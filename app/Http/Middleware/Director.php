@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class AdminMiddleware
+class Director
 {
     /**
      * Handle an incoming request.
@@ -15,16 +15,14 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        //$user=auth()->user();
         $user = $request->user();
         
         
 
         // Verificar si el usuario tiene el rol de administrador
-        if ($user && $user->roles()->where('role_name', 'admin')->exists()) {
+        if ($user && $user->roles()->where('role_name', 'director')->exists()) {
             return $next($request);
         }
-        
         return response()->json(['error' => 'Unauthorized'], 401);
     }
 }

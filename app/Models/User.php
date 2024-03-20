@@ -52,4 +52,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'role_emp')->withTimestamps();
     }
+
+    public function ubicacion()
+    {
+        return $this->belongsToMany(Ubicacion::class, 'ubicacion_permitida')->withTimestamps();
+    }
 }
