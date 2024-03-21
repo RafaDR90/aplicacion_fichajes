@@ -13,7 +13,7 @@ class UbicacionController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json(Ubicacion::all(), 200);
     }
 
     /**
@@ -50,27 +50,28 @@ class UbicacionController extends Controller
             201);
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Ubicacion $ubicacion)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Ubicacion $ubicacion)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Ubicacion $ubicacion)
+    public function destroy(Request $request)
     {
-        //
+        $request->validate([
+            'id' => 'required|integer|exists:ubicacion,id'
+        ]);
+        $ubicacion = Ubicacion::find($request->id);
+        
+
+        try {
+            $ubicacion->delete();
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Error al eliminar la ubicacion, solo se pueden borrar ubicaciones que no se han usado'],
+                500);
+        }
+        return response()->json([
+            'message' => 'Ubicacion eliminada correctamente'],
+            200);
     }
+    
 }

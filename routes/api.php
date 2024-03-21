@@ -42,5 +42,6 @@ Route::group(['middleware' => ['auth:api']], function () {
     
     //UbicacionController
     Route::post('/add-ubicacion', [UbicacionController::class, 'store'])->middleware(Admin::class);
+    Route::get('/get-ubicaciones', [UbicacionController::class, 'index'])->middleware(Admin::class);
 
 });
