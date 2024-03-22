@@ -26,13 +26,11 @@
         const dropdownPerfilOpen = ref(false);
 
         const toggleSidebar = () => {
-            console.log('paso2')
             isHidden.value = !isHidden.value;
         };
 
         const closeSidebar = () => {
             if (!isHidden.value) {
-                console.log('paso3')
                 isHidden.value = true;
             }
         };
@@ -44,7 +42,6 @@
         }
 
         const handleDropdownPerfil = (newDropdownPerfilOpen) => {
-            console.log('estamos aqui');
         dropdownPerfilOpen.value = !dropdownPerfilOpen.value;
         };
 

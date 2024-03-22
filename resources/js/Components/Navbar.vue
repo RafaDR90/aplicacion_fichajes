@@ -12,7 +12,7 @@
         <div class="h-9 w-9">
           <img class="h-full w-full rounded-full object-cover object-center" src="img/navbar/fotoperfil.png" alt="" />
         </div>
-        <p v-if="$page.props.auth.user">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
+        <p v-if="$page && $page.props.auth.user">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
         <div class="w-4 h-4">
           <img class="w-full Fh-full object-cover object-center mt-0.5" src="img/navbar/flecha-hacia-abajo.png"
             alt="Flecha" />
@@ -25,7 +25,7 @@
             <img class="w-full h-full rounded-full object-cover object-center" src="img/navbar/fotoperfil.png"
               alt="Foto de perfil" />
           </div>
-          <p v-if="$page.props.auth.user" class=" text-white py-2">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
+          <p v-if="$page && $page.props.auth.user" class=" text-white py-2">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
         </div>
         <Link @click="dropdownOpen = !dropdownOpen"
           class="block px-4 py-2 text-gray-800 hover:bg-gray-100 active:bg-gray-200" :href="route('profile.edit')">
@@ -54,7 +54,6 @@ const changueStatusDropdownPerfil = () => {
   emit("dropdown-perfil");
 };
 const toggleSidebar = () => {
-  console.log("paso1");
   emit("toggle-sidebar");
 };
 
