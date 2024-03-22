@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Director
+class SuperAdmin
 {
     /**
      * Handle an incoming request.
@@ -20,7 +20,7 @@ class Director
         
 
         // Verificar si el usuario tiene el rol de administrador
-        if ($user && $user->roles()->where('role_name', 'director')->exists()) {
+        if ($user && $user->roles()->where('role_name', 'super-admin')->exists()) {
             return $next($request);
         }
         return response()->json(['error' => 'Unauthorized'], 401);

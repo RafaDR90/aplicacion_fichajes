@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiController;
 use App\Http\Middleware\Admin;
-use App\Http\Middleware\Director;
+use App\Http\Middleware\SuperAdmin;
 use App\Http\Controllers\Dispositivo\DispositivoController;
 use App\Http\Controllers\Role\RoleController;
 use App\Http\Controllers\Ubicacion\UbicacionController;
@@ -27,11 +27,11 @@ Route::group(['middleware' => ['auth:api']], function () {
 
     //RoleController
     Route::get('/get-roles', [RoleController::class, 'index'])->middleware(Admin::class);
-    Route::post('/add-role', [RoleController::class, 'store'])->middleware(Director::class);
-    Route::post('/asigna-rol-to-user', [RoleController::class, 'asignaRolToUser'])->middleware(Director::class);
-    Route::post('/delete-role', [RoleController::class, 'destroy'])->middleware(Director::class);
+    Route::post('/add-role', [RoleController::class, 'store'])->middleware(SuperAdmin::class);
+    Route::post('/asigna-rol-to-user', [RoleController::class, 'asignaRolToUser'])->middleware(SuperAdmin::class);
+    Route::post('/delete-role', [RoleController::class, 'destroy'])->middleware(SuperAdmin::class);
     Route::post('/get-roles-user-id', [RoleController::class, 'showRolesUserId'])->middleware(Admin::class);
-    Route::post('/delete-role-user', [RoleController::class, 'deleteRoleFromUser'])->middleware(Director::class);
+    Route::post('/delete-role-user', [RoleController::class, 'deleteRoleFromUser'])->middleware(SuperAdmin::class);
     
     //DispositivoController
     Route::post('/add-dispositivo', [DispositivoController::class, 'store'])->middleware(Admin::class);

@@ -1,9 +1,18 @@
 <template>
-    <div id="sidebar" :class="{ '-translate-x-full': isHidden, 'translate-x-0': !isHidden }" class=" bg-white fixed h-full top-0 left-0 transition-all duration-300 transform z-50  w-80 border-r border-gray-300">
+    <div id="sidebar" :class="{ '-translate-x-full': isHidden, 'translate-x-0': !isHidden }"
+        class=" bg-white fixed h-full top-0 left-0 transition-all duration-300 transform z-50  w-80 border-r border-gray-300">
         <div class="h-16">
             <img class="h-full ml-5 mt-2" src="img/sidebar/logo.png" alt="">
         </div>
         <div class="w-full h-[calc(100%-4.5rem)] flex flex-col gap-1 items-center justify-around">
+
+            <Link :href="route('fichaje')" class=" button_nav ">
+            <div class="h-6 w-6">
+                <img class="h-full w-full" src="img/sidebar/fichajes.png" alt="">
+            </div>
+            <p class="mr-8">Fichar</p>
+            </Link>
+
             <button class=" button_nav ">
                 <div class="h-6 w-6">
                     <img class="h-full w-full" src="img/sidebar/empleado.png" alt="">
@@ -34,33 +43,25 @@
 
             <button class=" button_nav ">
                 <div class="h-6 w-6">
-                    <img class="h-full w-full" src="img/sidebar/fichar.png" alt="">
-                </div>
-                <p class="mr-8">Fichar</p>
-            </button>
-
-            <button class=" button_nav ">
-                <div class="h-6 w-6">
                     <img class="h-full w-full" src="img/sidebar/calendario.png" alt="">
                 </div>
                 <p class="mr-8">Horarios</p>
             </button>
 
-            
+
         </div>
     </div>
 </template>
-  
-  <script setup>
-  import { ref, defineProps } from 'vue';
-  
-  
-  
-  const props = defineProps({
+
+<script setup>
+import { ref, defineProps } from 'vue';
+import { Link } from "@inertiajs/vue3";
+
+
+const props = defineProps({
     isHidden: Boolean,
-  });
-  
-  
-  
-  </script>
-  
+});
+
+
+
+</script>

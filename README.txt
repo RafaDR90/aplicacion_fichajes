@@ -1,5 +1,7 @@
 DETALLES A TENER EN CUENTA
 
+Se ha usado Laravel 11 con Breeze, Inertia y vue
+
 - Si da error la creacion de token
     php artisan passport:client --personal
 

@@ -72,9 +72,9 @@ class RoleController extends Controller
                 'message' => 'Rol no encontrado'],
                 404);
         }
-        if($role->role_name == 'admin' or $role->role_name == 'director'){
+        if($role->role_name == 'admin' or $role->role_name == 'super-admin'){
             return response()->json([
-                'message' => 'No se pueden eliminar los roles admin y director'],
+                'message' => 'No se pueden eliminar los roles admin y super-admin'],
                 400);
         }
         //borra todas las filas que contengan la id del rol en la tabla role_emp

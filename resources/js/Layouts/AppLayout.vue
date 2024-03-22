@@ -2,7 +2,7 @@
     <div @click="closeDropdownPerfil">
         <SidebarComponent :is-hidden="isHidden" />
         <div @click="closeSidebar" :class="{ 'xl:ml-80': !isHidden }" class="transition-all duration-300 transform">
-            <NavbarComponent @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar" :dropdownPerfilOpen />
+            <NavbarComponent @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar" :dropdownPerfilOpen :user="user" />
             <main class="w-full min-h-[calc(100vh-3.5rem)] bg-slate-300">
                 <slot/>
             </main>
@@ -23,7 +23,7 @@
     
     setup(props){
         const isHidden = ref(true);
-        const dropdownPerfilOpen = ref(true);
+        const dropdownPerfilOpen = ref(false);
 
         const toggleSidebar = () => {
             console.log('paso2')

@@ -12,7 +12,7 @@
         <div class="h-9 w-9">
           <img class="h-full w-full rounded-full object-cover object-center" src="img/navbar/fotoperfil.png" alt="" />
         </div>
-        <p>Nazaret Farina Heredia</p>
+        <p v-if="$page.props.auth.user">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
         <div class="w-4 h-4">
           <img class="w-full Fh-full object-cover object-center mt-0.5" src="img/navbar/flecha-hacia-abajo.png"
             alt="Flecha" />
@@ -25,12 +25,14 @@
             <img class="w-full h-full rounded-full object-cover object-center" src="img/navbar/fotoperfil.png"
               alt="Foto de perfil" />
           </div>
-          <p class=" text-white py-2">Nazaret Farina Heredia</p>
+          <p v-if="$page.props.auth.user" class=" text-white py-2">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
         </div>
-        <a href="#" @click="dropdownOpen = !dropdownOpen"
-          class="block px-4 py-2 text-gray-800 hover:bg-gray-100 active:bg-gray-200">Perfil</a>
-        <a href="#" @click="dropdownOpen = !dropdownOpen"
-          class="block px-4 py-2 text-gray-800 hover:bg-gray-100 active:bg-gray-200">Cerrar sesión</a>
+        <Link @click="dropdownOpen = !dropdownOpen"
+          class="block px-4 py-2 text-gray-800 hover:bg-gray-100 active:bg-gray-200" :href="route('profile.edit')">
+        Perfil</Link>
+        <DropdownLink @click="dropdownOpen = !dropdownOpen" :href="route('logout')" method="post" as="button">
+          Cerrar sesion
+        </DropdownLink>
       </div>
     </div>
   </nav>
@@ -38,9 +40,15 @@
 
 <script setup>
 import { watch, ref, defineProps } from "vue";
-const props = defineProps(["dropdownPerfilOpen"]);
+import { Link } from "@inertiajs/vue3";
+import DropdownLink from '@/Components/DropdownLink.vue';
 
-const emit = defineEmits(["toggle-sidebar","dropdown-perfil"]);
+const props = defineProps({
+  dropdownPerfilOpen: Boolean,
+  user: Object, 
+});
+
+const emit = defineEmits(["toggle-sidebar", "dropdown-perfil"]);
 
 const changueStatusDropdownPerfil = () => {
   emit("dropdown-perfil");
