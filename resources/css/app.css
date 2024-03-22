@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* RESET */
+  body * {
+    @apply m-0 p-0;
+  }
+}
+@layer components{
+  /* SIDEBAR */
+    .button_nav {
+        @apply hover:bg-gris-light focus:bg-primary-light focus:font-semibold rounded-md w-11/12 flex p-5 gap-6 hover:shadow-md focus:shadow-lg ;
+      }
+}
+
