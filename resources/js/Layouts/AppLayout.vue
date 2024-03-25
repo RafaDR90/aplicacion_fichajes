@@ -1,9 +1,9 @@
 <template>
-    <div @click="closeDropdownPerfil">
+    <div @click="closeDropdownPerfil" class=" bg-gris-light">
         <SidebarComponent :is-hidden="isHidden" />
         <div @click="closeSidebar" :class="{ 'xl:ml-80': !isHidden }" class="transition-all duration-300 transform">
-            <NavbarComponent @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar" :dropdownPerfilOpen :user="user" />
-            <main class="w-full min-h-[calc(100vh-3.5rem)] bg-slate-300">
+            <NavbarComponent @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar" :dropdownPerfilOpen="dropdownPerfilOpen" :user="user" />
+            <main class="w-full min-h-[calc(100vh-5rem)]">
                 <slot/>
             </main>
         </div>

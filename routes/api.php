@@ -16,10 +16,12 @@ Route::get('/get-fecha', [ApiController::class, 'fechaYHora']);
 Route::post('/email-exists', [ApiController::class, 'emailExists']);
 //Route::get('/get-users-and-roles', [ApiController::class, 'getUsersAndRoles']);   PUEDO CREARLO SI QUIERO HACER UNA VISTA DE EMPLEADOS Y SUS ROLES
 
+Route::post('/register', [ApiController::class, 'register']);
+
 //protected routes
 Route::group(['middleware' => ['auth:api']], function () {
     //ApiController
-    Route::post('/register', [ApiController::class, 'register'])->middleware(Admin::class);
+  //  Route::post('/register', [ApiController::class, 'register'])->middleware(Admin::class);
     Route::get('/profile', [ApiController::class, 'profile']);
     Route::get('/logout', [ApiController::class, 'logout']);
     Route::post('/reset-pw-token', [ApiController::class, 'getResetPasswordToken']);

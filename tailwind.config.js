@@ -21,6 +21,9 @@ export default {
                 'primary-strong': '#2563EB',
                 'gris-light': '#F9FAFB',
                 'gris-borde': '#D1D5DB',
+                'azul-fondo-btn': '#3B82F6',
+                'azul-fondo-btn-hover': '#2563EB',
+                'azul-fondo-btn-pulse': '#1D4CBA',
               }
         },
     },

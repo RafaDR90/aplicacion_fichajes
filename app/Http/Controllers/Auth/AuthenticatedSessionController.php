@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
     public function create(): Response
     {
         if (Auth::check()) {
-            return redirect()->route('showUsers');
+            return redirect()->route('fichaje');
         }
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
@@ -36,7 +36,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('showUsers', absolute: false));
+        return redirect()->intended(route('fichaje', absolute: false));
     }
 
     /**

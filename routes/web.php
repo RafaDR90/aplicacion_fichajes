@@ -22,7 +22,7 @@ Route::get('/usuarios', [UserController::class, 'showUsers'])->name('showUsers')
 
 
 Route::get('/dashboard', function () {
-    return redirect()->route('showUsers');
+    return redirect()->route('fichaje');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
