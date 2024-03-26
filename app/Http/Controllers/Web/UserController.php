@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Resources\UserResource;
 
 
 class UserController extends Controller
@@ -18,10 +19,23 @@ class UserController extends Controller
         return $authenticatedSessionController->create();
     }
 
-    public function showUsers()
+    public function showUsers(Request $request)
     {
-        $users = User::all();
-        return Inertia::render('Usuario/VistaUsuarios', ['users' => $users]);
+        $search = $request->input('search');
+        $sortField = $request->input('sortField', 'name'); // Default sort field is 'name'
+        $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction is 'asc'
+
+        $query = User::query();
+
+        if ($search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        }
+
+        $query->orderBy($sortField, $sortDirection);
+
+        $users = $query->paginate(2);
+
+        return Inertia::render('Usuario/VistaUsuarios', ['users' => $users, 'search'=> $search]);
     }
 }
 /* $posts = Post::all();

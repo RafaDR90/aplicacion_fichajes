@@ -17,8 +17,8 @@
                             </svg>
                         </div>
 
-                        <input @input="updateSearch" class="peer h-full w-full outline-none text-lg text-gray-700 pr-2 border-none placeholder:text-gray-300 focus:ring-0" type="text"
-                            id="search" placeholder="Buscar por nombre..." />
+                        <input v-focus @input="updateSearch" class="peer h-full w-full outline-none text-lg text-gray-700 pr-2 border-none placeholder:text-gray-300 focus:ring-0" type="text"
+                            id="search" placeholder="Buscar por nombre..." :value="search" />
                     </div>
                 </div>
 
@@ -56,32 +56,41 @@
                 </tr>
             </tbody>
             
+            
         </table>
+        <nav>
+        <nav>
+    <Link v-if="users.prev_page_url" :href="users.prev_page_url">Anterior</Link>
+    <Pagination :pagination="users" />
+    <Link v-if="users.next_page_url" :href="users.next_page_url">Siguiente</Link>
+</nav>
+        </nav>
         
     </div>
 </template>
 
 <script>
 import { InertiaLink } from '@inertiajs/inertia-vue3'
+import { Link } from '@inertiajs/vue3'
+import Pagination from '@/Components/Pagination.vue'
 export default {
-    components: {
-        InertiaLink
-    },
     data() {
         return {
             search: '',
-            searchFilter: '',
-            searchTimeout: null,
             sortField: '',
             sortDirection: 'asc',
+            currentPage: 1,
+            itemsPerPage: 10
         }
     },
+    components: {
+        InertiaLink,
+        Link,
+        Pagination
+    },
     computed: {
-        filteredUsers() {
-            return this.users.filter(user => user.name.toLowerCase().includes(this.searchFilter.toLowerCase()));
-        },
         sortedUsers() {
-            return this.filteredUsers.sort((a, b) => {
+            return this.users.data.sort((a, b) => {
                 if (!this.sortField) return 0;
                 if (this.sortDirection === 'asc') {
                     return a[this.sortField] > b[this.sortField] ? 1 : -1;
@@ -89,15 +98,12 @@ export default {
                     return a[this.sortField] < b[this.sortField] ? 1 : -1;
                 }
             });
-        }
+        },
     },
     methods: {
         updateSearch(event) {
-            clearTimeout(this.searchTimeout);
             this.search = event.target.value;
-            this.searchTimeout = setTimeout(() => {
-                this.searchFilter = this.search;
-            }, 1000);
+            this.fetchUsers();
         },
         setSort(field) {
             if (this.sortField === field) {
@@ -106,13 +112,21 @@ export default {
                 this.sortField = field;
                 this.sortDirection = 'asc';
             }
+            this.fetchUsers();
+        },
+        fetchUsers() {
+            this.$inertia.get('/usuarios', { search: this.search, page: this.currentPage });
+        },
+        changePage(page) {
+            this.currentPage = page;
+            this.fetchUsers();
         }
     },
     props: {
-        users: {
-            type: Array,
-            required: true,
-        },
+        users: Object,
+        search: String,
     },
 };
 </script>
+
+cuando paso de pagina se me reinicia la barra de search, tambien tengo que hacer que funcione el sort desde el servidor
