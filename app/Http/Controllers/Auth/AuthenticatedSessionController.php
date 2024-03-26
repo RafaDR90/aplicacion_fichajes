@@ -19,7 +19,7 @@ class AuthenticatedSessionController extends Controller
     public function create(): Response
     {
         if (Auth::check()) {
-            return redirect()->route('fichaje');
+            return Inertia::render('Fichaje/VistaFichaje');
         }
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),

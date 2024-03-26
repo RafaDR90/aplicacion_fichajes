@@ -19,7 +19,7 @@ export default {
                 'primary': '',
                 'primary-light': '#F0F9FF',
                 'primary-strong': '#2563EB',
-                'gris-light': '#F9FAFB',
+                'gris-light': '#F3F4F6',
                 'gris-borde': '#D1D5DB',
                 'azul-fondo-btn': '#3B82F6',
                 'azul-fondo-btn-hover': '#2563EB',

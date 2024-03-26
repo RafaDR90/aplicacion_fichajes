@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-col w-full min-h-full p-16">
+    <div class="flex-col w-full min-h-[calc(100vh-5rem)] p-16">
         <div class="p-4 mb-6">
             <h1 class="text-4xl font-bold">Empleados</h1>
         </div>
@@ -43,15 +43,14 @@
                 </tr>
             </thead>
             <tbody class=" bg-white">
-                <tr v-for="user in sortedUsers" :key="user.id" class="">
-                    <td class="flex gap-3 items-center p-4">
+                <tr v-for="(user, index) in sortedUsers" :key="user.id" class=" border-b border-gris-ligth" :class="index % 2 === 0 ? 'bg-white' : 'bg-gray-100'">                    <td class="flex gap-3 items-center p-4">
                         <div class=" w-10 h-10">
                             <img class="h-full w-full rounded-full object-cover" src="img/navbar/fotoperfil.png" alt="">
                         </div>
                         <div>
                             <p>{{ user.name }} {{user.apellidos}}</p>
                             <p>{{ user.email }}</p>
-                        </div>    
+                        </div>  
                     </td>
                     <td>Algun botn</td>
                 </tr>
