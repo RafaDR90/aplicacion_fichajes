@@ -21,21 +21,21 @@ class UserController extends Controller
 
     public function showUsers(Request $request)
     {
-        $search = $request->input('search');
+        $search = $request->input('search','');
         $sortField = $request->input('sortField', 'name'); // Default sort field is 'name'
-        $sortDirection = $request->input('sortDirection', 'asc'); // Default sort direction is 'asc'
 
         $query = User::query();
 
         if ($search) {
-            $query->where('name', 'like', '%' . $search . '%');
+            $query->where('name', 'like', '%' . $search . '%')
+                ->orWhere('apellidos', 'like', '%' . $search . '%');
         }
+        if(!empty($sortField))
+        $query->orderBy($sortField, 'asc');
 
-        $query->orderBy($sortField, $sortDirection);
+        $users = $query->paginate(4);
 
-        $users = $query->paginate(2);
-
-        return Inertia::render('Usuario/VistaUsuarios', ['users' => $users, 'search'=> $search]);
+        return Inertia::render('Usuario/VistaUsuarios', ['users' => $users, 'search' => $search, 'sortField' => $sortField]);
     }
 }
 /* $posts = Post::all();
