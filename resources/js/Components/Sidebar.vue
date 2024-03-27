@@ -1,6 +1,6 @@
 <template>
     <div id="sidebar" :class="{ '-translate-x-full': isHidden, 'translate-x-0': !isHidden }"
-        class=" bg-gris-light fixed h-full top-0 left-0 transition-all duration-300 transform z-50  w-80 border-r border-gray-300">
+        class=" bg-white fixed h-full top-0 left-0 transition-all duration-300 transform z-50  w-80 border-r border-gray-300">
         <div class="h-16">
             <img class="h-full ml-5 mt-2" src="img/sidebar/logo.png" alt="">
         </div>

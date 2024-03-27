@@ -27,6 +27,7 @@
                 <div class="flex flex-col gap-4 xl:flex-row xl:items-center">
                     <select :value="sortField" @change="updateSortField" name="sortBy" id=""
                         class="border border-gris-borde rounded-lg p-4 h-16 text-lg pr-10">
+                        <option class=" text-gray-500" value="">Ordenar</option>
                         <option value="name">Ordenar por (Nombre)</option>
                         <option value="email">Ordenar por (Correo)</option>
                         <option value="apellidos">Ordenar por (Apellidos)</option>

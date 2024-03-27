@@ -1,5 +1,5 @@
 <template>
-  <nav @click="dropdownOpen = false" class="w-full h-20 flex items-center shadow-sm justify-between bg-gris-light">
+  <nav @click="dropdownOpen = false" class="w-full h-20 flex items-center shadow-sm justify-between bg-white">
     <button @click.stop="toggleSidebar"
       class="ml-2 menu-icon p-3 rounded-lg transition duration-100 hover:bg-gris-light hover:shadow-md focus:bg-gris-light focus:shadow-md active:bg-gris-light active:shadow-md">
       <div class="w-5 h-0.5 bg-gray-500 rounded-full"></div>
