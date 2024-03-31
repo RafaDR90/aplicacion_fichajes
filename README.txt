@@ -8,5 +8,6 @@ Se ha usado Laravel 11 con Breeze, Inertia y vue
 - Video padre
     https://www.youtube.com/watch?v=Uz56BOekpLA&ab_channel=OnlineWebTutor
 
-voy por control de ubicaciones
+Terminar de arreglar el modificar Rol, si es super-admin no se puede modificar.
+por hacer= si le pongo como normal se tiene que borrar el admin del usuario y para hacerlo super-admin tengo que ser super-admin
 

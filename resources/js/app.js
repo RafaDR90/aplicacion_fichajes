@@ -13,13 +13,18 @@ createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(Applayout, {page: props.page}, [h(App, props)]) })
-        .directive('focus', {
-            mounted(el) {
-                el.focus();
-            },
+        createApp({
+            render: () => h(Applayout, {
+                page: props.page,
+                isAuthenticated: props.page && props.page.props ? props.page.props.user !== null : false
+            }, [h(App, props)])
         })
-        .use(plugin)
+            .directive('focus', {
+                mounted(el) {
+                    el.focus();
+                },
+            })
+            .use(plugin)
             .use(ZiggyVue)
             .mount(el);
     },

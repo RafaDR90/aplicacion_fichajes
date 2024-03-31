@@ -1,8 +1,8 @@
 <template>
     <div @click="closeDropdownPerfil" class=" bg-gris-light">
-        <SidebarComponent :is-hidden="isHidden" />
-        <div @click="closeSidebar" :class="{ 'xl:ml-80': !isHidden }" class="transition-all duration-300 transform">
-            <NavbarComponent @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar" :dropdownPerfilOpen="dropdownPerfilOpen" :user="user" />
+        <SidebarComponent v-if="$page && $page.props && $page.props.auth && $page.props.auth.user" :is-hidden="isHidden" />
+                <div @click="closeSidebar" :class="{ 'xl:ml-80': !isHidden }" class="transition-all duration-300 transform">
+            <NavbarComponent v-if="$page && $page.props && $page.props.auth && $page.props.auth.user" @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar" :dropdownPerfilOpen="dropdownPerfilOpen" :user="user" />
             <main class="w-full min-h-[calc(100vh-5rem)]">
                 <slot/>
             </main>
@@ -20,7 +20,10 @@
       NavbarComponent,
       SidebarComponent
     },
-    
+    props:{
+        
+        
+    },
     setup(props){
         const isHidden = ref(true);
         const dropdownPerfilOpen = ref(false);
