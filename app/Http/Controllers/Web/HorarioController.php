@@ -21,7 +21,7 @@ class HorarioController extends Controller
 
     public function creaHorario(Request $request)
     {
-        $request->validate([
+        $request->validator([
             'nombre' => 'required|string|max:100|min:3|unique:horarios,nombre',
             'hora_entrada' => 'required|before:hora_salida|date_format:H:i',
             'hora_salida' => 'required|after:hora_entrada|date_format:H:i|different:hora_entrada',
