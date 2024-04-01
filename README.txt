@@ -1,6 +1,7 @@
 DETALLES A TENER EN CUENTA
 
-Se ha usado Laravel 11 con Breeze, Inertia y vue
+Se ha usado Laravel 11 con Breeze, Inertia y vue.
+Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
 
 - Si da error la creacion de token
     php artisan passport:client --personal

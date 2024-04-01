@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\FichajeController;
 use App\Http\Middleware\Admin;
 use App\Http\Controllers\Web\RoleController;
+use App\Http\Controllers\Web\HorarioController;
 
 
 /*Route::get('/', function () {
@@ -21,11 +22,18 @@ use App\Http\Controllers\Web\RoleController;
 
 Route::get('/', [UserController::class, 'index']);
 
+//FICHAJE
+Route::get('/fichar', [FichajeController::class, 'fichar'])->name('fichar');
+
 Route::group(['middleware' => Admin::class], function () {
     Route::get('/usuarios', [UserController::class, 'showUsers'])->name('showUsers');
     Route::post('/cambiar-rol', [RoleController::class, 'cambiarRol'])->name('cambiarRol');
     Route::post('/perfil', [UserController::class, 'showUser'])->name('showUser');
 
+    //HORARIO   
+    Route::get('/horarios', [HorarioController::class, 'gestionHorarios'])->name('horarios');
+    Route::get('/nuevo-horario', [HorarioController::class, 'newHorario'])->name('nuevoHorario');
+    Route::post('/nuevo-horario', [HorarioController::class, 'creaHorario'])->name('creaHorario');
 });
 
 

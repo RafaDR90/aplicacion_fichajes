@@ -15,7 +15,7 @@
 
             <Link :href="route('showUsers')" class=" button_nav ">
             <div class="h-6 w-6">
-                <img class="h-full w-full" src="img/sidebar/empleados.png" alt="">
+                <img class="h-full w-full" src="img/sidebar/empleado.png" alt="">
             </div>
             <p class="mr-8">Empleados</p>
             </Link>
@@ -41,12 +41,12 @@
                 <p class="mr-8">Fichajes</p>
             </button>
 
-            <button class=" button_nav ">
+            <Link :href="route('horarios')" class=" button_nav ">
                 <div class="h-6 w-6">
                     <img class="h-full w-full" src="img/sidebar/calendario.png" alt="">
                 </div>
                 <p class="mr-8">Horarios</p>
-            </button>
+            </Link>
 
 
         </div>

@@ -20,7 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'apellidos', 
+        'apellidos',
         'email',
         'password',
     ];
@@ -51,6 +51,11 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_emp')->withTimestamps();
+    }
+
+    public function horarios()
+    {
+        return $this->belongsToMany(Horario::class, 'horario_emp', 'id_empleado', 'id_horario');
     }
 
     public function ubicacion()
