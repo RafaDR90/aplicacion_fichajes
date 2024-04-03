@@ -71,13 +71,7 @@
                             </div>
                             <div class="flex gap-1  justify-end mr-5 sm:mr-11 w-full py-2">
                                 <button
-                                    @click="confirmacion(id = horario.id, nombre = horario.nombre, accion = 'editar', ruta = 'vistaEditaHorario')"
-                                    class="h-6 w-6">
-                                    <img class=" w-full h-full" src="/img/iconos/editar.png" alt="Icono editar"
-                                        title="Editar">
-                                </button>
-                                <button
-                                    @click="confirmacion(id = horario.id, nombre = horario.nombre, accion = 'borrar', ruta = 'borrarHorario')"
+                                    @click="eliminar(id = horario.id, nombre = horario.nombre, accion = 'borrar', ruta = 'borrarHorario')"
                                     class="h-6 w-6">
                                     <img class=" w-full h-full" src="/img/iconos/borrar.png" alt="Icono borrar"
                                         title="Borrar">
