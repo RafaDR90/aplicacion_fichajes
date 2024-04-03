@@ -48,6 +48,9 @@ class RegisteredUserController extends Controller
 
         //Auth::login($user);
 
-        return redirect(route('showUsers', absolute: false));
+        $exito = "Empleado '{$user->name} {$user->apellidos}' creado correctamente";
+
+        return redirect(route('showUsers', absolute: false))->with('exito', $exito);
+
     }
 }

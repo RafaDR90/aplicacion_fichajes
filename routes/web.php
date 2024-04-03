@@ -9,7 +9,8 @@ use App\Http\Controllers\Web\FichajeController;
 use App\Http\Middleware\Admin;
 use App\Http\Controllers\Web\RoleController;
 use App\Http\Controllers\Web\HorarioController;
-
+use App\Http\Controllers\Web\AlertaController;
+use App\Http\Controllers\Web\UbicacionController;
 
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -34,6 +35,18 @@ Route::group(['middleware' => Admin::class], function () {
     Route::get('/horarios', [HorarioController::class, 'gestionHorarios'])->name('horarios');
     Route::get('/nuevo-horario', [HorarioController::class, 'newHorario'])->name('nuevoHorario');
     Route::post('/nuevo-horario', [HorarioController::class, 'creaHorario'])->name('creaHorario');
+    Route::get('/borrar-horario/{id}', [HorarioController::class, 'borrarHorario'])->name('borrarHorario');
+    Route::get('/editar-horario/{id}', [HorarioController::class, 'vistaEditaHorario'])->name('vistaEditaHorario');
+    Route::post('/editar-horario/{id}', [HorarioController::class, 'editaHorario'])->name('editaHorario');
+
+    //ALERTAS
+    Route::get('/alertas', [AlertaController::class, 'index'])->name('alertas');
+
+    //UBICACION
+    Route::post('/addUbicacion', [UbicacionController::class, 'addUbicacion'])->name('addUbicacion');
+    Route::post('/denyUbicacion', [UbicacionController::class, 'denyUbicacion'])->name('denyUbicacion');
+    Route::post('/toggleRequiereUbicacion', [UbicacionController::class, 'toggleRequiereUbicacion'])->name('toggleRequiereUbicacion');
+
 });
 
 

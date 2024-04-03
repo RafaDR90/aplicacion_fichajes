@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Models\Alerta;
+use App\Services\LocationService;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -35,6 +37,30 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
 
         $request->session()->regenerate();
+
+        $user = $request->user();
+
+        if ($user->requiere_ubicacion) {
+
+            $datosUbicacion = LocationService::getLocation();
+            Alerta::create([
+                'user_id' => $user->id,
+                'tipo' => 'ubicacion',
+                'mensaje' => 'Solicitud de ubicación',
+                'leido' => 0,
+                'datos' => [
+                    'countryCode' => $datosUbicacion['countryCode'],
+                    'city' => $datosUbicacion['city'],
+                    'zip' => $datosUbicacion['zip'],
+                    'lat' => $datosUbicacion['lat'],
+                    'lon' => $datosUbicacion['lon']
+                ],
+            ]);
+
+            $user->update([
+                'requiere_ubicacion' => 0
+            ]);
+        }
 
         return redirect()->intended(route('fichaje', absolute: false));
     }

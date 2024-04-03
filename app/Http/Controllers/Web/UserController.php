@@ -24,8 +24,9 @@ class UserController extends Controller
 
     public function showUsers(Request $request)
     {
-        $search = $request->input('search','');
-        $sortField = $request->input('sortField', 'name'); // Default sort field is 'name'
+        
+        $search = $request->input('search', '');
+        $sortField = $request->input('sortField', 'name');
 
         $query = User::with('roles');
 
@@ -33,35 +34,40 @@ class UserController extends Controller
             $query->where('name', 'like', '%' . $search . '%')
                 ->orWhere('apellidos', 'like', '%' . $search . '%');
         }
-        if(!empty($sortField))
-        $query->orderBy($sortField, 'asc');
+        if (!empty($sortField))
+            $query->orderBy($sortField, 'asc');
 
+        $exito = $request->session()->get('exito');
+        $request->session()->forget('exito');
+        
         $users = $query->paginate(15);
 
-        return Inertia::render('Usuario/VistaUsuarios', ['users' => $users, 'search' => $search, 'sortField' => $sortField]);
+        return Inertia::render('Usuario/VistaUsuarios', [
+            'users' => $users,
+            'search' => $search,
+            'sortField' => $sortField,
+            'exito' => $exito
+        ]);
     }
 
     public function showUser(Request $request)
     {
         $id = $request->input('id');
-        $user = User::with('roles')->find($id);
+        $user = User::with(['roles','ubicacion'])->find($id);
         return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user]);
     }
 
-    public static function hasRole($role){
+    public static function hasRole($role)
+    {
         $user = Auth::user();
         $roles = $user->roles;
         foreach ($roles as $rol) {
-            if($rol->role_name == $role){
+            if ($rol->role_name == $role) {
                 return true;
             }
         }
         return false;
-    
     }
-
-    
-
 }
 /* $posts = Post::all();
     return Inertia::render('Post/Index', ['posts' => $posts]); */

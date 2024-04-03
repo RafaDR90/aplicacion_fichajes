@@ -1,6 +1,6 @@
 DETALLES A TENER EN CUENTA
 
-Se ha usado Laravel 11 con Breeze, Inertia y vue.
+Se ha usado Laravel 11 con Breeze(Para el inicio de sesion), Inertia(Para los recargos de pagina) y vue.
 Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
 
 - Si da error la creacion de token
@@ -9,6 +9,7 @@ Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
 - Video padre
     https://www.youtube.com/watch?v=Uz56BOekpLA&ab_channel=OnlineWebTutor
 
-Terminar de arreglar el modificar Rol, si es super-admin no se puede modificar.
-por hacer= si le pongo como normal se tiene que borrar el admin del usuario y para hacerlo super-admin tengo que ser super-admin
 
+estoy con la vista de solicitud de ubicacion, falta añadirle los botones para aceptar la ubicacion
+
+despues de esto podria ponerme a restringir el acceso como quiera si no estoy en una ubicacion permitida 

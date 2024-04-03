@@ -11,7 +11,9 @@ class Horario extends Model
     use HasFactory;
 
     protected $table = 'horarios';
-    protected $fillable = ['nombre', 'hora_entrada', 'hora_salida', 'descanso_salida', 'descanso_entrada', 'libre', 'tipo'];
+    protected $fillable = ['nombre', 'hora_entrada', 'hora_salida', 'descanso_salida', 'descanso_entrada', 'libre', 'tipo', 'total_horas'];
+
+    
 
     public function users()
     {

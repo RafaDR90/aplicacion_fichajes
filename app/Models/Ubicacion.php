@@ -9,5 +9,10 @@ class Ubicacion extends Model
 {
     use HasFactory;
     protected $table = 'ubicacion';
-    protected $fillable = ['pais', 'ciudad', 'latitud', 'longitud'];
+    protected $fillable = ['pais', 'ciudad', 'latitud', 'longitud', 'cp'];
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class, 'ubicacion_permitida', 'id_user', 'id_ubicacion');
+    }
 }

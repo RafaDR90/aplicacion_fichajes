@@ -1,4 +1,9 @@
 <template>
+    <div v-if="exito"
+        class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative flex flex-col gap-1"
+        role="alert">
+        <p class="block sm:inline">- {{ exito }}</p>
+    </div>
     <div class="flex-col w-full min-h-[calc(100vh-5rem)] p-16">
         <div class="p-4 mb-6">
             <h1 class="text-4xl font-bold">Empleados</h1>
@@ -42,7 +47,7 @@
 
         </div>
 
-        <div class="border border-gris-borde w-full rounded-b-xl">
+        <div class="border border-gris-borde w-full ">
             <div>
                 <p class=" text-xl xl:text-2xl font-bold p-4">Lista de empleados</p>
                 <div>
@@ -50,9 +55,9 @@
                         v-for="(user, index) in sortedUsers" :key="user.id"
                         :class="index % 2 == 0 ? 'bg-white' : 'bg-gray-100'">
                         <div class="p-2 xl:flex xl:gap-2">
-                            <div :class="{ 'border-green-400 border-4 rounded-full': isAdmin(user) }"
+                            <div :class="{ 'border-green-400 border-2 rounded-full': isAdmin(user) }"
                                 class=" w-10 h-10 ">
-                                <img class="h-full w-full rounded-full object-cover" src="img/navbar/fotoperfil.png"
+                                <img class="h-full w-full rounded-full object-cover" src="/img/navbar/fotoperfil.png"
                                     alt="">
                             </div>
                             <div class=" text-sm">
@@ -63,32 +68,32 @@
                         <div class="absolute right-2 top-2 xl:relative">
                             <div class="hs-dropdown relative inline-flex">
                                 <div v-show="isOpen[user.id]"
-                                    class=" mr-9 z-20 hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-100 min-w-60 bg-white shadow-xl border border-gray-100 rounded-lg p-2 mt-2 dark:bg-gray-800 dark:border dark:border-gray-700 right-0 absolute"
+                                    class=" mr-9 z-20 hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-100 min-w-60 bg-white shadow-xl border border-gray-100 rounded-lg p-2 mt-0 right-0 absolute"
                                     aria-labelledby="hs-dropdown-custom-icon-trigger">
                                     <Link :href="route('showUser', { id: user.id })" method="post"
-                                        class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700">
+                                        class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 ">
                                     <p>Ver perfil</p>
                                     </Link>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700"
+                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                                         href="#">
                                         Newsletter
                                     </a>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700"
+                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                                         href="#">
                                         Purchases
                                     </a>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700"
+                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                                         href="#">
                                         Downloads
                                     </a>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:bg-gray-700"
+                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                                         href="#">
                                         Team Account
                                     </a>
                                 </div>
                                 <button @click="toggleDropdownMenu($event, user.id)"
                                     id="hs-dropdown-custom-icon-trigger" type="button"
-                                    class="hs-dropdown-toggle flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none dark:bg-slate-900 dark:border-gray-700 dark:text-white dark:hover:bg-gray-800 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
+                                    class="hs-dropdown-toggle flex justify-center items-center size-9 text-sm font-semibold rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none ">
                                     <svg class="flex-none size-4 text-gray-600" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -104,7 +109,7 @@
             </div>
         </div>
         <nav>
-            <nav>
+            <nav class=" bg-white rounded-b-xl border border-gris-borde">
                 <Pagination :pagination="users" :search="search" :sortField="sortField" />
             </nav>
         </nav>
@@ -113,7 +118,6 @@
 </template>
 
 <script>
-import { InertiaLink } from '@inertiajs/inertia-vue3'
 import { Link } from '@inertiajs/vue3'
 import Pagination from '@/Components/Pagination.vue'
 
@@ -128,7 +132,6 @@ export default {
         }
     },
     components: {
-        InertiaLink,
         Link,
         Pagination
     },
@@ -192,7 +195,8 @@ export default {
     props: {
         users: Object,
         search: String,
-        sortField: String
+        sortField: String,
+        exito: String | null
     },
 
 };

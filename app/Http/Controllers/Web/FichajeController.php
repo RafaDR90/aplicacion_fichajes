@@ -21,16 +21,13 @@ class FichajeController extends Controller
         //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
         $ip = '154.62.41.89';
 
-        $client = new Client();
+        $client = new Client(); //esto es Guzzle
         $response = $client->request('GET', 'http://ip-api.com/json/' . $ip);
         $response = json_decode($response->getBody()->getContents());
         foreach ($response as $key => $value) {
             var_dump($key . ' => ' . $value . "<br>");
         }
-        var_dump('<br><br><br>');
-
-        $userAgent = $request->header('User-Agent');
-        var_dump('User-Agent: ' . $userAgent);
+        
         die();
     }
 }

@@ -49,8 +49,6 @@ class RoleController extends Controller
         }
 
         $selectedUser = User::with('roles')->find($request->input('id'));
-
-
         return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $selectedUser, 'error' => $error]);
     }
 }
