@@ -35,6 +35,8 @@ FUNCIONALIDADES A MENCIONAR:
     - solicitud ubicacion en el siguiente login
     - lista ubicaciones
         - elimina ubicacion
+    - lista horarios
+        - asignacion horario
 
 - Auth
     - Si esta marcada la casilla de ubicacion manda una notificacion (alerta) cuando hace login
