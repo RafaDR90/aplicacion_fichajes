@@ -1,3 +1,16 @@
+RECORDATORIO
+- Mirar spatie para los roles
+- hacer funcionar boton de desasignar horario
+
+
+Usuario super-admin
+- admin@admin.com
+- admin
+
+Todos los demas usuarios tienen de password "password" y el email se puede ver en la pestaña empleados.
+
+
+
 DETALLES A TENER EN CUENTA
 
 Se ha usado Laravel 11 con Breeze(Para el inicio de sesion), Inertia(Para los recargos de pagina) y vue.
@@ -10,9 +23,7 @@ Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
     https://www.youtube.com/watch?v=Uz56BOekpLA&ab_channel=OnlineWebTutor
 
 
-estoy con el panel de usuario, falta preparar boton para borrar y quitar botones sobrantes
 
-podria ponerme a restringir el acceso como quiera si no estoy en una ubicacion permitida 
 
 FUNCIONALIDADES A MENCIONAR:
 
@@ -37,6 +48,7 @@ FUNCIONALIDADES A MENCIONAR:
         - elimina ubicacion
     - lista horarios
         - asignacion horario
+        - borrar horario (aún no funciona)
 
 - Auth
     - Si esta marcada la casilla de ubicacion manda una notificacion (alerta) cuando hace login

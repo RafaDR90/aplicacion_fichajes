@@ -35,7 +35,7 @@
                 <div class="flex">
                     <label class="inline-flex items-center cursor-pointer gap-2">
                         <span class=" ">Solicita ubicacion: </span>
-                        <input @change="handleUbicacionCheckbox" v-model="isChecked" type="checkbox" value=""
+                        <input @change="handleUbicacionCheckbox" v-model="isChecked" type="checkbox"
                             class="sr-only peer">
                         <div
                             class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
@@ -61,9 +61,9 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-10">
-                <div class="flex flex-col gap-2 w-max">
+                <div class="flex flex-col gap-2 w-5/12 min-w-72">
                     <h2 class="text-xl font-bold">Ubicaciones permitidas</h2>
-                    <div class="border border-gris-borde rounded w-72 md:w-96 p-5 h-60 overflow-auto">
+                    <div class="border border-gris-borde rounded min-w-72 w-full p-5 h-60 overflow-auto">
                         <div v-if="selectedUser && selectedUser.ubicacion" v-for="ubicacion in selectedUser.ubicacion">
                             <div class="flex justify-between">
                                 <p><span class=" font-bold">Pais: </span>{{ ubicacion.pais }}</p>
@@ -87,55 +87,53 @@
                     </div>
 
                 </div>
-                <div class="flex flex-col gap-2 w-max">
-                    <h2 class="text-xl font-bold">Dispositivos permitidos</h2>
-                    <div class="border border-gris-borde rounded w-72 md:w-96 p-5 h-40">
-                        aqui van los dispositivos
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-500 text-white rounded-lg px-2 py-1 w-max ml-1">Agregar
-                            dispositivo</button>
-                        <button class="bg-red-500 text-white rounded-lg px-2 py-1 w-max ml-1">Eliminar</button>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 w-max">
+                
+                <div class="flex flex-col gap-2 w-5/12 min-w-72">
                     <h2 class="text-xl font-bold">Horario</h2>
-                    <div class="border border-gris-borde rounded w-72 md:w-96 p-5 h-40">
+                    <div class="border border-gris-borde rounded  min-w-72 w-full p-2 h-60 overflow-auto">
                         <div v-for=" horario in selectedUser.horarios">
-                            <div class="flex">
+                            <div class="flex justify-between">
                                 <p class=" font-bold">{{ horario.nombre }}</p>
+                                <div class=" w-6 h-6">
+                                    <img class=" w-full h-full" src="/img/iconos/borrar.png" alt="Icono borrar"
+                                        title="Borrar">
+                                </div>
                             </div>
                             <div v-if="horario.hora_entrada">
                                 <table class="table-auto border-collapse border">
-        <thead class="text-sm">
-            <tr class=" bg-gris-borde">
-                <th class="border border-gris-borde px-1 ">Entrada</th>
-                <th class="border px-1">Salida</th>
-                <th v-if="horario.descanso_entrada" class="border  px-1">Descanso inicio</th>
-                <th v-if="horario.descanso_salida" class="border  px-1">Descanso fin</th>
-                <th class="border px-1">tiempo libre</th>
-                <th class="border px-1">Total horas</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class=" ">
-                <td class="border text-center border-gris-borde">{{ horario.hora_entrada.slice(0, 5) }}</td>
-                <td class="border text-center border-gris-borde">{{ horario.hora_salida.slice(0, 5) }}</td>
-                <td v-if="horario.descanso_entrada" class="border text-center border-gris-borde">{{ horario.descanso_entrada.slice(0, 5) }}</td>
-                <td v-if="horario.descanso_salida" class="border text-center border-gris-borde">{{ horario.descanso_salida.slice(0, 5) }}</td>
-                <td class="border text-center border-gris-borde">{{ horario.libre }}"</td>
-                <td class="border text-center border-gris-borde">{{ horario.total_horas }}</td>
-            </tr>
-        </tbody>
-    </table>
+                                    <thead class="text-sm">
+                                        <tr class=" bg-gris-borde">
+                                            <th class="border border-gris-borde px-1 ">Entrada</th>
+                                            <th class="border px-1">Salida</th>
+                                            <th v-if="horario.descanso_entrada" class="border  px-1">Descanso inicio
+                                            </th>
+                                            <th v-if="horario.descanso_salida" class="border  px-1">Descanso fin</th>
+                                            <th class="border px-1">tiempo libre</th>
+                                            <th class="border px-1">Total horas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class=" ">
+                                            <td class="border text-center border-gris-borde">{{
+        horario.hora_entrada.slice(0, 5) }}</td>
+                                            <td class="border text-center border-gris-borde">{{
+        horario.hora_salida.slice(0, 5) }}</td>
+                                            <td v-if="horario.descanso_entrada"
+                                                class="border text-center border-gris-borde">{{
+        horario.descanso_entrada.slice(0, 5) }}</td>
+                                            <td v-if="horario.descanso_salida"
+                                                class="border text-center border-gris-borde">{{
+        horario.descanso_salida.slice(0, 5) }}</td>
+                                            <td class="border text-center border-gris-borde">{{ horario.libre }}"</td>
+                                            <td class="border text-center border-gris-borde">{{ horario.total_horas }}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div>
-
                             </div>
-                            <!--<div>
-                                <p class=" font-bold text-nowrap">Total horas:</p>
-                                <p>{{ horario.total_horas }}h</p>
-                            </div>-->
+                            <div class="border-b mt-2 mb-1 border-gris-borde"></div>
 
                         </div>
                     </div>
@@ -248,7 +246,7 @@ const cancelar = () => {
 const handleUbicacionCheckbox = () => {
     router.post('/toggle-requiere-ubicacion', {
         requiere_ubicacion: event.target.checked,
-        idUser: selectedUser.id
+        idUser: props.selectedUser.id
     });
 };
 
