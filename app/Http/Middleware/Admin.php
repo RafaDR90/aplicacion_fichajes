@@ -21,7 +21,7 @@ class Admin
         
 
         // Verificar si el usuario tiene el rol de administrador
-        if ($user && $user->roles()->where('role_name', 'admin')->exists()) {
+        if ($user && $user->roles()->whereIn('role_name', ['admin', 'super-admin'])->exists()) {
             return $next($request);
         }
         

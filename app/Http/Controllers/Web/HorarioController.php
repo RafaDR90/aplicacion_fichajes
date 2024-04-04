@@ -129,21 +129,22 @@ class HorarioController extends Controller
 
     public function asignarHorario(Request $request)
     {
+
         $horario = Horario::find($request->horario_id);
         $user = User::find($request->idUser);
 
         if (!$horario || !$user) {
             $error = 'Ha habido un problema al asignar el horario';
-            return Redirect::route('showUser', ['id' => $request->user, 'error' => $error]);
+            return Redirect::route('showUser', ['id' => $request->idUser, 'error' => $error]);
         }
 
         //compruebo si el horario ya esta asignado
         $horarioAsignado = $user->horarios()->where('id_horario', $horario->id)->first();
         if ($horarioAsignado) {
             $error = 'El horario ya está asignado';
-            return Redirect::route('showUser', ['id' => $request->user, 'error' => $error]);
+            return Redirect::route('showUser', ['id' => $request->idUser, 'error' => $error]);
         }
-        
+
         $user->horarios()->attach($horario->id);
         $exito = 'Horario asignado correctamente';
 

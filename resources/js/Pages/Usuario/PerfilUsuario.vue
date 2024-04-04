@@ -196,7 +196,6 @@ const formHorario = reactive({
     horario_id: "",
 })
 
-let selectedUser = ref(props.selectedUser);
 
 
 let selectedRole = ref("");
@@ -210,13 +209,13 @@ let isChecked = ref(false);
 
 
 onMounted(() => {
-    isChecked.value = selectedUser.value.requiere_ubicacion == 1;
+    isChecked.value = props.selectedUser.requiere_ubicacion == 1;
 })
 
 let obtieneRol = computed(() => {
-    if (selectedUser.value.roles.length === 0) {
+    if (props.selectedUser.roles.length === 0) {
         return "Normal";
-    } else if (selectedUser.value.roles.some(role => role.role_name === "super-admin")) {
+    } else if (props.selectedUser.roles.some(role => role.role_name === "super-admin")) {
         return "Super Admin";
     } else {
         return "Admin";
@@ -227,7 +226,7 @@ let obtieneRol = computed(() => {
 
 const superAdmin = () => {
     // Compruebo si soy admin o super-admin y devuelvo true si lo soy
-    if (selectedUser.value.roles.some(role => role.role_name === "super-admin")) {
+    if (props.selectedUser.roles.some(role => role.role_name === "super-admin")) {
         return true;
     } else {
         return false;
@@ -249,7 +248,7 @@ const cancelar = () => {
 const handleUbicacionCheckbox = () => {
     router.post('/toggle-requiere-ubicacion', {
         requiere_ubicacion: event.target.checked,
-        idUser: selectedUser.value.id
+        idUser: selectedUser.id
     });
 };
 
@@ -263,7 +262,7 @@ const desasociarUbicacionAlert = (ubicacionId, act, path) => {
 const asignarHorario = () => {
     router.post('/asignar-horario', {
         horario_id: formHorario.horario_id,
-        idUser: selectedUser.value.id
+        idUser: props.selectedUser.id
     });
 };
 
