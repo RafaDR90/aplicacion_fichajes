@@ -9,8 +9,10 @@ use App\Models\Alerta;
 use App\Models\User;
 use Inertia\Inertia;
 
+
 class UbicacionController extends Controller
 {
+    
 
     public function addUbicacion(Request $request)
     {
@@ -73,8 +75,21 @@ class UbicacionController extends Controller
         $user->requiere_ubicacion = $request->requiere_ubicacion;
         $user->save();
 
-        $user = User::with('roles')->find($request->idUser);
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user]);
+        //creo exito dependiendo de si se ha activado o desactivado
+        $exito = $request->requiere_ubicacion ? 'Se notificará su ubicación la próxima vez que inicie sesión.' : 'La ubicación no es requerida.';
+
+        //llamo a la ruta showUser mandandole el idUser y el exito
+        return redirect()->route('showUser', ['id' => $request->idUser, 'exito' => $exito]);
+    }
+
+    public function desasociarUbicacion(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->ubicacion()->detach($request->id_ubicacion);
+
+        $user = User::with(['roles','ubicacion'])->find($user->id);
+        $exito = 'Ubicación desasociada con éxito';
+        return redirect()->route('showUser', ['id' => $request->id, 'exito' => $exito]);
     }
 
     /**

@@ -15,7 +15,7 @@ class Horario extends Model
 
     
 
-    public function users()
+    public function user()
     {
         return $this->belongsToMany(User::class, 'horario_emp', 'id_horario', 'id_empleado');
     }

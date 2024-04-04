@@ -32,7 +32,7 @@ class RoleController extends Controller
             $error = "No tienes permisos para asignar ese Rol";
             $userId = User::with('roles')->find($userId->id);
             
-            return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $userId, 'error' => $error]);
+            return redirect()->route('showUser', ['id' => $request->input('id'), 'error' => $error]);
         }
         if ($nuevoRolNombre != 'normal') {
             $nuevoRolId = Role::where('role_name', $nuevoRolNombre)->first();
@@ -41,14 +41,17 @@ class RoleController extends Controller
                     'role_id' => $nuevoRolId->id,
                     'user_id' => $userId->id
                 ]);
+                $exito = "Rol cambiado con éxito";
             } else {
                 $error = "Ha habido un problema al asignar el nuevo Rol";
             }
         } else {
             DB::table('role_emp')->where('user_id', $userId->id)->delete();
+            $exito = "Rol cambiado con éxito";
         }
 
-        $selectedUser = User::with('roles')->find($request->input('id'));
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $selectedUser, 'error' => $error]);
+        return redirect()->route('showUser', ['id' => $request->input('id'), 'error' => $error, 'exito' => $exito]);
+        //$selectedUser = User::with('roles')->find($request->input('id'));
+        //return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $selectedUser, 'error' => $error]);
     }
 }

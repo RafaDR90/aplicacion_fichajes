@@ -50,11 +50,12 @@ class UserController extends Controller
         ]);
     }
 
-    public function showUser(Request $request)
+    public function showUser(Request $request, $id = null, $exito = null, $error = null)
     {
         $id = $request->input('id');
-        $user = User::with(['roles','ubicacion'])->find($id);
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user]);
+        $user = User::with(['roles','ubicacion','horarios'])->find($id);
+        $allHorarios = DB::table('horarios')->get();
+        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'), 'allHorarios' => $allHorarios]);
     }
 
     public static function hasRole($role)
@@ -69,5 +70,3 @@ class UserController extends Controller
         return false;
     }
 }
-/* $posts = Post::all();
-    return Inertia::render('Post/Index', ['posts' => $posts]); */

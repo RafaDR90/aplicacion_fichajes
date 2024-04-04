@@ -1,9 +1,14 @@
 <template>
-    <div v-if="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex gap-1"
+    <div v-if="error"
+        class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative flex flex-col gap-1"
         role="alert">
         <strong class="font-bold">¡Ups!</strong>
-        <span class="block sm:inline">{{ error }}</span>
-
+        <span class="block sm:inline">- {{ error }}</span>
+    </div>
+    <div v-if="exito"
+        class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative flex flex-col gap-1"
+        role="alert">
+        <p class="block sm:inline">- {{ exito }}</p>
     </div>
     <div class=" w-full flex flex-col justify-center items-center">
         <h2 class=" text-2xl font-bold self-start ml-20 mt-10">Panel Administraci&oacute;n</h2>
@@ -71,7 +76,7 @@
                             </div>
                             <div class="flex gap-1  justify-end mr-5 sm:mr-11 w-full py-2">
                                 <button
-                                    @click="eliminar(id = horario.id, nombre = horario.nombre, accion = 'borrar', ruta = 'borrarHorario')"
+                                    @click="desasociarUbicacionAlert(ubicacionId = ubicacion.id, accion = 'desasociar ubicacion', ejecutar = 'desasociarUbicacion')"
                                     class="h-6 w-6">
                                     <img class=" w-full h-full" src="/img/iconos/borrar.png" alt="Icono borrar"
                                         title="Borrar">
@@ -80,11 +85,7 @@
                             <div class=" border-b border-gris-borde"></div>
                         </div>
                     </div>
-                    <div class="flex gap-2">
-                        <button class="bg-blue-500 text-white rounded-lg px-2 py-1 w-max ml-1">Agregar
-                            ubicacion</button>
-                        <button class="bg-red-500 text-white rounded-lg px-2 py-1 w-max ml-1">Eliminar</button>
-                    </div>
+
                 </div>
                 <div class="flex flex-col gap-2 w-max">
                     <h2 class="text-xl font-bold">Dispositivos permitidos</h2>
@@ -100,11 +101,53 @@
                 <div class="flex flex-col gap-2 w-max">
                     <h2 class="text-xl font-bold">Horario</h2>
                     <div class="border border-gris-borde rounded w-72 md:w-96 p-5 h-40">
-                        aqui van los horarios
+                        <div v-for=" horario in selectedUser.horarios">
+                            <div class="flex">
+                                <p class=" font-bold">{{ horario.nombre }}</p>
+                            </div>
+                            <div v-if="horario.hora_entrada">
+                                <table class="table-auto border-collapse border">
+        <thead class="text-sm">
+            <tr class=" bg-gris-borde">
+                <th class="border border-gris-borde px-1 ">Entrada</th>
+                <th class="border px-1">Salida</th>
+                <th v-if="horario.descanso_entrada" class="border  px-1">Descanso inicio</th>
+                <th v-if="horario.descanso_salida" class="border  px-1">Descanso fin</th>
+                <th class="border px-1">tiempo libre</th>
+                <th class="border px-1">Total horas</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class=" ">
+                <td class="border text-center border-gris-borde">{{ horario.hora_entrada.slice(0, 5) }}</td>
+                <td class="border text-center border-gris-borde">{{ horario.hora_salida.slice(0, 5) }}</td>
+                <td v-if="horario.descanso_entrada" class="border text-center border-gris-borde">{{ horario.descanso_entrada.slice(0, 5) }}</td>
+                <td v-if="horario.descanso_salida" class="border text-center border-gris-borde">{{ horario.descanso_salida.slice(0, 5) }}</td>
+                <td class="border text-center border-gris-borde">{{ horario.libre }}"</td>
+                <td class="border text-center border-gris-borde">{{ horario.total_horas }}</td>
+            </tr>
+        </tbody>
+    </table>
+                            </div>
+                            <div>
+
+                            </div>
+                            <!--<div>
+                                <p class=" font-bold text-nowrap">Total horas:</p>
+                                <p>{{ horario.total_horas }}h</p>
+                            </div>-->
+
+                        </div>
                     </div>
                     <div class="flex gap-2">
-                        <button class="bg-blue-500 text-white rounded-lg px-2 py-1 w-max ml-1">Agregar horario</button>
-                        <button class="bg-red-500 text-white rounded-lg px-2 py-1 w-max ml-1">Eliminar</button>
+                        <form class="flex items-center" @submit.prevent="asignarHorario">
+                            <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1"
+                                v-model="formHorario.horario_id">
+                                <option v-for="horario in allHorarios" :value="horario.id">{{ horario.nombre }}</option>
+                            </select>
+                            <button type="submit" class="bg-blue-500 text-white rounded-lg px-2 py-1 w-max ml-1">Asignar
+                                horario</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -113,10 +156,16 @@
 
     <div v-if="showAlert" class="absolute inset-0 flex justify-center  text-2xl">
         <div class=" sticky top-1/2 bg-white p-4 rounded shadow-gray-600 shadow-2xl h-max border">
-            <p>Seguro que desea {{ accion }} de <span class=" font-bold">{{ selectedUser.name }}</span> a <span
-                    class=" font-bold">{{ selectedRole }}</span>?</p>
+            <p>Seguro que desea {{ accion }} de <span class=" font-bold">{{ selectedUser.name }}</span><span
+                    v-if="ejecutar == 'cambiarRol'">a <span class=" font-bold">{{ selectedRole }}</span>?</span></p>
             <div class="flex justify-end gap-6 mt-10">
-                <Link :href="route(ejecutar, { 'id': selectedUser.id, 'rol': selectedRole })" method="post"
+                <Link v-if="ejecutar == 'cambiarRol'"
+                    :href="route(ejecutar, { 'id': selectedUser.id, 'rol': selectedRole })" method="post"
+                    class="bg-green-500 text-white rounded-lg px-2" :preserve-state="false">
+                Continuar
+                </Link>
+                <Link v-if="ejecutar == 'desasociarUbicacion'"
+                    :href="route(ejecutar, { 'id': selectedUser.id, 'id_ubicacion': ubicacion_id })" method="post"
                     class="bg-green-500 text-white rounded-lg px-2" :preserve-state="false">
                 Continuar
                 </Link>
@@ -130,25 +179,32 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { defineProps } from 'vue';
-import { computed } from 'vue';
+import { computed, reactive } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
-
+import { router } from '@inertiajs/vue3'
 
 
 const props = defineProps({
     selectedUser: Object,
     error: String,
+    exito: String,
+    allHorarios: Array,
 });
 
+const formHorario = reactive({
+    horario_id: "",
+})
+
 let selectedUser = ref(props.selectedUser);
-let error = ref(props.error);
 
 
 let selectedRole = ref("");
 let showAlert = ref(false);
 let accion = ref("");
 let ejecutar = ref("");
+
+let ubicacion_id = ref("");
 
 let isChecked = ref(false);
 
@@ -191,9 +247,24 @@ const cancelar = () => {
 };
 
 const handleUbicacionCheckbox = () => {
-    Inertia.post('/toggleRequiereUbicacion', {
+    router.post('/toggle-requiere-ubicacion', {
         requiere_ubicacion: event.target.checked,
         idUser: selectedUser.value.id
     });
 };
+
+const desasociarUbicacionAlert = (ubicacionId, act, path) => {
+    accion.value = act;
+    ejecutar.value = path;
+    ubicacion_id.value = ubicacionId;
+    showAlert.value = true;
+};
+
+const asignarHorario = () => {
+    router.post('/asignar-horario', {
+        horario_id: formHorario.horario_id,
+        idUser: selectedUser.value.id
+    });
+};
+
 </script>
