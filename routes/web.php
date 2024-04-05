@@ -67,6 +67,7 @@ Route::middleware('auth')->group(function () {
     //VACACIONES
     Route::get('/vacaciones', [VacacionesController::class, 'index'])->name('vacaciones');
     Route::get('/solicitud', [SolicitudController::class, 'index'])->name('solicitud');
+    Route::post('/solicitud-vacaciones', [VacacionesController::class, 'solicitudVacaciones'])->name('solicitudVacaciones');
 });
 
 require __DIR__ . '/auth.php';

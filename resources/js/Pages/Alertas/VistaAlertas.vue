@@ -1,5 +1,5 @@
 <template>
-    <div class="flex-col w-full min-h-[calc(100vh-5rem)] p-16">
+    <div class="flex-col w-full min-h-[calc(100vh-5rem)] p-4">
         <div class="p-4 mb-6">
             <h1 class="text-4xl font-bold">Notificaciones</h1>
         </div>
@@ -109,4 +109,6 @@ function closeAlert() {
 const props = defineProps({
     alertas: Array,
 });
+
+
 </script>

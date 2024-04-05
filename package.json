@@ -18,6 +18,10 @@
         "vue": "^3.4.0"
     },
     "dependencies": {
+        "@fullcalendar/core": "^6.1.11",
+        "@fullcalendar/daygrid": "^6.1.11",
+        "@fullcalendar/interaction": "^6.1.11",
+        "@fullcalendar/vue3": "^6.1.11",
         "@inertiajs/inertia-vue3": "^0.6.0",
         "laravel-precognition-vue-inertia": "^0.5.4",
         "vue-loader": "^17.4.2"

@@ -10,7 +10,7 @@
         role="alert">
         <p class="block sm:inline">- {{ exito }}</p>
     </div>
-    <div class=" w-full flex flex-col justify-center items-center">
+    <div class=" w-full flex flex-col justify-center items-center ">
         <h2 class=" text-2xl font-bold self-start ml-20 mt-10">Panel Administraci&oacute;n</h2>
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6">
 

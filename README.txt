@@ -1,6 +1,8 @@
 RECORDATORIO
 - Mirar spatie para los roles
 - hacer funcionar boton de desasignar horario
+- voy por esta funcion public function solicitudVacaciones (Request $request) tengo que comprobar que no haya 
+solicitudes del mismo usuario ni vacaciones repetidas en la tabla
 
 
 Usuario super-admin
@@ -15,6 +17,7 @@ DETALLES A TENER EN CUENTA
 
 Se ha usado Laravel 11 con Breeze(Para el inicio de sesion), Inertia(Para los recargos de pagina) y vue.
 Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
+Se ha usado FullCalendar para renderizar el calendario
 
 - Si da error la creacion de token
     php artisan passport:client --personal

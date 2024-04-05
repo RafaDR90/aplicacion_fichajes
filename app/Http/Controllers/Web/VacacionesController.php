@@ -6,6 +6,9 @@ use App\Models\Vacaciones;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\Alerta;
+
 
 
 class VacacionesController extends Controller
@@ -30,6 +33,33 @@ class VacacionesController extends Controller
            
         ];
         return $vacaciones;
+    }
+
+    public function solicitudVacaciones (Request $request)
+    {
+        $dias = $request->input('dias');
+
+        if(!SolicitudController::creaSolicitud('vacaciones', 'Solicitud de vacaciones', $dias, auth()->user()->id)){
+            //si no se ha creado la alerta retorno un error a la vista
+            return Redirect::route('solicitud',['error' => 'Error al solicitar vacaciones','vista' => 'vacaciones']);
+        }
+        try{
+            //guardo en la bd las vacaciones haciendo un bucle a los dias
+            foreach($dias as $dia){
+                $vacaciones = new Vacaciones();
+                $vacaciones->fecha = $dia;
+                $vacaciones->user_id = auth()->user()->id;
+                $vacaciones->save();
+            }
+        }catch(\Exception $e){
+            //borro la alerta creada
+            Alerta::where('user_id', auth()->user()->id)->where('tipo', 'vacaciones')->delete();
+            return Redirect::route('solicitud',['error' => $e->getMessage() ,'vista' => 'vacaciones']);
+        }
+        return Redirect::route('solicitud',['exito' => 'Solicitud de vacaciones realizada con exito','vista' => 'vacaciones']);
+
+        
+        
     }
 
     /**

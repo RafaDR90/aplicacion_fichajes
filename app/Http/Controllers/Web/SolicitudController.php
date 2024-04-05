@@ -17,7 +17,7 @@ class SolicitudController extends Controller
         //si vista es vacaciones llamo a la funcion de obtenervacaciones de vacacionesController
         if ($request->vista == 'vacaciones') {
             $vacaciones = VacacionesController::obtieneVacaciones();
-            return Inertia::render('Solicitud/VistaSolicitud', ['vacaciones' => $vacaciones]);
+            return Inertia::render('Solicitud/VistaSolicitud', ['vacaciones' => $vacaciones, 'error' => $request->error, 'exito' => $request->exito]);
         }
         return Inertia::render('Solicitud/VistaSolicitud');
     }
@@ -25,9 +25,19 @@ class SolicitudController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public static function creaSolicitud($tipo, $mensaje, $datos, $userId)
     {
-        //
+        try {
+            $alerta = new Alerta();
+            $alerta->tipo = $tipo;
+            $alerta->mensaje = $mensaje;
+            $alerta->datos = $datos;
+            $alerta->user_id = $userId;
+            $alerta->save();
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
 
     /**
