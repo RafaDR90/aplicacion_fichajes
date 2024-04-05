@@ -47,6 +47,12 @@
                 </div>
                 <p class="mr-8">Horarios</p>
             </Link>
+            <Link :href="route('solicitud')" class=" button_nav ">
+                <div class="h-6 w-6">
+                    <img class="h-full w-full" src="/img/sidebar/solicitud.png" alt="">
+                </div>
+                <p class="mr-8">Solicitud</p>
+            </Link>
 
 
         </div>

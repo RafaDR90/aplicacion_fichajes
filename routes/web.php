@@ -10,7 +10,9 @@ use App\Http\Middleware\Admin;
 use App\Http\Controllers\Web\RoleController;
 use App\Http\Controllers\Web\HorarioController;
 use App\Http\Controllers\Web\AlertaController;
+use App\Http\Controllers\Web\SolicitudController;
 use App\Http\Controllers\Web\UbicacionController;
+use App\Http\Controllers\Web\VacacionesController;
 
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -23,8 +25,7 @@ use App\Http\Controllers\Web\UbicacionController;
 
 Route::get('/', [UserController::class, 'index']);
 
-//FICHAJE
-Route::get('/fichar', [FichajeController::class, 'fichar'])->name('fichar');
+
 
 Route::group(['middleware' => Admin::class], function () {
     Route::get('/usuarios', [UserController::class, 'showUsers'])->name('showUsers');
@@ -61,8 +62,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/fichaje', [FichajeController::class, 'index'])->name('fichaje');
-    
-
+    //FICHAJE
+    Route::get('/fichar', [FichajeController::class, 'fichar'])->name('fichar');
+    //VACACIONES
+    Route::get('/vacaciones', [VacacionesController::class, 'index'])->name('vacaciones');
+    Route::get('/solicitud', [SolicitudController::class, 'index'])->name('solicitud');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
