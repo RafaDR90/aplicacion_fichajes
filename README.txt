@@ -1,8 +1,7 @@
 RECORDATORIO
 - Mirar spatie para los roles
 - hacer funcionar boton de desasignar horario
-- voy por esta funcion public function solicitudVacaciones (Request $request) tengo que comprobar que no haya 
-solicitudes del mismo usuario ni vacaciones repetidas en la tabla
+- arreglando solicitud de vacaciones, cuando la abro da error hasta que recargo la pagina y cuando solicito vacaciones me saca de la vista vacaciones
 
 
 Usuario super-admin

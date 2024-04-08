@@ -35,6 +35,11 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    filter: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   computed: {
@@ -46,6 +51,9 @@ export default {
       if (this.sortField) {
         url += '&sortField=' + this.sortField;
       }
+      if(this.filter){
+        url += '&filter=' + this.filter;
+      }
       return url;
     },
     nextPageUrl() {
@@ -55,6 +63,9 @@ export default {
       }
       if (this.sortField) {
         url += '&sortField=' + this.sortField;
+      }
+      if(this.filter){
+        url += '&filter=' + this.filter;
       }
       return url;
     }

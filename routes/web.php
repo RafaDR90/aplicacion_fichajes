@@ -49,6 +49,10 @@ Route::group(['middleware' => Admin::class], function () {
     Route::post('/denyUbicacion', [UbicacionController::class, 'denyUbicacion'])->name('denyUbicacion');
     Route::post('/toggle-requiere-ubicacion', [UbicacionController::class, 'toggleRequiereUbicacion'])->name('toggleRequiereUbicacion');
     Route::post('/desasociar-ubicacion', [UbicacionController::class, 'desasociarUbicacion'])->name('desasociarUbicacion');
+
+    //VACACIONES
+    Route::post('/accepta-vacaciones', [VacacionesController::class, 'update'])->name('aceptarVacaciones');
+    Route::post('/denegada-vacaciones', [VacacionesController::class, 'deniegaVacaciones'])->name('deniegaVacaciones');
 });
 
 

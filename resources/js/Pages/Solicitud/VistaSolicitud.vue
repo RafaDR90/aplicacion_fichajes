@@ -38,14 +38,15 @@
                 </ul>
                 <div class="flex flex-col w-full items-center">
                     <button @click="solicitarDiasSeleccionados"
-                    class=" p-4 w-max bg-green-300 rounded-md mt-10 font-bold hover:bg-green-200 shadow-md active:shadow-none active:bg-green-300">Solicitar
-                    dias seleccionados</button>
-                <button @click="deseleccionarTodo"
-                    class=" p-4 w-max bg-red-500 rounded-md mt-10 font-bold hover:bg-red-400 shadow-md active:shadow-none active:bg-red-500">Deseleccionar
-                    todo</button>
-                    <p class=" font-bold text-sm mt-2"><span class=" font-bold text-gray-600">Dias disponibles:</span> 2</p>
+                        class=" p-4 w-max bg-green-300 rounded-md mt-10 font-bold hover:bg-green-200 shadow-md active:shadow-none active:bg-green-300">Solicitar
+                        dias seleccionados</button>
+                    <button @click="deseleccionarTodo"
+                        class=" p-4 w-max bg-red-500 rounded-md mt-10 font-bold hover:bg-red-400 shadow-md active:shadow-none active:bg-red-500">Deseleccionar
+                        todo</button>
+                    <p class=" font-bold text-sm mt-2"><span class=" font-bold text-gray-600">Dias disponibles:</span> 2
+                    </p>
                 </div>
-                
+
             </div>
             <div v-if="vista == 'vacaciones'" class=" w-full mt-12 min-h-96 flex justify-center ">
                 <FullCalendar :options="calendarOptions" class="w-[80vh]" />
@@ -71,6 +72,7 @@ const props = defineProps({
     exito: String,
     error: String,
 })
+
 
 const hoy = new Date()
 const fechaActual = new Date(hoy.getFullYear(), hoy.getMonth())
@@ -99,7 +101,7 @@ const solicitarDiasSeleccionados = () => {
     if (fechasSeleccionadas.value.length === 0) {
         return
     }
-    router.post('/solicitud-vacaciones', { dias: fechasSeleccionadas.value }, { preserveState: true });
+    router.post('/solicitud-vacaciones', { dias: fechasSeleccionadas.value }, { preserveState: false, refresh: true});
 }
 
 const calendarOptions = {
@@ -119,6 +121,17 @@ const calendarOptions = {
         if (dia === 0 || dia === 6 || info.date < new Date()) {
             return
         }
+        let encontrado = false;
+        props.vacaciones.forEach(vacacion => {
+            if (vacacion.fecha === info.dateStr) {
+                encontrado = true;
+                return
+            }
+        });
+        if (encontrado) {
+            return
+        }
+
         if (fechasSeleccionadas.value.includes(info.dateStr)) {
             fechasSeleccionadas.value = fechasSeleccionadas.value.filter(f => f !== info.dateStr)
             info.dayEl.style.backgroundColor = 'white';
@@ -138,6 +151,7 @@ const calendarOptions = {
     firstDay: 1,
     locale: esLocale,
     dayCellDidMount: (info) => {
+        //si la fecha es menor a la actual la pongo en gris
         if (new Date(info.date) < new Date()) {
             info.el.style.backgroundColor = 'grey';
         }
@@ -146,9 +160,24 @@ const calendarOptions = {
             info.el.style.backgroundColor = '#B21414';
         }
 
+        // Si la fecha existe en props.vacaciones, cambiar el color de fondo a amarillo
+        props.vacaciones.forEach(vacacion => {
+            // Crear la fecha en UTC
+            let date = new Date(info.date);
+            let utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+
+            if (vacacion.fecha === utcDate.toISOString().slice(0, 10)) {
+                if (vacacion.aprobada === 0) {
+                    info.el.style.backgroundColor = '#FBBF24';
+                } else {
+                    info.el.style.backgroundColor = '#34D399';
+                }
+            }
+        });
     },
 
 }
+
 
 
 </script>

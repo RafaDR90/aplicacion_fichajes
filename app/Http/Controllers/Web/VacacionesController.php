@@ -8,8 +8,7 @@ use App\Http\Controllers\Controller;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Alerta;
-
-
+use Illuminate\Support\Facades\Date;
 
 class VacacionesController extends Controller
 {
@@ -18,21 +17,10 @@ class VacacionesController extends Controller
      */
     public static function obtieneVacaciones()
     {
-        //creo un array falso de vacaciones
-        $vacaciones = [
-            [
-                'id' => 1,
-                'fecha' => '2021-06-01',
-                'estado' => 'pendiente'
-            ],
-            [
-                'id' => 2,
-                'fecha' => '2021-06-02',
-                'estado' => 'pendiente'
-            ],
-           
-        ];
-        return $vacaciones;
+        //devuelvo las vacaciones del usuario
+        return $vacaciones = Vacaciones::where('user_id', auth()->user()->id)->get();
+        
+
     }
 
     public function solicitudVacaciones (Request $request)
@@ -41,10 +29,10 @@ class VacacionesController extends Controller
 
         if(!SolicitudController::creaSolicitud('vacaciones', 'Solicitud de vacaciones', $dias, auth()->user()->id)){
             //si no se ha creado la alerta retorno un error a la vista
-            return Redirect::route('solicitud',['error' => 'Error al solicitar vacaciones','vista' => 'vacaciones']);
+            return Redirect::route('solicitud',['error' => 'Error al solicitar vacaciones, ya tienes una solicitud de vacaciones pendiente','vista' => 'vacaciones']);
         }
         try{
-            //guardo en la bd las vacaciones haciendo un bucle a los dias
+            //guardo en la bd las vacaciones
             foreach($dias as $dia){
                 $vacaciones = new Vacaciones();
                 $vacaciones->fecha = $dia;
@@ -57,9 +45,44 @@ class VacacionesController extends Controller
             return Redirect::route('solicitud',['error' => $e->getMessage() ,'vista' => 'vacaciones']);
         }
         return Redirect::route('solicitud',['exito' => 'Solicitud de vacaciones realizada con exito','vista' => 'vacaciones']);
+    }
 
-        
-        
+    public function update(Request $request, Vacaciones $vacaciones)
+    {
+        //obtengo datos con idAlert
+        $idAlert = $request->input('idAlert');
+        $alerta = Alerta::find($idAlert);
+        $iduser=$request->input('idUser');
+
+        //obtengo las vacaciones de idUser
+        $vacaciones = Vacaciones::where('user_id', $iduser)->get();
+        //actualizo las vacaciones
+        foreach($vacaciones as $vacacion){
+            $vacacion->aprobada = 1;
+            $vacacion->save();
+        }
+        //actualizo la alerta
+        $alerta->leido = 1;
+        $alerta->save();
+        return Redirect::route('alertas');
+
+        dd($alerta);die();
+    }
+
+    public function deniegaVacaciones(Request $request)
+    {
+        $idAlert = $request->input('idAlert');
+        $alerta = Alerta::find($idAlert);
+        $iduser=$request->input('idUser');
+        $vacaciones = Vacaciones::where('user_id', $iduser)
+        ->where('aprobada', 0)
+        ->get();
+        foreach($vacaciones as $vacacion){
+            $vacacion->delete();
+        }
+        $alerta->leido = 1;
+        $alerta->save();
+        return Redirect::route('alertas');
     }
 
     /**
@@ -97,10 +120,7 @@ class VacacionesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Vacaciones $vacaciones)
-    {
-        //
-    }
+    
 
     /**
      * Remove the specified resource from storage.

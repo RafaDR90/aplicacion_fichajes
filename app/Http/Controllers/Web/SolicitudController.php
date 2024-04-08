@@ -15,6 +15,7 @@ class SolicitudController extends Controller
     public function index(Request $request)
     {
         //si vista es vacaciones llamo a la funcion de obtenervacaciones de vacacionesController
+        //var_dump($request->vista);die;
         if ($request->vista == 'vacaciones') {
             $vacaciones = VacacionesController::obtieneVacaciones();
             return Inertia::render('Solicitud/VistaSolicitud', ['vacaciones' => $vacaciones, 'error' => $request->error, 'exito' => $request->exito]);
@@ -27,6 +28,15 @@ class SolicitudController extends Controller
      */
     public static function creaSolicitud($tipo, $mensaje, $datos, $userId)
     {
+        //obtengo las alertas del userId del tipo $tipo y si ya hay una creada retorno false
+        $alerta = Alerta::where('user_id', $userId)
+        ->where('tipo', $tipo)
+        ->where('leido', 0)
+        ->first();
+
+        if ($alerta) {
+            return false;
+        }
         try {
             $alerta = new Alerta();
             $alerta->tipo = $tipo;
