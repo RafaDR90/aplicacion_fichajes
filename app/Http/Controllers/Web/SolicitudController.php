@@ -15,9 +15,9 @@ class SolicitudController extends Controller
     public function index(Request $request)
     {
         //si vista es vacaciones llamo a la funcion de obtenervacaciones de vacacionesController
-        //var_dump($request->vista);die;
         if ($request->vista == 'vacaciones') {
             $vacaciones = VacacionesController::obtieneVacaciones();
+
             return Inertia::render('Solicitud/VistaSolicitud', ['vacaciones' => $vacaciones, 'error' => $request->error, 'exito' => $request->exito]);
         }
         return Inertia::render('Solicitud/VistaSolicitud');

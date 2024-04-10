@@ -43,6 +43,7 @@ Route::group(['middleware' => Admin::class], function () {
 
     //ALERTAS
     Route::get('/alertas', [AlertaController::class, 'index'])->name('alertas');
+    Route::post('/marcar-leida', [AlertaController::class, 'marcarLeidaAlerta'])->name('marcarLeidaAlerta');
 
     //UBICACION
     Route::post('/addUbicacion', [UbicacionController::class, 'addUbicacion'])->name('addUbicacion');

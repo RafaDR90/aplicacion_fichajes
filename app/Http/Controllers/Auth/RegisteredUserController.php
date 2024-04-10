@@ -47,7 +47,11 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         //Auth::login($user);
-
+        //añado 30 dias de vacaciones
+        $user->diasVacaciones()->create([
+            'dias_disponibles' => 30,
+        ]);
+        
         $exito = "Empleado '{$user->name} {$user->apellidos}' creado correctamente";
 
         return redirect(route('showUsers', absolute: false))->with('exito', $exito);

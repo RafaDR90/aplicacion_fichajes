@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use App\Models\RoleEmp;
+use App\Models\DiasVacaciones;
 
 class User extends Authenticatable
 {
@@ -63,5 +64,15 @@ class User extends Authenticatable
     public function ubicacion()
     {
         return $this->belongsToMany(Ubicacion::class, 'ubicacion_permitida')->withTimestamps();
+    }
+
+    public function diasVacaciones()
+    {
+        return $this->hasOne(DiasVacaciones::class);
+    }
+
+    public function fichajes()
+    {
+        return $this->hasMany(Fichaje::class);
     }
 }

@@ -1,7 +1,7 @@
 RECORDATORIO
 - Mirar spatie para los roles
 - hacer funcionar boton de desasignar horario
-- arreglando solicitud de vacaciones, cuando la abro da error hasta que recargo la pagina y cuando solicito vacaciones me saca de la vista vacaciones
+- añadir boton de volver o marca de agua (cuando edito horario,)
 
 
 Usuario super-admin
@@ -58,6 +58,7 @@ FUNCIONALIDADES A MENCIONAR:
 - Notificaciones
     - muestra Notificaciones
     - puedes aceptar o rechazar notificaciones, estas se marcaran como leido y desapareceran (hasta que pueda filtrar por leidas)
+    - puedes filtrar entre tipo de notificaciones
 
 - Horarios
     - añadir Horarios
@@ -65,4 +66,11 @@ FUNCIONALIDADES A MENCIONAR:
     - editar horario
         - tanto al editar como al añadir, hay diferentes restricciones dependiendo del tipo (flexible, continuo, partido)
 
-    (Aun no se pueden asignar horarios)
+- Solicitud
+    - Vacaciones
+        - seleccionar dias
+        - solicitar dias seleccionados
+        - desmarcar dias seleccionados
+        - los dias libres suben y bajan dependiendo dias marcados y dias restantes en la bd, se actualizaran al solicitar dias y si se deniegan se devolveran
+
+    

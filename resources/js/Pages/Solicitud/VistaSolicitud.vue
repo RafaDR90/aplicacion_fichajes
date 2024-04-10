@@ -32,9 +32,9 @@
             </div>
             <div v-if="vista == 'vacaciones'" class=" w-full flex flex-col items-center ">
                 <ul class=" list-disc mt-5 lg:flex lg:gap-20">
-                    <li class=" text-[#B21414] font-bold">Fines de semana y festivos</li>
-                    <li class="font-bold text-yellow-400 text-nowrap">Vacaciones pendientes de confirmacion</li>
-                    <li class="font-bold text-green-400">Vacaciones</li>
+                    <li class=" text-[#B21414] font-bold text-shadow  bggr">Fines de semana y festivos</li>
+                    <li class="font-bold text-yellow-400 text-nowrap text-shadow">Vacaciones pendientes de confirmacion</li>
+                    <li class="font-bold text-green-400 text-shadow">Vacaciones</li>
                 </ul>
                 <div class="flex flex-col w-full items-center">
                     <button @click="solicitarDiasSeleccionados"
@@ -43,7 +43,7 @@
                     <button @click="deseleccionarTodo"
                         class=" p-4 w-max bg-red-500 rounded-md mt-10 font-bold hover:bg-red-400 shadow-md active:shadow-none active:bg-red-500">Deseleccionar
                         todo</button>
-                    <p class=" font-bold text-sm mt-2"><span class=" font-bold text-gray-600">Dias disponibles:</span> 2
+                    <p class=" font-bold text-sm mt-2"><span class=" font-bold text-gray-600">Dias disponibles:</span> {{ (vacaciones.diasDisponibles.dias_disponibles - fechasSeleccionadas.length) }}
                     </p>
                 </div>
 
@@ -63,6 +63,7 @@ import FullCalendar from '@fullcalendar/vue3'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import esLocale from '@fullcalendar/core/locales/es';
+import { onMounted } from 'vue';
 
 
 
@@ -73,6 +74,15 @@ const props = defineProps({
     error: String,
 })
 
+onMounted(() => {
+    if(props.vacaciones){
+     vista.value = 'vacaciones';
+    }
+})
+// Cuando cargues los datos de las vacaciones, establece datosCargados en true
+const obtenerVacaciones = () => {
+    router.get('/solicitud', { vista: 'vacaciones' }, { preserveState: false, refresh: true});
+}
 
 const hoy = new Date()
 const fechaActual = new Date(hoy.getFullYear(), hoy.getMonth())
@@ -81,10 +91,6 @@ const seisMesesDespues = new Date(hoy.getFullYear(), hoy.getMonth() + 8, 0)
 const vista = ref('')
 const fechasSeleccionadas = ref([]);
 
-const obtenerVacaciones = () => {
-    router.get('/solicitud', { vista: 'vacaciones' }, { preserveState: true });
-    vista.value = 'vacaciones'
-}
 
 const deseleccionarTodo = () => {
     fechasSeleccionadas.value.forEach(fecha => {
@@ -101,7 +107,7 @@ const solicitarDiasSeleccionados = () => {
     if (fechasSeleccionadas.value.length === 0) {
         return
     }
-    router.post('/solicitud-vacaciones', { dias: fechasSeleccionadas.value }, { preserveState: false, refresh: true});
+    router.post('/solicitud-vacaciones', { dias: fechasSeleccionadas.value }, { preserveState: false, refresh: true });
 }
 
 const calendarOptions = {
@@ -122,7 +128,7 @@ const calendarOptions = {
             return
         }
         let encontrado = false;
-        props.vacaciones.forEach(vacacion => {
+        props.vacaciones.vacaciones.forEach(vacacion => {
             if (vacacion.fecha === info.dateStr) {
                 encontrado = true;
                 return
@@ -136,11 +142,10 @@ const calendarOptions = {
             fechasSeleccionadas.value = fechasSeleccionadas.value.filter(f => f !== info.dateStr)
             info.dayEl.style.backgroundColor = 'white';
             info.dayEl.style.border = '1px solid #D8D8D8';
-        } else {
+        } else if(fechasSeleccionadas.value.length < props.vacaciones.diasDisponibles.dias_disponibles) {
             fechasSeleccionadas.value.push(info.dateStr)
             info.dayEl.style.border = '4px solid green';
             info.dayEl.style.backgroundColor = 'rgba(0, 128, 0, 0.1)';
-
         }
     },
     events: props.events || [],
@@ -161,19 +166,21 @@ const calendarOptions = {
         }
 
         // Si la fecha existe en props.vacaciones, cambiar el color de fondo a amarillo
-        props.vacaciones.forEach(vacacion => {
-            // Crear la fecha en UTC
-            let date = new Date(info.date);
-            let utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+        if (props.vacaciones) {
+            props.vacaciones.vacaciones.forEach(vacacion => {
+                // Crear la fecha en UTC
+                let date = new Date(info.date);
+                let utcDate = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 
-            if (vacacion.fecha === utcDate.toISOString().slice(0, 10)) {
-                if (vacacion.aprobada === 0) {
-                    info.el.style.backgroundColor = '#FBBF24';
-                } else {
-                    info.el.style.backgroundColor = '#34D399';
+                if (vacacion.fecha === utcDate.toISOString().slice(0, 10)) {
+                    if (vacacion.aprobada === 0) {
+                        info.el.style.backgroundColor = '#FBBF24';
+                    } else {
+                        info.el.style.backgroundColor = '#34D399';
+                    }
                 }
-            }
-        });
+            });
+        }
     },
 
 }

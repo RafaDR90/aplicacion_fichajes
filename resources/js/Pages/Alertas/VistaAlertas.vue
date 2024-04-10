@@ -4,14 +4,20 @@
             <h1 class="text-4xl font-bold">Notificaciones</h1>
         </div>
 
-        <div class="w-full  bg-white border border-gris-borde p-8 rounded-t-2xl">
+        <div class="w-full  bg-white border border-gris-borde p-8 rounded-t-2xl flex flex-col gap-3">
             <!-- Aqui va la barra de busqueda y filtros-->
             <select :value="filter" @change="updateFilter" name="filter" id=""
                 class="border border-gris-borde rounded-lg p-4 h-16 text-lg pr-10">
                 <option class=" text-gray-500" value="">Todo</option>
                 <option value="ubicacion">Solicitud de ubicaciones</option>
                 <option value="vacaciones">Solicitud de vacaciones</option>
+                <option value="fichaje">Anomalia de fichaje</option>
             </select>
+
+            <div class="flex items-center space-x-2">
+                <label for="leidos" class="text-lg text-gray-700">Ver leidos:</label>
+                <input type="checkbox" :checked="leidos" :value="leidos" @change="toggleLeidos" name="leidos" id="leidos" class="form-checkbox h-5 w-5 text-gray-700 rounded-md">
+            </div>
         </div>
 
         <div class="border border-gris-borde w-full ">
@@ -41,7 +47,7 @@
                                     </div>
 
                                 </div>
-                                <div class="flex gap-3 mt-3">
+                                <div class="flex gap-3 mt-3" v-if="!alerta.leido">
                                     <button
                                         @click="openConfirmation(alerta.id, alerta.user.id, 'añadir la ubicación', alerta.user.name + ' ' + alerta.user.apellidos, 'addUbicacion')"
                                         class="bg-green-500 text-white p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:bg-green-600 active:bg-green-700">Aceptar</button>
@@ -80,7 +86,7 @@
                                     </div>
 
                                 </div>
-                                <div class="flex gap-3 mt-3">
+                                <div class="flex gap-3 mt-3"  v-if="!alerta.leido">
                                     <button
                                         @click="openConfirmation(alerta.id, alerta.user.id, 'añadir vacaciones', alerta.user.name + ' ' + alerta.user.apellidos, 'aceptarVacaciones')"
                                         class="bg-green-500 text-white p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:bg-green-600 active:bg-green-700">Aceptar</button>
@@ -103,13 +109,55 @@
                                     class="border-t border-gris-borde w-full mt-4">
                                 </div>
                             </div>
+
+                            <div v-if="alerta.tipo == 'fichaje'">
+                                <p class=" text-orange-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
+                                <div class="flex flex-col sm:flex-row sm:gap-40">
+                                    <div>
+                                        <p><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
+                                            }}
+                                            {{ alerta.user.apellidos }}</p>
+                                        <p v-if="alerta.datos.horaEntrada" class=" font-bold">Llega tarde.</p>
+                                        <div class="flex flex-col md:flex-row md:gap-20 my-1">
+                                            <p><span class=" font-bold">Fichaje a las: </span>{{
+                                                alerta.datos.horaFichaje.split(':').slice(0, 2).join(':') }}</p>
+                                            <p v-if="alerta.datos.horaEntrada"><span class=" font-bold">Hora Entrada:
+                                                </span>{{ alerta.datos.horaEntrada.split(':').slice(0, 2).join(':') }}
+                                            </p>
+                                            <p v-if="alerta.datos.horaSalida"><span class=" font-bold">Hora de salida:
+                                                </span>{{ alerta.datos.horaSalida.split(':').slice(0, 2).join(':') }}
+                                            </p>
+                                            <p><span class=" font-bold">Horario: </span>{{ alerta.datos.nombreHorario }}
+                                            </p>
+                                        </div>
+                                        <button v-if="!alerta.leido"
+                                            @click="openConfirmation(alerta.id, alerta.user.id, 'marcar como leído', null, 'marcarLeidaAlerta')"
+                                            class=" mt-2 bg-green-500 text-white p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:bg-green-600 active:bg-green-700">Marcar
+                                            como leido</button>
+                                        <p class=" text-sm text-gray-500 mt-2"><span class=" font-bold">Fecha: </span>{{
+                                            new
+                                                Date(alerta.created_at).toLocaleDateString('es-ES', {
+                                                    year: 'numeric', month: 'long', day: 'numeric'
+                                            }) }} a las {{ new
+                                                Date(alerta.created_at).toLocaleTimeString('es-ES', {
+                                                    hour: '2-digit', minute:
+                                                        '2-digit'
+                                                }) }}</p>
+                                        <!-- Linea separadora -->
+                                        <div v-if="alerta != alertas.data[alertas.data.length - 1]"
+                                            class="border-t border-gris-borde w-full mt-4">
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <nav class=" bg-white rounded-b-xl border border-gris-borde">
-            <Pagination :pagination="alertas" :filter="filter" />
+            <Pagination :pagination="alertas" :filter="filter" :leidos="leidos"/>
         </nav>
     </div>
 
@@ -118,8 +166,9 @@
 
     <div v-if="showAlert" class="absolute inset-0 flex justify-center  text-2xl">
         <div class=" sticky top-1/2 bg-white p-4 rounded shadow-gray-600 shadow-2xl h-max border">
-            <p>¿Seguro que desea <span class=" font-bold">{{ accion }}</span> a <span class=" font-bold">{{
-                nombreEmp }}</span>?</p>
+            <p>¿Seguro que desea <span class=" font-bold">{{ accion }}</span> <span v-if="nombreEmp">a</span> <span
+                    class=" font-bold">{{
+                        nombreEmp }}</span>?</p>
             <div class="flex justify-end gap-6 mt-10">
                 <Link @click="closeAlert" :href="route(rute, { idAlert: idAlerta, idUser: idEmp })" method="post"
                     class="bg-green-500 text-white rounded-lg px-2">
@@ -143,8 +192,10 @@ import { router } from '@inertiajs/vue3';
 
 const props = defineProps({
     alertas: Array,
-    filter: String
+    filter: String,
+    leidos: Boolean
 });
+
 // Variables para la confirmacion.
 const showAlert = ref(false);
 const accion = ref('');
@@ -155,8 +206,19 @@ const idAlerta = ref('');
 const sortField = ref('');
 const search = ref('');
 
+
+const toggleLeidos = () => {
+    if(props.leidos){
+        router.get(`/alertas?filter=${props.filter ||''}`);
+    }else{
+        router.get(`/alertas?filter=${props.filter || ''}&leidos=${!props.leidos}`);
+    }
+};
+console.log(props.leidos);
+
 const updateFilter = (event) => {
-    router.get(`/alertas?filter=${event.target.value}`);
+    //añadi leidos a la url
+    router.get(`/alertas?filter=${event.target.value}&leidos=${props.leidos}`);
 };
 
 

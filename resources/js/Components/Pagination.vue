@@ -40,6 +40,11 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    leidos: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   computed: {
@@ -54,6 +59,9 @@ export default {
       if(this.filter){
         url += '&filter=' + this.filter;
       }
+      if(this.leidos){
+        url += '&leidos=' + this.leidos;
+      }
       return url;
     },
     nextPageUrl() {
@@ -66,6 +74,9 @@ export default {
       }
       if(this.filter){
         url += '&filter=' + this.filter;
+      }
+      if(this.leidos){
+        url += '&leidos=' + this.leidos;
       }
       return url;
     }

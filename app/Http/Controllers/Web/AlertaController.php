@@ -15,12 +15,14 @@ class AlertaController extends Controller
      */
     public function index(Request $request)
     {
+        $leidos = $request->input('leidos', false);
+        $leidos = filter_var($leidos, FILTER_VALIDATE_BOOLEAN);
         $filtro = $request->input('filter', '');
         //si filtro no esta vacio busco las alertas que contengan el filtro
         if ($filtro) {
-            $alertas = Alerta::where('leido', 0)->where('tipo', 'like', '%' . $filtro . '%')->with('user');
+            $alertas = Alerta::where('leido', $leidos)->where('tipo', 'like', '%' . $filtro . '%')->with('user');
         } else {
-            $alertas = Alerta::where('leido', 0)->with('user');
+            $alertas = Alerta::where('leido', $leidos)->with('user');
         }
 
         $alertas = $alertas->paginate(10);
@@ -28,55 +30,28 @@ class AlertaController extends Controller
         return Inertia::render('Alertas/VistaAlertas', [
             'alertas' => $alertas,
             'filter' => $filtro,
+            'leidos' => $leidos
 
         ]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Crea una alerta
      */
-    public function create()
+    public static function create($tipo, $mensaje, $datos, $userId)
     {
-        die('create');
+        $alerta = new Alerta();
+        $alerta->tipo = $tipo;
+        $alerta->mensaje = $mensaje;
+        $alerta->datos = $datos;
+        $alerta->user_id = $userId;
+        $alerta->save();   
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function marcarLeidaAlerta(Request $request)
     {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Alerta $alerta)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Alerta $alerta)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Alerta $alerta)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Alerta $alerta)
-    {
-        //
+        $alerta = Alerta::find($request->idAlert);
+        $alerta->leido = 1;
+        $alerta->save();
     }
 }
