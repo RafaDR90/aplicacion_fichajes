@@ -24,7 +24,7 @@ class UserController extends Controller
 
     public function showUsers(Request $request)
     {
-        
+
         $search = $request->input('search', '');
         $sortField = $request->input('sortField', 'name');
 
@@ -39,7 +39,7 @@ class UserController extends Controller
 
         $exito = $request->session()->get('exito');
         $request->session()->forget('exito');
-        
+
         $users = $query->paginate(15);
 
         return Inertia::render('Usuario/VistaUsuarios', [
@@ -53,9 +53,19 @@ class UserController extends Controller
     public function showUser(Request $request, $id = null, $exito = null, $error = null)
     {
         $id = $request->input('id');
-        $user = User::with(['roles','ubicacion','horarios'])->find($id);
+        $user = User::with(['roles', 'ubicacion', 'horarios'])->find($id);
         $allHorarios = DB::table('horarios')->get();
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'), 'allHorarios' => $allHorarios]);
+        $role = 'admin';
+        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'), 'allHorarios' => $allHorarios, 'role' => $role]);
+    }
+
+    public function myProfile(Request $request)
+    {
+        $user = Auth::user();
+        $user = User::with(['roles', 'ubicacion', 'horarios'])->find($user->id);
+        $allHorarios = DB::table('horarios')->get();
+        $role = $user->roles[0]->role_name;
+        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'),  'allHorarios' => $allHorarios, 'role'=> $role]);
     }
 
     public static function hasRole($role)

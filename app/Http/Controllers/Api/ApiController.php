@@ -52,7 +52,6 @@ class ApiController extends Controller
             'password' => $request->password
         ])) {
             $user = Auth::user();
-
             //comprueba si el usuario tiene un token
             $user->tokens->each(function ($token, $key) {
                 $token->delete();

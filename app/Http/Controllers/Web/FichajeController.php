@@ -11,16 +11,29 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\Fichaje;
 use Illuminate\Support\Carbon;
 use App\Models\Alerta;
+use Illuminate\Support\Facades\Date;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 
 class FichajeController extends Controller
 {
     public function index(Request $request): Response
     {
-        return Inertia::render('Fichaje/VistaFichaje', ['error' => $request->error, 'exito' => $request->exito]);
+        $serverTime = Carbon::now('UTC');
+        $serverTimeString = $serverTime->toJSON();
+
+        $horario = $request->user()->horarios->first();
+        $fichajes = Fichaje::where('user_id', $request->user()->id)
+            ->where('created_at', 'like', date('Y-m-d') . '%')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return Inertia::render('Fichaje/VistaFichaje', ['error' => $request->error, 'exito' => $request->exito, 'horario' => $horario, 'fichajes' => $fichajes, 'serverTime' => $serverTimeString]);
     }
     public function fichar(Request $request)
     {
+        //muestro datetime de laravel en un vardump
         $ip = $request->ip();
         //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
         $ip = '154.62.41.89';
@@ -35,15 +48,17 @@ class FichajeController extends Controller
         //obtengo usuario junto con ubicacion y horarios asignados
         $user = $request->user();
         $ubicacion = $user->ubicacion;
-        $horario = $user->horarios;
+        //obtengo el primer horario
+        $horario = $user->horarios->first();
         //si no existen ubicaciones retorno con error
         if ($ubicacion->isEmpty()) {
             return Redirect::route('fichaje', ['error' => 'No tienes ninguna ubicacion asignada']);
         }
-        if ($horario->isEmpty()) {
+        if (!$horario) {
             return Redirect::route('fichaje', ['error' => 'No tienes ningun horario asignado']);
         }
         $ubicacionPermitida = false;
+        $ubicacionId = null;
         foreach ($ubicacion as $key => $value) {
             if (
                 $value->latitud == $response->lat &&
@@ -53,6 +68,7 @@ class FichajeController extends Controller
                 $value->pais == $response->countryCode
             ) {
                 $ubicacionPermitida = true;
+                $ubicacionId = $value->id;
                 //salgo del foreach
                 break;
             }
@@ -76,34 +92,34 @@ class FichajeController extends Controller
         //creo un nuevo fichaje
         $nuevoFichaje = new Fichaje();
         $nuevoFichaje->user_id = $user->id;
-        $nuevoFichaje->ubicacion_id = $ubicacion[0]->id;
+        $nuevoFichaje->ubicacion_id = $ubicacionId;
 
 
         if (!$ultimoFichaje || !$ultimoFichaje->esDeHoy()) {
             $nuevoFichaje->tipo = 'entrada';
             //compruebo que la hora actual este en un rango de 15 minutos antes o despues de la hora de entrada
-            if ($horario[0]->tipo == 'partido' || $horario[0]->tipo == 'continuo') {
-                $horaEntrada = Carbon::parse($horario[0]->hora_entrada);
-                $horaSalida = Carbon::parse($horario[0]->hora_salida);
+            if ($horario->tipo == 'partido' || $horario->tipo == 'continuo') {
+                $horaEntrada = Carbon::parse($horario->hora_entrada);
+                $horaSalida = Carbon::parse($horario->hora_salida);
                 if ($hora < (clone $horaEntrada)->subMinutes(15)->format('H:i:s')) {
                     return Redirect::route('fichaje', ['error' => 'Hora de entrada no permitida, su hora de entrada es: ' . $horaEntrada->format('H:i:s')]);
                 }
-                if ($hora > (clone $horaEntrada)->addMinutes(15)->format('H:i:s')&& $hora < (clone $horaSalida)->subMinutes(30)->format('H:i:s')) {
+                if ($hora > (clone $horaEntrada)->addMinutes(15)->format('H:i:s') && $hora < (clone $horaSalida)->subMinutes(30)->format('H:i:s')) {
                     $datos = [
                         'horaFichaje' => $hora,
                         'horaEntrada' => $horaEntrada->format('H:i:s'),
-                        'nombreHorario' => $horario[0]->nombre,
+                        'nombreHorario' => $horario->nombre,
                     ];
                     AlertaController::create('fichaje', 'Anomalía fichaje', $datos, $user->id);
-                    $error='LLegada tarde, se ha creado una alerta. Su hora de entrada es: ' . $horaEntrada->format('H:i:s');
+                    $error = 'LLegada tarde, se ha creado una alerta. Su hora de entrada es: ' . $horaEntrada->format('H:i:s');
                 }
             }
         } else {
             if ($ultimoFichaje->tipo == 'entrada') {
                 $nuevoFichaje->tipo = 'salida';
                 //si la hora actual es mayor a 15 minutos de la hora de salida retorno con error
-                if ($horario[0]->tipo == 'partido' || $horario[0]->tipo == 'continuo') {
-                    $horaSalida = Carbon::parse($horario[0]->hora_salida);
+                if ($horario->tipo == 'partido' || $horario->tipo == 'continuo') {
+                    $horaSalida = Carbon::parse($horario->hora_salida);
                     if ($hora > (clone $horaSalida)->addMinutes(15)->format('H:i:s')) {
                         //no ficha, ya se fichara automaticamente y se enviara notificacion
                         return Redirect::route('fichaje', ['error' => 'Hora de salida exedida, su hora de salida es: ' . $horaSalida->format('H:i:s')]);
@@ -111,12 +127,12 @@ class FichajeController extends Controller
                 }
             } else {
                 $nuevoFichaje->tipo = 'entrada';
-                if ($horario[0]->tipo == 'partido' || $horario[0]->tipo == 'continuo'){
-                    $horaSalida = Carbon::parse($horario[0]->hora_salida);
-                    if ($hora > (clone $horaSalida)->subMinutes(30)->format('H:i:s')&& $hora < (clone $horaSalida)->format('H:i:s')){
+                if ($horario->tipo == 'partido' || $horario->tipo == 'continuo') {
+                    $horaSalida = Carbon::parse($horario->hora_salida);
+                    if ($hora > (clone $horaSalida)->subMinutes(30)->format('H:i:s') && $hora < (clone $horaSalida)->format('H:i:s')) {
                         //no ficha, ya se fichara automaticamente y se enviara notificacion
                         return Redirect::route('fichaje', ['error' => 'No puedes fichar entrada, queda poco para tu hora de salida: ' . $horaSalida->format('H:i:s')]);
-                    }elseif($hora > (clone $horaSalida)->format('H:i:s')){
+                    } elseif ($hora > (clone $horaSalida)->format('H:i:s')) {
                         return Redirect::route('fichaje', ['error' => 'No puedes fichar entrada, fuera de horario.']);
                     }
                 }
@@ -124,7 +140,57 @@ class FichajeController extends Controller
         }
 
         $nuevoFichaje->save();
+        $fichajes = Fichaje::where('user_id', $user->id)
+            ->where('created_at', 'like', $fecha . '%')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return Redirect::route('fichaje', ['exito' => 'Fichaje de '.$nuevoFichaje->tipo.' realizado con exito.', 'error'=>$error ?? null]);
+
+        $serverTime = Carbon::now('UTC');
+        $serverTimeString = $serverTime->toJSON();
+
+        return Redirect::route('fichaje', ['exito' => 'Fichaje de ' . $nuevoFichaje->tipo . ' realizado con exito.', 'error' => $error ?? null, 'fichajes' => $fichajes, 'horario' => $horario ?? null, 'serverTime' => $serverTimeString]);
+    }
+
+    public function showFichajes(Request $request){
+        $today = date('Y-m-d');
+        $day= date('Y-m-d');
+        $searchName=null;
+        $request->validate([
+            'dateFilter' => 'nullable|date_format:Y-m-d',
+            'search' => 'nullable|string'
+        ]);
+        if($request->dateFilter){
+            $day = $request->dateFilter;
+        }
+        if($request->search){
+            $searchName = $request->search;
+        }
+        
+        //obtengo users que no tienen vacaciones
+
+        $users = User::with('vacaciones')
+            ->where(DB::raw('CONCAT(name, " ", apellidos)'), 'like', '%' . $searchName . '%')
+            ->whereDoesntHave('vacaciones', function ($query) use ($day) {
+                $query->where('fecha', '=', $day)
+                    ->where('aprobada', '=', 1);
+            })->paginate(15);
+
+
+        //añado a users sus fichajes de hoy
+        $coincidence=false;
+        foreach ($users as $key => $user) {
+            $checkins = Fichaje::where('user_id', $user->id)
+                ->where('created_at', 'like', $day . '%')
+                ->orderBy('created_at', 'desc')
+                ->get();
+            $user->setAttribute('checkins', $checkins);
+           
+            if($checkins->count() > 0){
+                $coincidence=true;
+            }
+        }
+
+        return Inertia::render('Fichaje/VistaFichajes',['serverDate' => $today, 'users' => $users, 'coincidence' => $coincidence, 'searchDateServer' => $day,'searchNameServer' => $searchName]);
     }
 }

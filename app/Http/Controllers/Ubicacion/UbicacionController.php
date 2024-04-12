@@ -13,6 +13,7 @@ class UbicacionController extends Controller
      */
     public function index()
     {
+        die('UbicacionController@index');
         return response()->json(Ubicacion::all(), 200);
     }
 

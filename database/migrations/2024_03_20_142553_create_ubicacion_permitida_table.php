@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('ubicacion_permitida', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('ubicacion_id')->constrained('ubicacion');
+            $table->foreignId('ubicacion_id')->nullable()->constrained('ubicacion');
             $table->timestamps();
         });
     }

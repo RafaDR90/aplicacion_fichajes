@@ -150,4 +150,13 @@ class HorarioController extends Controller
 
         return Redirect::route('showUser', ['id' => $request->idUser, 'exito' => $exito]);
     }
+
+    public function desasociarHorario(Request $request)
+    {
+        $user = User::find($request->id);
+        $user->horarios()->detach($request->id_ubicacion);
+        $exito = 'Horario desasociado correctamente';
+        return redirect()->route('showUser', ['id' => $request->id, 'exito' => $exito]);
+
+    }
 }

@@ -1,8 +1,10 @@
 RECORDATORIO
 - Mirar spatie para los roles
 - hacer funcionar boton de desasignar horario
-- añadir boton de volver o marca de agua (cuando edito horario,)
+- He creado middleware ShareInertiaDataRolepara que me pase el rol del usuario a todas las vistas que no se usarlo y he intentado pasarme el rol
+modificando AppServiceProvider que tampoco ha funcionado
 
+composition api y composition option de vue
 
 Usuario super-admin
 - admin@admin.com
@@ -10,6 +12,7 @@ Usuario super-admin
 
 Todos los demas usuarios tienen de password "password" y el email se puede ver en la pestaña empleados.
 
+- http://127.0.0.1:8000/api/cierra-fichajes para cerrar el dia (Requiere Admin)
 
 
 DETALLES A TENER EN CUENTA
@@ -31,6 +34,11 @@ FUNCIONALIDADES A MENCIONAR:
 
 (todas las rutas estan protegidas con auth o admin a travez de middleware aunque no esta aun muy pulido)
 (Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente)
+(a las 11 de la noche se automatizan varias funciones
+    - EmpleadosAusentes (Comprueba los usuarios que no han fichado en el dia y crea una notificacion de asusencia)
+    - cierraFichajes (Comprueba si alguien no ha fichado y cierra el fichaje a la hora fin de su horario y envia la notificacion)
+    - compruebaHorasTrabajadas (Si alguien no ha trabajado las horas totales de su horario se envia notificacion)
+    )
 
 - En el nav hay un dropdown que permite editar perfil (no esta pulido) y cerrar sesion
 
@@ -57,8 +65,9 @@ FUNCIONALIDADES A MENCIONAR:
 
 - Notificaciones
     - muestra Notificaciones
-    - puedes aceptar o rechazar notificaciones, estas se marcaran como leido y desapareceran (hasta que pueda filtrar por leidas)
+    - puedes aceptar o rechazar notificaciones, estas se marcaran como leido y desapareceran 
     - puedes filtrar entre tipo de notificaciones
+    - puedes filtrar por leidas y no leidas
 
 - Horarios
     - añadir Horarios

@@ -71,6 +71,11 @@ class User extends Authenticatable
         return $this->hasOne(DiasVacaciones::class);
     }
 
+    public function vacaciones()
+    {
+        return $this->hasMany(Vacaciones::class);
+    }
+
     public function fichajes()
     {
         return $this->hasMany(Fichaje::class);

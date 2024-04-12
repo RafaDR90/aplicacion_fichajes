@@ -45,6 +45,18 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    dateFilter: {
+      type: String,
+      required: false,
+      default: ''
+    }
+  },
+  mounted(){
+    if(this.search){
+      console.log('hay search')
+    }else{
+      console.log('no hay search')
     }
   },
   computed: {
@@ -62,6 +74,9 @@ export default {
       if(this.leidos){
         url += '&leidos=' + this.leidos;
       }
+      if(this.dateFilter){
+        url += '&dateFilter=' + this.dateFilter;
+      }
       return url;
     },
     nextPageUrl() {
@@ -77,6 +92,9 @@ export default {
       }
       if(this.leidos){
         url += '&leidos=' + this.leidos;
+      }
+      if(this.dateFilter){
+        url += '&dateFilter=' + this.dateFilter;
       }
       return url;
     }

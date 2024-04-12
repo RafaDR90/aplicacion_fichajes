@@ -40,6 +40,7 @@ Route::group(['middleware' => Admin::class], function () {
     Route::get('/editar-horario/{id}', [HorarioController::class, 'vistaEditaHorario'])->name('vistaEditaHorario');
     Route::post('/editar-horario/{id}', [HorarioController::class, 'editaHorario'])->name('editaHorario');
     Route::post('/asignar-horario', [HorarioController::class, 'asignarHorario'])->name('asignarHorario');
+    Route::post('/desasociar-horario', [HorarioController::class, 'desasociarHorario'])->name('desasociarHorario');
 
     //ALERTAS
     Route::get('/alertas', [AlertaController::class, 'index'])->name('alertas');
@@ -54,6 +55,9 @@ Route::group(['middleware' => Admin::class], function () {
     //VACACIONES
     Route::post('/accepta-vacaciones', [VacacionesController::class, 'update'])->name('aceptarVacaciones');
     Route::post('/denegada-vacaciones', [VacacionesController::class, 'deniegaVacaciones'])->name('deniegaVacaciones');
+
+    //FICHAJES
+    Route::get('/fichajes', [FichajeController::class, 'showFichajes'])->name('showFichajes');
 });
 
 
@@ -69,10 +73,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/fichaje', [FichajeController::class, 'index'])->name('fichaje');
     //FICHAJE
     Route::get('/fichar', [FichajeController::class, 'fichar'])->name('fichar');
+    
     //VACACIONES
     Route::get('/vacaciones', [VacacionesController::class, 'index'])->name('vacaciones');
     Route::get('/solicitud', [SolicitudController::class, 'index'])->name('solicitud');
     Route::post('/solicitud-vacaciones', [VacacionesController::class, 'solicitudVacaciones'])->name('solicitudVacaciones');
+    //USUARIO
+    Route::get('/my-profile', [UserController::class, 'myProfile'])->name('myProfile');
 });
 
 require __DIR__ . '/auth.php';

@@ -13,7 +13,7 @@
             <p class="mr-8">Fichar</p>
             </Link>
 
-            <Link :href="route('showUsers')" class=" button_nav ">
+            <Link  :href="route('showUsers')" class=" button_nav ">
             <div class="h-6 w-6">
                 <img class="h-full w-full" src="/img/sidebar/empleado.png" alt="">
             </div>
@@ -34,12 +34,12 @@
                 <p class="mr-8">Ausencias</p>
             </button>
 
-            <button class=" button_nav ">
+            <Link :href="route('showFichajes')" class=" button_nav ">
                 <div class="h-6 w-6">
                     <img class="h-full w-full" src="/img/sidebar/fichajes.png" alt="">
                 </div>
                 <p class="mr-8">Fichajes</p>
-            </button>
+            </Link>
 
             <Link :href="route('horarios')" class=" button_nav ">
                 <div class="h-6 w-6">

@@ -12,11 +12,13 @@
                 <option value="ubicacion">Solicitud de ubicaciones</option>
                 <option value="vacaciones">Solicitud de vacaciones</option>
                 <option value="fichaje">Anomalia de fichaje</option>
+                <option value="asistencia">Falta de asistencia</option>
             </select>
 
             <div class="flex items-center space-x-2">
                 <label for="leidos" class="text-lg text-gray-700">Ver leidos:</label>
-                <input type="checkbox" :checked="leidos" :value="leidos" @change="toggleLeidos" name="leidos" id="leidos" class="form-checkbox h-5 w-5 text-gray-700 rounded-md">
+                <input type="checkbox" :checked="leidos" :value="leidos" @change="toggleLeidos" name="leidos"
+                    id="leidos" class="form-checkbox h-5 w-5 text-gray-700 rounded-md">
             </div>
         </div>
 
@@ -27,6 +29,9 @@
                     <!--Aqui las notificaciones con un v-for-->
                     <div class=" bg-white rounded-b-xl p-3 flex flex-col gap-5  w-full border-t border-gris-borde">
                         <div v-for="alerta in alertas.data" :key="alerta.id">
+                            <!--
+                                BLOQUE DE ALERTAS DE UBICACION
+                            -->
                             <div v-if="alerta.tipo == 'ubicacion'">
                                 <p class=" text-green-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
                                 <div class="flex flex-col sm:flex-row sm:gap-40">
@@ -70,7 +75,9 @@
                                     class="border-t border-gris-borde w-full mt-4">
                                 </div>
                             </div>
-
+                            <!--
+                                BLOQUE DE ALERTAS DE VACACIONES
+                            -->
                             <div v-if="alerta.tipo == 'vacaciones'">
                                 <p class=" text-blue-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
                                 <div class="flex flex-col sm:flex-row sm:gap-40">
@@ -86,7 +93,7 @@
                                     </div>
 
                                 </div>
-                                <div class="flex gap-3 mt-3"  v-if="!alerta.leido">
+                                <div class="flex gap-3 mt-3" v-if="!alerta.leido">
                                     <button
                                         @click="openConfirmation(alerta.id, alerta.user.id, 'añadir vacaciones', alerta.user.name + ' ' + alerta.user.apellidos, 'aceptarVacaciones')"
                                         class="bg-green-500 text-white p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:bg-green-600 active:bg-green-700">Aceptar</button>
@@ -110,8 +117,14 @@
                                 </div>
                             </div>
 
-                            <div v-if="alerta.tipo == 'fichaje'">
-                                <p class=" text-orange-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
+                            <!--
+                                BLOQUE DE ALERTAS DE ANOMALIAS DE FICHAJE
+                            -->
+                            <div v-if="alerta.tipo == 'fichaje' || alerta.tipo == 'fichajeClose'">
+                                <!--el fallo esta xk hay que pner mas vif-->
+                                <p class="font-bold text-xl mb-2"
+                                    :class="{ 'text-orange-500': alerta.tipo !== 'fichajeClose', 'text-red-500': alerta.tipo === 'fichajeClose' }">
+                                    {{ alerta.mensaje }}</p>
                                 <div class="flex flex-col sm:flex-row sm:gap-40">
                                     <div>
                                         <p><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
@@ -119,16 +132,16 @@
                                             {{ alerta.user.apellidos }}</p>
                                         <p v-if="alerta.datos.horaEntrada" class=" font-bold">Llega tarde.</p>
                                         <div class="flex flex-col md:flex-row md:gap-20 my-1">
-                                            <p><span class=" font-bold">Fichaje a las: </span>{{
-                                                alerta.datos.horaFichaje.split(':').slice(0, 2).join(':') }}</p>
+                                            <p v-if="alerta.datos.horaFichaje"><span class=" font-bold">Fichaje a las:
+                                                </span>{{
+                                                    alerta.datos.horaFichaje.split(':').slice(0, 2).join(':') }}</p>
                                             <p v-if="alerta.datos.horaEntrada"><span class=" font-bold">Hora Entrada:
                                                 </span>{{ alerta.datos.horaEntrada.split(':').slice(0, 2).join(':') }}
                                             </p>
                                             <p v-if="alerta.datos.horaSalida"><span class=" font-bold">Hora de salida:
                                                 </span>{{ alerta.datos.horaSalida.split(':').slice(0, 2).join(':') }}
                                             </p>
-                                            <p><span class=" font-bold">Horario: </span>{{ alerta.datos.nombreHorario }}
-                                            </p>
+                                            
                                         </div>
                                         <button v-if="!alerta.leido"
                                             @click="openConfirmation(alerta.id, alerta.user.id, 'marcar como leído', null, 'marcarLeidaAlerta')"
@@ -138,7 +151,7 @@
                                             new
                                                 Date(alerta.created_at).toLocaleDateString('es-ES', {
                                                     year: 'numeric', month: 'long', day: 'numeric'
-                                            }) }} a las {{ new
+                                                }) }} a las {{ new
                                                 Date(alerta.created_at).toLocaleTimeString('es-ES', {
                                                     hour: '2-digit', minute:
                                                         '2-digit'
@@ -151,13 +164,49 @@
 
                                 </div>
                             </div>
+
+                            <!--
+                                BLOQUE DE ALERTAS DE FALTA DE ASISTENCIA
+                            -->
+                            <div v-if="alerta.tipo == 'asistencia'">
+                                <p class=" text-blue-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
+                                <div class="flex flex-col sm:flex-row sm:gap-40">
+                                    <div>
+                                        <div class="flex flex-col md:flex-row md:gap-20">
+                                            <p><span class=" font-bold">Nombre: </span>{{ alerta.user.name }} {{
+                                                alerta.user.apellidos }}</p>
+                                            <p><span class=" font-bold">Email: </span>{{ alerta.user.email }}</p>
+                                        </div>
+                                        <p class=" mt-3"><span class=" font-bold">Fecha de ausencia: </span> {{ new
+                                            Date(alerta.created_at).toLocaleDateString() }}</p>
+                                    </div>
+                                    
+                                </div>
+                                <button v-if="!alerta.leido"
+                                            @click="openConfirmation(alerta.id, alerta.user.id, 'marcar como leído', null, 'marcarLeidaAlerta')"
+                                            class=" mt-2 bg-green-500 text-white p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:bg-green-600 active:bg-green-700">Marcar
+                                            como leido</button>
+                                        <p class=" text-sm text-gray-500 mt-2"><span class=" font-bold">Fecha: </span>{{
+                                            new
+                                                Date(alerta.created_at).toLocaleDateString('es-ES', {
+                                                    year: 'numeric', month: 'long', day: 'numeric'
+                                                }) }} a las {{ new
+                                                Date(alerta.created_at).toLocaleTimeString('es-ES', {
+                                                    hour: '2-digit', minute:
+                                                        '2-digit'
+                                                }) }}</p>
+                                        <!-- Linea separadora -->
+                                        <div v-if="alerta != alertas.data[alertas.data.length - 1]"
+                                            class="border-t border-gris-borde w-full mt-4">
+                                        </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <nav class=" bg-white rounded-b-xl border border-gris-borde">
-            <Pagination :pagination="alertas" :filter="filter" :leidos="leidos"/>
+            <Pagination :pagination="alertas" :filter="filter" :leidos="leidos" />
         </nav>
     </div>
 
@@ -208,9 +257,9 @@ const search = ref('');
 
 
 const toggleLeidos = () => {
-    if(props.leidos){
-        router.get(`/alertas?filter=${props.filter ||''}`);
-    }else{
+    if (props.leidos) {
+        router.get(`/alertas?filter=${props.filter || ''}`);
+    } else {
         router.get(`/alertas?filter=${props.filter || ''}&leidos=${!props.leidos}`);
     }
 };

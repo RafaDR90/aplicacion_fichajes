@@ -28,7 +28,7 @@
           <p v-if="$page && $page.props.auth.user" class=" text-white py-2">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
         </div>
         <Link @click="dropdownOpen = !dropdownOpen"
-          class="block px-4 py-2 text-gray-800 hover:bg-gray-100 active:bg-gray-200" :href="route('profile.edit')">
+          class="block px-4 py-2 text-gray-800 hover:bg-gray-100 active:bg-gray-200" :href="route('myProfile')">
         Perfil</Link>
         <DropdownLink @click="dropdownOpen = !dropdownOpen" :href="route('logout')" method="post" as="button">
           Cerrar sesion

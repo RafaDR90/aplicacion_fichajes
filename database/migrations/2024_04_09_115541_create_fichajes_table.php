@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('fichajes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('ubicacion_id')->constrained('ubicacion');
+            $table->foreignId('ubicacion_id')->nullable()->constrained('ubicacion');
             $table->string('tipo')->comment('in, out');
             $table->timestamps();
         });
