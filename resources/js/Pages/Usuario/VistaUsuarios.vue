@@ -57,8 +57,10 @@
                         <div class="p-2 xl:flex xl:gap-2">
                             <div :class="{ 'border-green-400 border-2 rounded-full': isAdmin(user) }"
                                 class=" w-10 h-10 ">
-                                <img class="h-full w-full rounded-full object-cover" src="/img/navbar/fotoperfil.png"
-                                    alt="">
+                                <img v-if="user.image_url" :src="'/images/'+user.image_url"
+                                class="h-full w-full rounded-full object-cover" alt="foto de perfil" />
+                                <img v-else class="h-full w-full rounded-full object-cover" src="/img/navbar/fotoperfil.png"
+                                    alt="foto de perfil">
                             </div>
                             <div class=" text-sm">
                                 <p>{{ user.name }} {{ user.apellidos }}</p>
@@ -129,6 +131,7 @@ export default {
             currentPage: 1,
             itemsPerPage: 10,
             isOpen: [],
+            intervalId:null,
         }
     },
     components: {
@@ -166,7 +169,18 @@ export default {
         },
         updateSearch(event) {
             this.search = event.target.value;
-            this.fetchUsers();
+            if (event.data === ' ' && this.search.slice(-1) === ' ') {
+                return;
+            }
+            // Limpiar el intervalo existente
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+            }
+            // Establecer un nuevo intervalo
+            this.intervalId = setInterval(() => {
+                this.fetchUsers();
+                clearInterval(this.intervalId);
+            }, 500);
         },
         updateSortField(event) {
             this.sortField = event.target.value;

@@ -10,9 +10,11 @@
         role="alert">
         <p class="block sm:inline">- {{ exito }}</p>
     </div>
-    <div class=" w-full flex flex-col justify-center items-center " >
-        <h2 class=" text-2xl font-bold self-start ml-20 mt-10"  v-if="role=='super-admin' || role=='admin'">Panel Administraci&oacute;n</h2>
-        <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6"  v-if="role=='super-admin' || role =='admin'">
+    <div class=" w-full flex flex-col justify-center items-center ">
+        <h2 class=" text-2xl font-bold self-start ml-20 mt-10" v-if="role == 'super-admin' || role == 'admin'">Panel
+            Administraci&oacute;n</h2>
+        <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6"
+            v-if="role == 'super-admin' || role == 'admin'">
 
             <!--Container principal de administracion-->
             <div class=" flex flex-col gap-4">
@@ -46,20 +48,54 @@
             <!--Fin del container principal de administracion-->
 
         </div>
-        <h2 class=" text-2xl font-bold self-start ml-20">Panel de Usuario</h2>
+        <h2 class=" text-2xl font-bold self-start ml-20 mt-10">Panel de Usuario</h2>
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6 flex flex-col gap-14">
             <div class="flex flex-col gap-4 items-center md:items-start md:flex-row md:gap-8">
-                <div class=" w-60 h-60">
-                    <img src="/img/navbar/fotoperfil.png" alt=""
-                        class=" bg-gris-light border border-gris-borde rounded-lg w-full h-full">
+                <div class=" w-60 h-60 relative">
+                    <img v-if="selectedUser.image_url" :src="'/images/'+selectedUser.image_url" alt="foto de perfil"
+                        class="bg-gris-light border border-gris-borde rounded-lg w-full h-full object-cover">
+                    <img v-else src="/img/navbar/fotoperfil.png" alt="foto de perfil"
+                        class="bg-gris-light border border-gris-borde rounded-lg w-full h-full">
+                    <div
+                        class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200">
+                        <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
+                        <button class=" w-10 h-10">
+                            <img @click="fileUpload" src="/img/iconos/editarFotoPerfil.png" alt="Icono editar"
+                                class="w-full h-full">
+                        </button>
+                    </div>
                 </div>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 ">
                     <p class=" text-2xl font-bold mt-2">{{ selectedUser.name }} {{ selectedUser.apellidos }}</p>
                     <p class=" text-lg">{{ selectedUser.email }}</p>
-                    <p class=" text-lg">{{ selectedUser.telefono }}</p>
-                    <p class=" text-lg">{{ selectedUser.direccion }}</p>
+                    <div v-if="!editPhone" class=" text-lg flex gap-3 items-center">
+                        <p>{{ selectedUser.telefono }} </p>
+                        <img @click="openEdit('editPhone')" class=" w-5 h-5" src="/img/iconos/editar.png"
+                            alt="Icono editar">
+                    </div>
+                    <form form @submit.prevent="submitPhone" v-else>
+                        <input type="text" class=" border border-gris-borde rounded-lg p-1" id="editedPhone"
+                            name="editedPhone" @keyup.enter="submitPhone" @keyup.esc="editPhone = !editPhone"
+                            @blur="editPhone = false" v-model="formPhone.editedPhone" ref="phoneInput">
+                        <button class="hidden" type="submit">Submit</button>
+                    </form>
+
+                    <div v-if="!editAddress" class="flex gap-3 items-center">
+                        <p class=" text-lg">{{ selectedUser.direccion }}</p>
+                        <img @click="openEdit('editAddress')" class=" w-5 h-5" src="/img/iconos/editar.png"
+                            alt="Icono editar">
+                    </div>
+                    <form form @submit.prevent="submitAddress" v-else>
+                        <input type="text" class=" border border-gris-borde rounded-lg p-1 w-72 md:w-96"
+                            id="editedAddress" name="editedAddress" @keyup.enter="submitAddress"
+                            @keyup.esc="editAddress = !editAddress" @blur="editAddress = false"
+                            v-model="formAddress.editedAddress">
+                        <button class="hidden" type="submit">Submit</button>
+                    </form>
+
                 </div>
             </div>
+
             <div class="flex flex-wrap gap-10">
                 <div class="flex flex-col gap-2 w-5/12 min-w-72">
                     <h2 class="text-xl font-bold">Ubicaciones permitidas</h2>
@@ -75,7 +111,7 @@
                                 <p><span class=" font-bold">Longitud: </span>{{ ubicacion.longitud }}</p>
                             </div>
                             <div class="flex gap-1  justify-end mr-5 sm:mr-11 w-full py-2">
-                                <button  v-if="role=='super-admin' || role =='admin'"
+                                <button v-if="role == 'super-admin' || role == 'admin'"
                                     @click="desasociarUbicacionAlert(ubicacionId = ubicacion.id, accion = 'desasociar ubicacion', ejecutar = 'desasociarUbicacion')"
                                     class="h-6 w-6">
                                     <img class=" w-full h-full" src="/img/iconos/borrar.png" alt="Icono borrar"
@@ -87,14 +123,15 @@
                     </div>
 
                 </div>
-                
+
                 <div class="flex flex-col gap-2 w-5/12 min-w-72">
                     <h2 class="text-xl font-bold">Horario</h2>
                     <div class="border border-gris-borde rounded  min-w-72 w-full p-2 h-60 overflow-auto">
                         <div v-for=" horario in selectedUser.horarios">
                             <div class="flex justify-between">
                                 <p class=" font-bold">{{ horario.nombre }}</p>
-                                <button  v-if="role =='super-admin' || role =='admin'" class=" w-6 h-6" @click="desasociarUbicacionAlert(ubicacionId = horario.id, accion = 'desasociar horario', ejecutar = 'desasociarHorario')">
+                                <button v-if="role == 'super-admin' || role == 'admin'" class=" w-6 h-6"
+                                    @click="desasociarUbicacionAlert(ubicacionId = horario.id, accion = 'desasociar horario', ejecutar = 'desasociarHorario')">
                                     <img class=" w-full h-full" src="/img/iconos/borrar.png" alt="Icono borrar"
                                         title="Borrar">
                                 </button>
@@ -115,15 +152,15 @@
                                     <tbody>
                                         <tr class=" ">
                                             <td class="border text-center border-gris-borde">{{
-        horario.hora_entrada.slice(0, 5) }}</td>
+                                                horario.hora_entrada.slice(0, 5) }}</td>
                                             <td class="border text-center border-gris-borde">{{
-        horario.hora_salida.slice(0, 5) }}</td>
+                                                horario.hora_salida.slice(0, 5) }}</td>
                                             <td v-if="horario.descanso_entrada"
                                                 class="border text-center border-gris-borde">{{
-        horario.descanso_entrada.slice(0, 5) }}</td>
+                                                    horario.descanso_entrada.slice(0, 5) }}</td>
                                             <td v-if="horario.descanso_salida"
                                                 class="border text-center border-gris-borde">{{
-        horario.descanso_salida.slice(0, 5) }}</td>
+                                                    horario.descanso_salida.slice(0, 5) }}</td>
                                             <td class="border text-center border-gris-borde">{{ horario.libre }}"</td>
                                             <td class="border text-center border-gris-borde">{{ horario.total_horas }}
                                             </td>
@@ -138,8 +175,8 @@
                         </div>
                     </div>
                     <div class="flex gap-2">
-                        <p>{{ role }}</p>
-                        <form  v-if="role=='super-admin' || role=='admin'" class="flex items-center" @submit.prevent="asignarHorario">
+                        <form v-if="role == 'super-admin' || role == 'admin'" class="flex items-center"
+                            @submit.prevent="asignarHorario">
                             <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1"
                                 v-model="formHorario.horario_id">
                                 <option v-for="horario in allHorarios" :value="horario.id">{{ horario.nombre }}</option>
@@ -163,9 +200,8 @@
                     class="bg-green-500 text-white rounded-lg px-2" :preserve-state="false">
                 Continuar
                 </Link>
-                <Link v-else 
-                    :href="route(ejecutar, { 'id': selectedUser.id, 'id_ubicacion': ubicacion_id })" method="post"
-                    class="bg-green-500 text-white rounded-lg px-2" :preserve-state="false">
+                <Link v-else :href="route(ejecutar, { 'id': selectedUser.id, 'id_ubicacion': ubicacion_id })"
+                    method="post" class="bg-green-500 text-white rounded-lg px-2" :preserve-state="false">
                 Continuar
                 </Link>
                 <button @click="cancelar" class="bg-red-500 text-white rounded-lg px-2">Cancelar</button>
@@ -176,9 +212,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { defineProps } from 'vue';
-import { computed, reactive } from 'vue';
+import { ref, onMounted, reactive, defineProps, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 import { router } from '@inertiajs/vue3'
@@ -191,11 +225,68 @@ const props = defineProps({
     allHorarios: Array,
     role: String,
 });
-
 const formHorario = reactive({
     horario_id: "",
 })
 
+const formAddress = reactive({
+    editedAddress: "",
+})
+
+const formPhone = reactive({
+    editedPhone: "",
+})
+
+/*--------------------------------
+BLOQUE EDITAR TELEFONO Y DIRECCION
+--------------------------------*/
+function submitPhone() {
+    editPhone.value = false;
+    router.post('/change-phone', formPhone)
+}
+
+function submitAddress() {
+    router.post('/change-address', formAddress)
+    editAddress.value = false;
+}
+
+const openEdit = (field) => {
+    if (field === "editPhone") {
+        formPhone.editedPhone = props.selectedUser.telefono;
+        editPhone.value = true;
+        //pongo el focus en el input, espero 100ms para que se renderice el input
+        setTimeout(() => {
+            document.getElementById('editedPhone').focus();
+        }, 100);
+    }
+    if (field === "editAddress") {
+        formAddress.editedAddress = props.selectedUser.direccion;
+        editAddress.value = true;
+        setTimeout(() => {
+            document.getElementById('editedAddress').focus();
+        }, 100);
+    }
+};
+const editPhone = ref(false);
+const editAddress = ref(false);
+const phoneInput = ref(null);
+
+
+/*---------------------------
+BLOQUE SUBIR IMAGEN DE PERFIL
+---------------------------*/
+const fileInput = ref(null);
+
+const fileUpload = () => {
+    fileInput.value.click();
+};
+
+const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    router.post('/change-profile-image', formData);
+};
 
 
 let selectedRole = ref("");

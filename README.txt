@@ -1,8 +1,7 @@
 RECORDATORIO
 - Mirar spatie para los roles
 - hacer funcionar boton de desasignar horario
-- He creado middleware ShareInertiaDataRolepara que me pase el rol del usuario a todas las vistas que no se usarlo y he intentado pasarme el rol
-modificando AppServiceProvider que tampoco ha funcionado
+- Me falta eliminar horarios y usuarios con safe delete
 
 composition api y composition option de vue
 
@@ -20,6 +19,7 @@ DETALLES A TENER EN CUENTA
 Se ha usado Laravel 11 con Breeze(Para el inicio de sesion), Inertia(Para los recargos de pagina) y vue.
 Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
 Se ha usado FullCalendar para renderizar el calendario
+Se ha usado LibPhoneNumber para validar los numeros de telefono
 
 - Si da error la creacion de token
     php artisan passport:client --personal

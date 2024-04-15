@@ -57,7 +57,6 @@
                 </ul>
             </div>
         </div>
-
     </div>
     <div
         class="fixed bottom-0 text-xl justify-center text-nowrap border border-gris-borde w-max left-1/2 transform -translate-x-1/2 bg-white rounded-tl-lg rounded-tr-lg p-4 hidden sm:flex">

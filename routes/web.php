@@ -80,6 +80,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/solicitud-vacaciones', [VacacionesController::class, 'solicitudVacaciones'])->name('solicitudVacaciones');
     //USUARIO
     Route::get('/my-profile', [UserController::class, 'myProfile'])->name('myProfile');
+    Route::post('/change-address', [UserController::class, 'editAddress'])->name('editAddress');
+    Route::post('/change-phone', [UserController::class, 'editPhone'])->name('editPhone');
+    Route::post('/change-profile-image', [UserController::class, 'editProfileImage'])->name('editProfileImage');
 });
 
 require __DIR__ . '/auth.php';
