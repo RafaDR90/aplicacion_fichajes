@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Inertia\Inertia;
 use Inertia\Response;
+use libphonenumber\PhoneNumberUtil;
+use Illuminate\Support\Facades\Validator;
 
 class RegisteredUserController extends Controller
 {
@@ -30,16 +32,36 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'apellidos' => 'required|string|max:255',
+            'direccion' => 'required|string|max:255|min:8',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        $phoneUtil = PhoneNumberUtil::getInstance();
+    try {
+        $telefono = $phoneUtil->parse($request->telefono, 'ES');
+    } catch (\libphonenumber\NumberParseException $e) {
+        $validator->errors()->add('telefono', 'El número de teléfono no es válido');
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    if (!$phoneUtil->isValidNumber($telefono)) {
+        $validator->errors()->add('telefono', 'El número de teléfono no es válido');
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
         $user = User::create([
             'name' => $request->name,
             'apellidos' => $request->apellidos,
+            'telefono' => $request->telefono,
+            'direccion' => $request->direccion,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);

@@ -50,6 +50,11 @@ export default {
       type: String,
       required: false,
       default: ''
+    },
+    eliminados: {
+      type: String,
+      required: false,
+      default: ''
     }
   },
   mounted(){
@@ -77,6 +82,9 @@ export default {
       if(this.dateFilter){
         url += '&dateFilter=' + this.dateFilter;
       }
+      if(this.eliminados){
+        url += '&eliminados=' + this.eliminados;
+      }
       return url;
     },
     nextPageUrl() {
@@ -95,6 +103,9 @@ export default {
       }
       if(this.dateFilter){
         url += '&dateFilter=' + this.dateFilter;
+      }
+      if(this.eliminados){
+        url += '&eliminados=' + this.eliminados;
       }
       return url;
     }

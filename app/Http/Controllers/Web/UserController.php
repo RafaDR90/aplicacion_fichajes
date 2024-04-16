@@ -28,11 +28,16 @@ class UserController extends Controller
 
     public function showUsers(Request $request)
     {
+        $eliminados = boolval($request->input('eliminados', false));
 
         $search = $request->input('search', '');
         $sortField = $request->input('sortField', 'name');
 
-        $query = User::with('roles');
+        if ($eliminados) {
+            $query = User::onlyTrashed()->with('roles');
+        } else {
+            $query = User::with('roles');
+        }
 
         if ($search) {
             $query->where(DB::raw('CONCAT(name, " ", apellidos)'), 'like', '%' . $search . '%');
@@ -49,15 +54,16 @@ class UserController extends Controller
             'users' => $users,
             'search' => $search,
             'sortField' => $sortField,
-            'exito' => $exito
+            'exito' => $exito,
+            'eliminados' => $eliminados,
         ]);
     }
 
     public function showUser(Request $request, $id = null)
     {
         $id = $request->input('id');
-        $user = User::with(['roles', 'ubicacion', 'horarios'])->find($id);
-        $allHorarios = DB::table('horarios')->get();
+        $user = User::withTrashed()->with(['roles', 'ubicacion', 'horarios'])->find($id);
+        $allHorarios = DB::table('horarios')->whereNull('deleted_at')->get();
         $role = 'admin';
         return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'), 'allHorarios' => $allHorarios, 'role' => $role]);
     }
@@ -68,7 +74,7 @@ class UserController extends Controller
         $exito = session('exito') ?? null;
         $user = Auth::user();
         $user = User::with(['roles', 'ubicacion', 'horarios'])->find($user->id);
-        $allHorarios = DB::table('horarios')->get();
+        $allHorarios = DB::table('horarios')->whereNull('deleted_at')->get();
         if ($user->roles->isNotEmpty()) {
             $role = $user->roles[0]->role_name;
         }
@@ -104,16 +110,17 @@ class UserController extends Controller
         if ($request->editedPhone == Auth::user()->telefono) {
             return redirect()->route('myProfile')->with('error', 'El número de teléfono no ha cambiado.');
         }
-        
+
         $user = User::find(Auth::user()->id);
         $user->telefono = $request->editedPhone;
         $user->save();
         return redirect()->route('myProfile')->with('exito', 'Número de teléfono actualizado correctamente.');
     }
 
+
     public function editAddress(Request $request)
     {
-        $validator= Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'editedAddress' => 'required|string|max:255|min:8',
         ]);
 
@@ -134,7 +141,7 @@ class UserController extends Controller
 
     public function editProfileImage(Request $request)
     {
-        $validator= Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'file' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
         if ($validator->fails()) {
@@ -148,6 +155,19 @@ class UserController extends Controller
         $user->image_url = $imageName;
         $user->save();
         return back()->with('exito', 'Imagen de perfil actualizada correctamente.');
+    }
 
+    public function deleteUser(Request $request)
+    {
+        //si esta eliminado lo restaura sino lo elimina
+        $user = User::withTrashed()->find($request->id);
+        if ($user->trashed()) {
+            $user->restore();
+            return redirect()->route('showUsers')->with('exito', 'Usuario restaurado correctamente.');
+        } else {
+            $user->delete();
+            $request->session()->put('exito', 'Usuario eliminado correctamente.');
+            return redirect()->route('showUsers')->with('exito', 'Usuario eliminado correctamente.');
+        }
     }
 }

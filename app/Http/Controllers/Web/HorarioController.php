@@ -16,7 +16,7 @@ class HorarioController extends Controller
 {
     public function gestionHorarios()
     {
-        $horarios = Horario::all();
+        $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
         return Inertia::render('Horario/VistaHorarios', ['horarios' => $horarios]);
     }
 
@@ -27,7 +27,7 @@ class HorarioController extends Controller
 
     public function editaHorario(Request $request, $id)
     {
-        $horario = Horario::find($id);
+        $horario = Horario::withTrashed()->find($id);
 
         $validator = Validator::make($request->all(), [
             'nombre' => 'required|string|max:100|min:3|unique:horarios,nombre,' . $id,
@@ -55,7 +55,7 @@ class HorarioController extends Controller
             date('H:i', strtotime($horario->descanso_entrada)) != date('H:i', strtotime($request->descanso_entrada)) ||
             $horario->libre != $request->libre ||
             $horario->total_horas != $request->totalHoras
-        ){
+        ) {
             $horario->nombre = $request->nombre;
             $horario->hora_entrada = $request->hora_entrada;
             $horario->hora_salida = $request->hora_salida;
@@ -67,7 +67,7 @@ class HorarioController extends Controller
             $horario->save();
 
             $exito = 'Horario editado correctamente';
-            $horarios = Horario::all();
+            $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
             return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
         } else {
             $errores = ['error' => ['No se ha modificado ningun campo']];
@@ -105,25 +105,38 @@ class HorarioController extends Controller
         $horario->save();
 
         $exito = 'Horario creado correctamente';
-        $horarios = Horario::all();
+        $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
         return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
     }
 
     public function borrarHorario($id)
     {
         $horario = Horario::find($id);
+        if (!$horario) {
+            return $this->gestionHorarios();
+        }
+
         //borra horarios de la tabla intermedia
         $horario->users()->detach();
 
         $horario->delete();
         $exito = 'Horario ' . $horario->nombre . ' borrado correctamente';
-        $horarios = Horario::all();
+        $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
+        return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
+    }
+
+    public function restaurarHorario($id)
+    {
+        $horario = Horario::withTrashed()->find($id);
+        $horario->restore();
+        $exito = 'Horario ' . $horario->nombre . ' restaurado correctamente';
+        $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
         return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
     }
 
     public function vistaEditaHorario($id)
     {
-        $horario = Horario::find($id);
+        $horario = Horario::withTrashed()->orderBy('deleted_at', 'asc')->find($id);
         return Inertia::render('Horario/NuevoHorario', ['horario' => $horario]);
     }
 
@@ -157,6 +170,5 @@ class HorarioController extends Controller
         $user->horarios()->detach($request->id_ubicacion);
         $exito = 'Horario desasociado correctamente';
         return redirect()->route('showUser', ['id' => $request->id, 'exito' => $exito]);
-
     }
 }

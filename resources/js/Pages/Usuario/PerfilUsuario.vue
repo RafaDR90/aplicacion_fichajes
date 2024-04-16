@@ -17,7 +17,7 @@
             v-if="role == 'super-admin' || role == 'admin'">
 
             <!--Container principal de administracion-->
-            <div class=" flex flex-col gap-4">
+            <div class=" flex flex-col gap-4 relative">
                 <div class="flex flex-col gap-4">
                     <div class="flex gap-1">
                         <p>Usuario: </p>
@@ -44,6 +44,12 @@
                         </div>
                     </label>
                 </div>
+                <div v-if="selectedUser && !selectedUser.deleted_at" class="md:absolute right-0">
+                    <button @click="deleteUserAlert" class=" px-4 py-2 w-max bg-red-600  shadow-lg rounded-lg font-bold text-white hover:bg-red-500 cursor-pointer active:bg-red-700 active:shadow-none">Eliminar usuario</button>
+                </div>
+                <div v-else class="md:absolute right-0">
+                    <button @click="deleteUserAlert" class=" px-4 py-2 w-max bg-green-600  shadow-lg rounded-lg font-bold text-white hover:bg-green-500 cursor-pointer active:bg-green-700 active:shadow-none">Restaurar usuario</button>
+                </div>
             </div>
             <!--Fin del container principal de administracion-->
 
@@ -56,7 +62,7 @@
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full object-cover">
                     <img v-else src="/img/navbar/fotoperfil.png" alt="foto de perfil"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full">
-                    <div
+                    <div v-if="selectedUser.id == $page.props.auth.user.id"
                         class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-200">
                         <input type="file" ref="fileInput" @change="handleFileUpload" style="display: none" />
                         <button class=" w-10 h-10">
@@ -70,7 +76,7 @@
                     <p class=" text-lg">{{ selectedUser.email }}</p>
                     <div v-if="!editPhone" class=" text-lg flex gap-3 items-center">
                         <p>{{ selectedUser.telefono }} </p>
-                        <img @click="openEdit('editPhone')" class=" w-5 h-5" src="/img/iconos/editar.png"
+                        <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editPhone')" class=" w-5 h-5" src="/img/iconos/editar.png"
                             alt="Icono editar">
                     </div>
                     <form form @submit.prevent="submitPhone" v-else>
@@ -82,7 +88,7 @@
 
                     <div v-if="!editAddress" class="flex gap-3 items-center">
                         <p class=" text-lg">{{ selectedUser.direccion }}</p>
-                        <img @click="openEdit('editAddress')" class=" w-5 h-5" src="/img/iconos/editar.png"
+                        <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editAddress')" class=" w-5 h-5" src="/img/iconos/editar.png"
                             alt="Icono editar">
                     </div>
                     <form form @submit.prevent="submitAddress" v-else>
@@ -174,7 +180,7 @@
 
                         </div>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2" v-if="!selectedUser.horarios.length > 0">
                         <form v-if="role == 'super-admin' || role == 'admin'" class="flex items-center"
                             @submit.prevent="asignarHorario">
                             <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1"
@@ -193,7 +199,7 @@
     <div v-if="showAlert" class="absolute inset-0 flex justify-center  text-2xl">
         <div class=" sticky top-1/2 bg-white p-4 rounded shadow-gray-600 shadow-2xl h-max border">
             <p>Seguro que desea {{ accion }} de <span class=" font-bold">{{ selectedUser.name }}</span><span
-                    v-if="ejecutar == 'cambiarRol'">a <span class=" font-bold">{{ selectedRole }}</span>?</span></p>
+                    v-if="ejecutar == 'cambiarRol'"> a <span class=" font-bold">{{ selectedRole }}</span>?</span></p>
             <div class="flex justify-end gap-6 mt-10">
                 <Link v-if="ejecutar == 'cambiarRol'"
                     :href="route(ejecutar, { 'id': selectedUser.id, 'rol': selectedRole })" method="post"
@@ -287,6 +293,9 @@ const handleFileUpload = (event) => {
     formData.append('file', file);
     router.post('/change-profile-image', formData);
 };
+/*---------------------
+FIN BLOQUE SUBIR IMAGEN
+---------------------*/
 
 
 let selectedRole = ref("");
@@ -302,6 +311,7 @@ let isChecked = ref(false);
 onMounted(() => {
     isChecked.value = props.selectedUser.requiere_ubicacion == 1;
 })
+console.log(props.selectedUser);
 
 let obtieneRol = computed(() => {
     if (props.selectedUser.roles.length === 0) {
@@ -322,6 +332,16 @@ const superAdmin = () => {
     } else {
         return false;
     }
+};
+
+const deleteUserAlert = () => {
+    if (props.selectedUser.deleted_at) {
+        accion.value = "restaurar la cuenta";
+    } else {
+        accion.value = "eliminar la cuenta";
+    }
+    showAlert.value = true;
+    ejecutar.value = "deleteUser";
 };
 
 const cambiarRolAlert = () => {

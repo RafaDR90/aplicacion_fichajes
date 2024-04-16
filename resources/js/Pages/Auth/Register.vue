@@ -5,11 +5,15 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { defineProps } from 'vue';
+import { flash } from '@inertiajs/inertia';
 
 const form = useForm({
     name: '',
     apellidos: '',
     email: '',
+    telefono: '',
+    direccion: '',
     password: '',
     password_confirmation: '',
 });
@@ -19,9 +23,13 @@ const submit = () => {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
+const props = defineProps(['error']);
+
 </script>
 
 <template>
+    
     <div class=" m-10 xl:m-20">
         <Head title="Register" />
         <h2 class=" mb-10 text-2xl font-bold">Registrar empleado</h2>
@@ -52,6 +60,24 @@ const submit = () => {
                     autocomplete="username" />
 
                 <InputError class="mt-2" :message="form.errors.email" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="telefono" value="Telefono" />
+
+                <TextInput id="telefono" type="text" class="mt-1 block w-full" v-model="form.telefono" required
+                    autocomplete="telefono" />
+
+                <InputError class="mt-2" :message="form.errors.telefono" />
+            </div>
+
+            <div class="mt-4">
+                <InputLabel for="direccion" value="Direccion" />
+
+                <TextInput id="direccion" type="text" class="mt-1 block w-full" v-model="form.direccion" required
+                    autocomplete="direccion" />
+
+                <InputError class="mt-2" :message="form.errors.direccion" />
             </div>
 
             <div class="mt-4">

@@ -24,26 +24,32 @@
                     <div class=" bg-white rounded-b-xl p-3 flex flex-col gap-5  w-full">
 
                         <div v-for="(horario, index) in horarios" class="flex flex-col">
-                            <div class=" flex flex-col sm:flex-row">
+                            <div class=" flex flex-col sm:flex-row" :class="horario.deleted_at ? 'text-gray-400':''">
                                 <p class=" text-xl ml-2 text-nowrap"><span class=" font-bold">#{{ horario.id }}</span>
                                     {{ horario.nombre }}</p>
-                                <div class="flex gap-1  justify-end mr-5 sm:mr-11 w-full">
+                                <div class="flex gap-1  justify-end mr-5 sm:mr-11 w-full items-center">
                                     <button
                                         @click="confirmacion(id = horario.id, nombre = horario.nombre, accion = 'editar', ruta = 'vistaEditaHorario')"
                                         class="h-6 w-6">
                                         <img class=" w-full h-full" src="/img/iconos/editar.png" alt="Icono editar"
                                             title="Editar">
                                     </button>
-                                    <button
+                                    <button v-if="!horario.deleted_at"
                                         @click="confirmacion(id = horario.id, nombre = horario.nombre, accion = 'borrar', ruta = 'borrarHorario')"
                                         class="h-6 w-6">
                                         <img class=" w-full h-full" src="/img/iconos/borrar.png" alt="Icono borrar"
                                             title="Borrar">
                                     </button>
+                                    <button v-else
+                                        @click="confirmacion(id = horario.id, nombre = horario.nombre, accion = 'restaurar', ruta = 'restaurarHorario')"
+                                        class="h-7 w-7">
+                                        <img class=" w-full h-full" src="/img/iconos/restablecer.png" alt="Icono restaurar"
+                                            title="Restablecer">
+                                    </button>
                                 </div>
                             </div>
 
-                            <div class="pl-4 flex flex-col sm:flex-row sm:gap-10 flex-wrap ">
+                            <div :class="horario.deleted_at ? 'text-gray-400':''" class="pl-4 flex flex-col sm:flex-row sm:gap-10 flex-wrap ">
                                 <div v-if="horario.tipo != 'flexible'" class="sm:w-56">
                                     <p>Entrada: {{ horario.hora_entrada }}</p>
                                     <p>Salida: {{ horario.hora_salida }}</p>

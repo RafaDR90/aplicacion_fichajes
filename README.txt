@@ -1,7 +1,11 @@
 RECORDATORIO
+- mostrar hora del servidor en reloj
 - Mirar spatie para los roles
-- hacer funcionar boton de desasignar horario
-- Me falta eliminar horarios y usuarios con safe delete
+- Me falta eliminar horarios con safe delete
+- boton de volver en editar horario
+- boton de volver en perfil de usuarios
+- comprobar por que no me sale en fichajes Aaron Briseño
+- cuando me registro que me pida todos los campos
 
 composition api y composition option de vue
 

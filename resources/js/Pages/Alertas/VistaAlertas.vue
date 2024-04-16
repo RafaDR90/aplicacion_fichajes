@@ -32,11 +32,11 @@
                             <!--
                                 BLOQUE DE ALERTAS DE UBICACION
                             -->
-                            <div v-if="alerta.tipo == 'ubicacion'">
+                            <div v-if="alerta.tipo == 'ubicacion' && alerta.user">
                                 <p class=" text-green-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
                                 <div class="flex flex-col sm:flex-row sm:gap-40">
                                     <div>
-                                        <p><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
+                                        <p v-if="alerta.user"><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
                                             }}
                                             {{ alerta.user.apellidos }}</p>
                                         <p><span class=" font-bold">C&oacute;digo de pa&iacute;s: </span>{{
@@ -78,11 +78,11 @@
                             <!--
                                 BLOQUE DE ALERTAS DE VACACIONES
                             -->
-                            <div v-if="alerta.tipo == 'vacaciones'">
+                            <div v-if="alerta.tipo == 'vacaciones' && alerta.user">
                                 <p class=" text-blue-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
                                 <div class="flex flex-col sm:flex-row sm:gap-40">
                                     <div>
-                                        <p><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
+                                        <p v-if="alerta.user"><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
                                             }}
                                             {{ alerta.user.apellidos }}</p>
                                         <p><span class=" font-bold">Dias solicitados: </span><span
@@ -120,14 +120,14 @@
                             <!--
                                 BLOQUE DE ALERTAS DE ANOMALIAS DE FICHAJE
                             -->
-                            <div v-if="alerta.tipo == 'fichaje' || alerta.tipo == 'fichajeClose'">
+                            <div v-if="(alerta.tipo == 'fichaje' || alerta.tipo == 'fichajeClose') && alerta.user">
                                 <!--el fallo esta xk hay que pner mas vif-->
                                 <p class="font-bold text-xl mb-2"
                                     :class="{ 'text-orange-500': alerta.tipo !== 'fichajeClose', 'text-red-500': alerta.tipo === 'fichajeClose' }">
                                     {{ alerta.mensaje }}</p>
                                 <div class="flex flex-col sm:flex-row sm:gap-40">
                                     <div>
-                                        <p><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
+                                        <p v-if="alerta.user"><span class=" font-bold">De: </span>#{{ alerta.user.id }} {{ alerta.user.name
                                             }}
                                             {{ alerta.user.apellidos }}</p>
                                         <p v-if="alerta.datos.horaEntrada" class=" font-bold">Llega tarde.</p>
@@ -168,7 +168,7 @@
                             <!--
                                 BLOQUE DE ALERTAS DE FALTA DE ASISTENCIA
                             -->
-                            <div v-if="alerta.tipo == 'asistencia'">
+                            <div v-if="alerta.tipo == 'asistencia' && alerta.user">
                                 <p class=" text-blue-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
                                 <div class="flex flex-col sm:flex-row sm:gap-40">
                                     <div>

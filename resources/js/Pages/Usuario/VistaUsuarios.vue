@@ -9,7 +9,8 @@
             <h1 class="text-4xl font-bold">Empleados</h1>
         </div>
 
-        <div class="w-full  bg-white border border-gris-borde p-8 rounded-t-2xl">
+        <div class="w-full  bg-white border border-gris-borde p-8 pb-2 rounded-t-2xl">
+
             <div class="flex flex-col xl:flex-row justify-between gap-4">
 
                 <div class=' h-16'>
@@ -44,6 +45,11 @@
                     </Link>
                 </div>
             </div>
+            <div class="flex items-center space-x-2 mt-2">
+                <label for="eliminados" class="text-lg text-gray-700">Ver eliminados:</label>
+                <input type="checkbox" :checked="eliminados" :value="eliminados" @change="toggleEliminados"
+                    name="eliminados" id="eliminados" class="form-checkbox h-5 w-5 text-gray-700 rounded-md">
+            </div>
 
         </div>
 
@@ -57,10 +63,10 @@
                         <div class="p-2 xl:flex xl:gap-2">
                             <div :class="{ 'border-green-400 border-2 rounded-full': isAdmin(user) }"
                                 class=" w-10 h-10 ">
-                                <img v-if="user.image_url" :src="'/images/'+user.image_url"
-                                class="h-full w-full rounded-full object-cover" alt="foto de perfil" />
-                                <img v-else class="h-full w-full rounded-full object-cover" src="/img/navbar/fotoperfil.png"
-                                    alt="foto de perfil">
+                                <img v-if="user.image_url" :src="'/images/' + user.image_url"
+                                    class="h-full w-full rounded-full object-cover" alt="foto de perfil" />
+                                <img v-else class="h-full w-full rounded-full object-cover"
+                                    src="/img/navbar/fotoperfil.png" alt="foto de perfil">
                             </div>
                             <div class=" text-sm">
                                 <p>{{ user.name }} {{ user.apellidos }}</p>
@@ -78,20 +84,13 @@
                                     </Link>
                                     <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                                         href="#">
-                                        Newsletter
+                                        Opcion #2
                                     </a>
                                     <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                                         href="#">
-                                        Purchases
+                                        Opcion #3
                                     </a>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
-                                        href="#">
-                                        Downloads
-                                    </a>
-                                    <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
-                                        href="#">
-                                        Team Account
-                                    </a>
+
                                 </div>
                                 <button @click="toggleDropdownMenu($event, user.id)"
                                     id="hs-dropdown-custom-icon-trigger" type="button"
@@ -112,7 +111,7 @@
         </div>
         <nav>
             <nav class=" bg-white rounded-b-xl border border-gris-borde">
-                <Pagination :pagination="users" :search="search" :sortField="sortField" />
+                <Pagination :pagination="users" :search="search" :sortField="sortField" :eliminados="eliminados" />
             </nav>
         </nav>
 
@@ -122,6 +121,8 @@
 <script>
 import { Link } from '@inertiajs/vue3'
 import Pagination from '@/Components/Pagination.vue'
+import { router } from '@inertiajs/vue3';
+
 
 export default {
     data() {
@@ -131,7 +132,7 @@ export default {
             currentPage: 1,
             itemsPerPage: 10,
             isOpen: [],
-            intervalId:null,
+            intervalId: null,
         }
     },
     components: {
@@ -157,6 +158,14 @@ export default {
         }
     },
     methods: {
+
+        toggleEliminados() {
+            if (this.eliminados) {
+                router.get(`/usuarios?`);
+            } else {
+                router.get(`/usuarios?eliminados=${!this.eliminados}`);
+            }
+        },
         toggleDropdownMenu(event, index) {
             // si esta abierto lo cierra, si esta cerrado lo abre y cierra los demas
             this.isOpen[index] = !this.isOpen[index];
@@ -190,11 +199,16 @@ export default {
             this.fetchUsers();
         },
         fetchUsers() {
-            this.$inertia.get('/usuarios', {
+            console.log(this.eliminados)
+            let params = {
                 search: this.search,
                 page: this.currentPage,
-                sortField: this.sortField,
-            }, {
+                sortField: this.sortField
+            };
+            if (this.eliminados) {
+                params.eliminados = this.eliminados;
+            }
+            this.$inertia.get('/usuarios', params, {
                 replace: true,
                 preserveState: true,
             });
@@ -210,7 +224,8 @@ export default {
         users: Object,
         search: String,
         sortField: String,
-        exito: String | null
+        exito: String | null,
+        eliminados: Boolean,
     },
 
 };

@@ -28,15 +28,18 @@ Route::get('/', [UserController::class, 'index']);
 
 
 Route::group(['middleware' => Admin::class], function () {
+    //USUARIOS
     Route::get('/usuarios', [UserController::class, 'showUsers'])->name('showUsers');
     Route::post('/cambiar-rol', [RoleController::class, 'cambiarRol'])->name('cambiarRol');
     Route::get('/perfil', [UserController::class, 'showUser'])->name('showUser');
+    Route::post('/delete-user', [UserController::class, 'deleteUser'])->name('deleteUser');
 
     //HORARIO   
     Route::get('/horarios', [HorarioController::class, 'gestionHorarios'])->name('horarios');
     Route::get('/nuevo-horario', [HorarioController::class, 'newHorario'])->name('nuevoHorario');
     Route::post('/nuevo-horario', [HorarioController::class, 'creaHorario'])->name('creaHorario');
     Route::get('/borrar-horario/{id}', [HorarioController::class, 'borrarHorario'])->name('borrarHorario');
+    Route::get('/restaurar-horario/{id}', [HorarioController::class, 'restaurarHorario'])->name('restaurarHorario');
     Route::get('/editar-horario/{id}', [HorarioController::class, 'vistaEditaHorario'])->name('vistaEditaHorario');
     Route::post('/editar-horario/{id}', [HorarioController::class, 'editaHorario'])->name('editaHorario');
     Route::post('/asignar-horario', [HorarioController::class, 'asignarHorario'])->name('asignarHorario');
