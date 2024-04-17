@@ -84,14 +84,18 @@ const props = defineProps({
 ---------------------------------*/
 let errorMessage = ref(props.error ?? null);
 let successMessage = ref(props.exito ?? null);
+/*---------------------------------*/
 
 let serverTimeRef = ref();
+let serverTimeToCompare= ref();
 let totalHours = ref(['00:00:00']);
 
 watchEffect(() => {
     errorMessage.value = props.error;
     successMessage.value = props.exito;
-    serverTimeRef.value = new Date(props.serverTime);
+    serverTimeToCompare.value = new Date(props.serverTime);
+    serverTimeRef.value = new Date(new Date(props.serverTime).getTime() - 2 * 60 * 60 * 1000);
+
     if (props.error) {
         setTimeout(() => {
             errorMessage.value = null;
@@ -107,8 +111,9 @@ watchEffect(() => {
 let intervalId;
 onMounted(() => {
     intervalId = setInterval(() => {
-        if (serverTimeRef.value) {
+        if (serverTimeRef.value && serverTimeToCompare.value) {
             serverTimeRef.value = new Date(serverTimeRef.value.getTime() + 1000);
+            serverTimeToCompare.value = new Date(serverTimeToCompare.value.getTime() + 1000);
         }
     }, 1000);
 });
@@ -166,7 +171,7 @@ const calculateTime = () => {
 
     // Si el ultimo fichaje fue una entrada, suma la diferencia con la hora actual
     if (lastEntry) {
-        const serverTime = new Date(serverTimeRef.value);
+        const serverTime = new Date(serverTimeToCompare.value);
         
         totalSeconds += (serverTime - lastEntry) / 1000;
     }

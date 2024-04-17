@@ -263,7 +263,6 @@ const toggleLeidos = () => {
         router.get(`/alertas?filter=${props.filter || ''}&leidos=${!props.leidos}`);
     }
 };
-console.log(props.leidos);
 
 const updateFilter = (event) => {
     //añadi leidos a la url

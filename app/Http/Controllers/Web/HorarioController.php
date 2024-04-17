@@ -9,22 +9,42 @@ use App\Models\Horario;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
+use Diglactic\Breadcrumbs\Breadcrumbs;
 
 use Illuminate\Support\Facades\Log;
 
 class HorarioController extends Controller
 {
+    /**
+     * Muestra la vista de gestión de horarios.
+     *
+     * @return \Inertia\Response
+     */
     public function gestionHorarios()
     {
+        $breadcrumbs = Breadcrumbs::generate('horarios');
+
         $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
-        return Inertia::render('Horario/VistaHorarios', ['horarios' => $horarios]);
+        return Inertia::render('Horario/VistaHorarios', ['horarios' => $horarios, 'breadcrumbs' => $breadcrumbs]);
     }
 
+    /**
+     * Muestra la vista para crear un nuevo horario.
+     *
+     * @return \Inertia\Response
+     */
     public function newHorario()
     {
-        return Inertia::render('Horario/NuevoHorario');
+        return Inertia::render('Horario/NuevoHorario', ['breadcrumbs' => Breadcrumbs::generate('newHorario')]);
     }
 
+    /**
+     * Edita un horario existente.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Inertia\Response
+     */
     public function editaHorario(Request $request, $id)
     {
         $horario = Horario::withTrashed()->find($id);
@@ -42,7 +62,8 @@ class HorarioController extends Controller
 
         if ($validator->fails()) {
             $errores = $validator->errors();
-            return Inertia::render('Horario/NuevoHorario', ['errores' => $errores, 'horario' => $horario]);
+            $breadcrumbs = Breadcrumbs::generate('editHorario');
+            return Inertia::render('Horario/NuevoHorario', ['errores' => $errores, 'horario' => $horario, 'breadcrumbs' => $breadcrumbs]);
         }
 
         //si se ha cambiado algun campo edita el horario de lo contrario devuelve errores['No se ha modificado ningun campo']
@@ -68,13 +89,22 @@ class HorarioController extends Controller
 
             $exito = 'Horario editado correctamente';
             $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
-            return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
+            $breadcrumbs = Breadcrumbs::generate('horarios');
+
+            return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios, 'breadcrumbs' => $breadcrumbs]);
         } else {
             $errores = ['error' => ['No se ha modificado ningun campo']];
-            return Inertia::render('Horario/NuevoHorario', ['errores' => $errores, 'horario' => $horario]);
+            $breadcrumbs = Breadcrumbs::generate('editHorario');
+            return Inertia::render('Horario/NuevoHorario', ['errores' => $errores, 'horario' => $horario, 'breadcrumbs' => $breadcrumbs??null]);
         }
     }
 
+    /**
+     * Crea un nuevo horario.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
+     */
     public function creaHorario(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -90,7 +120,8 @@ class HorarioController extends Controller
 
         if ($validator->fails()) {
             $errores = $validator->errors();
-            return Inertia::render('Horario/NuevoHorario', ['errores' => $errores]);
+            $breadcrumbs = Breadcrumbs::generate('newHorario');
+            return Inertia::render('Horario/NuevoHorario', ['errores' => $errores, 'breadcrumbs' => $breadcrumbs]);
         }
 
         $horario = new Horario();
@@ -106,9 +137,16 @@ class HorarioController extends Controller
 
         $exito = 'Horario creado correctamente';
         $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
-        return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
+        $breadcrumbs = Breadcrumbs::generate('horarios');
+        return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios, 'breadcrumbs' => $breadcrumbs]);
     }
 
+    /**
+     * Borra un horario existente.
+     *
+     * @param  int  $id
+     * @return \Inertia\Response
+     */
     public function borrarHorario($id)
     {
         $horario = Horario::find($id);
@@ -122,24 +160,45 @@ class HorarioController extends Controller
         $horario->delete();
         $exito = 'Horario ' . $horario->nombre . ' borrado correctamente';
         $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
-        return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
+        $breadcrumbs = Breadcrumbs::generate('horarios');
+        return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios, 'breadcrumbs' => $breadcrumbs]);
     }
 
+    /**
+     * Restaura un horario borrado.
+     *
+     * @param  int  $id
+     * @return \Inertia\Response
+     */
     public function restaurarHorario($id)
     {
         $horario = Horario::withTrashed()->find($id);
         $horario->restore();
         $exito = 'Horario ' . $horario->nombre . ' restaurado correctamente';
         $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
-        return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios]);
+        $breadcrumbs = Breadcrumbs::generate('horarios');
+        return Inertia::render('Horario/VistaHorarios', ['exito' => $exito, 'horarios' => $horarios, 'breadcrumbs' => $breadcrumbs]);
     }
 
+    /**
+     * Muestra la vista para editar un horario.
+     *
+     * @param  int  $id
+     * @return \Inertia\Response
+     */
     public function vistaEditaHorario($id)
     {
         $horario = Horario::withTrashed()->orderBy('deleted_at', 'asc')->find($id);
-        return Inertia::render('Horario/NuevoHorario', ['horario' => $horario]);
+        $breadcrumbs = Breadcrumbs::generate('editHorario');
+        return Inertia::render('Horario/NuevoHorario', ['horario' => $horario, 'breadcrumbs' => $breadcrumbs]);
     }
 
+    /**
+     * Asigna un horario a un usuario.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function asignarHorario(Request $request)
     {
 
@@ -164,6 +223,12 @@ class HorarioController extends Controller
         return Redirect::route('showUser', ['id' => $request->idUser, 'exito' => $exito]);
     }
 
+    /**
+     * Desasocia un horario de un usuario.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function desasociarHorario(Request $request)
     {
         $user = User::find($request->id);

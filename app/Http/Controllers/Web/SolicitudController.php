@@ -9,8 +9,12 @@ use Inertia\Inertia;
 
 class SolicitudController extends Controller
 {
+    
     /**
-     * Display a listing of the resource.
+     * Muestra la vista de solicitud. Si la vista es 'vacaciones', obtiene las vacaciones.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
      */
     public function index(Request $request)
     {
@@ -24,7 +28,13 @@ class SolicitudController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Crea una solicitud de alerta. Si ya existe una alerta del mismo tipo para el usuario, retorna false.
+     *
+     * @param  string  $tipo
+     * @param  string  $mensaje
+     * @param  array   $datos
+     * @param  int     $userId
+     * @return bool
      */
     public static function creaSolicitud($tipo, $mensaje, $datos, $userId)
     {
@@ -50,43 +60,4 @@ class SolicitudController extends Controller
         }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Alerta $alerta)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Alerta $alerta)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Alerta $alerta)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Alerta $alerta)
-    {
-        //
-    }
 }

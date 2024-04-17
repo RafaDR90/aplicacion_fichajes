@@ -5,7 +5,12 @@
         <p class="block sm:inline">- {{ exito }}</p>
     </div>
     <div class=" flex-col w-full min-h-[calc(100vh-5rem)] p-4">
-
+        <div class="flex self-start ml-4 mt-6">
+            <div v-for="(breadcrumb, index) in breadcrumbs" :key="index" class="flex">
+                <Link v-if="index !== breadcrumbs.length - 1" :href="breadcrumb.url" ><span class=" text-gray-700 font-semibold hover:text-primary-strong">{{ breadcrumb.title }}</span> <span>></span> </Link>
+                <Link v-else class=" text-gray-700 font-semibold"> &nbsp;{{ breadcrumb.title }}</Link>
+            </div>
+        </div>
         <div class="p-4 mb-6">
             <h1 class="text-4xl font-bold">Horarios</h1>
 
@@ -114,5 +119,6 @@ const props = defineProps({
     flash: Object,
     exito: String,
     error: String,
+    breadcrumbs: Array,
 });
 </script>

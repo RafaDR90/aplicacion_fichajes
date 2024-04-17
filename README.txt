@@ -1,11 +1,7 @@
 RECORDATORIO
-- mostrar hora del servidor en reloj
+- Para modificar la hora en los cambios de hora a la del servidor VistaFichaje.vue / linea 94
 - Mirar spatie para los roles
-- Me falta eliminar horarios con safe delete
-- boton de volver en editar horario
-- boton de volver en perfil de usuarios
 - comprobar por que no me sale en fichajes Aaron Briseño
-- cuando me registro que me pida todos los campos
 
 composition api y composition option de vue
 
@@ -24,6 +20,7 @@ Se ha usado Laravel 11 con Breeze(Para el inicio de sesion), Inertia(Para los re
 Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
 Se ha usado FullCalendar para renderizar el calendario
 Se ha usado LibPhoneNumber para validar los numeros de telefono
+Se ha usado Breadcrumbs para las migas de pan
 
 - Si da error la creacion de token
     php artisan passport:client --personal

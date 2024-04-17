@@ -18,6 +18,12 @@ use Illuminate\Support\Facades\DB;
 
 class FichajeController extends Controller
 {
+    /**
+     * Muestra una lista de los recursos.
+     *
+     * @param  Request  $request
+     * @return Response
+     */
     public function index(Request $request): Response
     {
         $serverTime = Carbon::now('UTC');
@@ -31,6 +37,13 @@ class FichajeController extends Controller
 
         return Inertia::render('Fichaje/VistaFichaje', ['error' => $request->error, 'exito' => $request->exito, 'horario' => $horario, 'fichajes' => $fichajes, 'serverTime' => $serverTimeString]);
     }
+
+    /**
+     * Realiza el fichaje de un usuario.
+     *
+     * @param  Request  $request
+     * @return Redirect
+     */
     public function fichar(Request $request)
     {
         //muestro datetime de laravel en un vardump
@@ -151,22 +164,29 @@ class FichajeController extends Controller
 
         return Redirect::route('fichaje', ['exito' => 'Fichaje de ' . $nuevoFichaje->tipo . ' realizado con exito.', 'error' => $error ?? null, 'fichajes' => $fichajes, 'horario' => $horario ?? null, 'serverTime' => $serverTimeString]);
     }
-
-    public function showFichajes(Request $request){
+    
+    /**
+     * Muestra los fichajes de los usuarios.
+     *
+     * @param  Request  $request
+     * @return InertiaResponse
+     */
+    public function showFichajes(Request $request)
+    {
         $today = date('Y-m-d');
-        $day= date('Y-m-d');
-        $searchName=null;
+        $day = date('Y-m-d');
+        $searchName = null;
         $request->validate([
             'dateFilter' => 'nullable|date_format:Y-m-d',
             'search' => 'nullable|string'
         ]);
-        if($request->dateFilter){
+        if ($request->dateFilter) {
             $day = $request->dateFilter;
         }
-        if($request->search){
+        if ($request->search) {
             $searchName = $request->search;
         }
-        
+
         //obtengo users que no tienen vacaciones
 
         $users = User::with('vacaciones')
@@ -178,19 +198,19 @@ class FichajeController extends Controller
 
 
         //añado a users sus fichajes de hoy
-        $coincidence=false;
+        $coincidence = false;
         foreach ($users as $key => $user) {
             $checkins = Fichaje::where('user_id', $user->id)
                 ->where('created_at', 'like', $day . '%')
                 ->orderBy('created_at', 'desc')
                 ->get();
             $user->setAttribute('checkins', $checkins);
-           
-            if($checkins->count() > 0){
-                $coincidence=true;
+
+            if ($checkins->count() > 0) {
+                $coincidence = true;
             }
         }
 
-        return Inertia::render('Fichaje/VistaFichajes',['serverDate' => $today, 'users' => $users, 'coincidence' => $coincidence, 'searchDateServer' => $day,'searchNameServer' => $searchName]);
+        return Inertia::render('Fichaje/VistaFichajes', ['serverDate' => $today, 'users' => $users, 'coincidence' => $coincidence, 'searchDateServer' => $day, 'searchNameServer' => $searchName]);
     }
 }

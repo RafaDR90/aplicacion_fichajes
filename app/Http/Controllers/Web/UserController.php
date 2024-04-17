@@ -15,17 +15,29 @@ use Illuminate\Support\Facades\Auth;
 use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Support\Facades\Validator;
+use Diglactic\Breadcrumbs\Breadcrumbs;
 
 
 class UserController extends Controller
 {
 
+    /**
+     * Muestra la página de inicio de sesión.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $authenticatedSessionController = new AuthenticatedSessionController();
         return $authenticatedSessionController->create();
     }
 
+    /**
+     * Muestra una lista de usuarios.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function showUsers(Request $request)
     {
         $eliminados = boolval($request->input('eliminados', false));
@@ -50,24 +62,41 @@ class UserController extends Controller
 
         $users = $query->paginate(15);
 
+        $breadcrumbs = Breadcrumbs::generate('showUsers');
+
         return Inertia::render('Usuario/VistaUsuarios', [
             'users' => $users,
             'search' => $search,
             'sortField' => $sortField,
             'exito' => $exito,
             'eliminados' => $eliminados,
+            'breadcrumbs' => $breadcrumbs,
         ]);
     }
 
+    /**
+     * Muestra un usuario específico.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function showUser(Request $request, $id = null)
     {
         $id = $request->input('id');
         $user = User::withTrashed()->with(['roles', 'ubicacion', 'horarios'])->find($id);
         $allHorarios = DB::table('horarios')->whereNull('deleted_at')->get();
         $role = 'admin';
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'), 'allHorarios' => $allHorarios, 'role' => $role]);
+        $breadcrumbs = Breadcrumbs::generate('showUser');
+        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'), 'allHorarios' => $allHorarios, 'role' => $role, 'breadcrumbs' => $breadcrumbs]);
     }
 
+    /**
+     * Muestra el perfil del usuario actualmente autenticado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function myProfile(Request $request)
     {
         $error = session('error') ?? null;
@@ -81,6 +110,12 @@ class UserController extends Controller
         return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null]);
     }
 
+    /**
+     * Comprueba si el usuario actualmente autenticado tiene un rol específico.
+     *
+     * @param  string  $role
+     * @return bool
+     */
     public static function hasRole($role)
     {
         $user = Auth::user();
@@ -93,6 +128,12 @@ class UserController extends Controller
         return false;
     }
 
+    /**
+     * Edita el número de teléfono del usuario actualmente autenticado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function editPhone(Request $request)
     {
         $phoneUtil = PhoneNumberUtil::getInstance();
@@ -117,7 +158,12 @@ class UserController extends Controller
         return redirect()->route('myProfile')->with('exito', 'Número de teléfono actualizado correctamente.');
     }
 
-
+    /**
+     * Edita la dirección del usuario actualmente autenticado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function editAddress(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -139,6 +185,12 @@ class UserController extends Controller
         return redirect()->route('myProfile')->with('exito', 'Dirección actualizada correctamente.');
     }
 
+    /**
+     * Edita la imagen de perfil del usuario actualmente autenticado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function editProfileImage(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -157,6 +209,12 @@ class UserController extends Controller
         return back()->with('exito', 'Imagen de perfil actualizada correctamente.');
     }
 
+    /**
+     * Elimina o restaura un usuario.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function deleteUser(Request $request)
     {
         //si esta eliminado lo restaura sino lo elimina

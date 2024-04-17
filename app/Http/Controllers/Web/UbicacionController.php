@@ -12,8 +12,13 @@ use Inertia\Inertia;
 
 class UbicacionController extends Controller
 {
-    
 
+    /**
+     * Añade una ubicación a partir de una alerta.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
     public function addUbicacion(Request $request)
     {
         //obtengo datos de alerta con idAlert
@@ -36,7 +41,7 @@ class UbicacionController extends Controller
             ->where('cp', $ubicacion->cp)
             ->first();
 
-            //si existe, compruebo si ya esta asociada al usuario
+        //si existe, compruebo si ya esta asociada al usuario
         if ($ubicacionExistente) {
             $ubicacionAsociada = $user->ubicacion()->where('ubicacion_id', $ubicacionExistente->id)->first();
             //si ya esta asociada devuelvo a la vista anulando la alerta
@@ -59,9 +64,14 @@ class UbicacionController extends Controller
         //marco alerta como leida
         $alerta->leido = 1;
         $alerta->save();
-
     }
 
+    /**
+     * Marca una alerta como leída sin añadir la ubicación.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     */
     public function denyUbicacion(Request $request)
     {
         $alerta = Alerta::find($request->idAlert);
@@ -69,6 +79,12 @@ class UbicacionController extends Controller
         $alerta->save();
     }
 
+    /**
+     * Cambia la preferencia del usuario sobre si requiere ubicación o no.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function toggleRequiereUbicacion(Request $request)
     {
         $user = User::find($request->idUser);
@@ -82,69 +98,19 @@ class UbicacionController extends Controller
         return redirect()->route('showUser', ['id' => $request->idUser, 'exito' => $exito]);
     }
 
+    /**
+     * Desasocia una ubicación del usuario.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function desasociarUbicacion(Request $request)
     {
         $user = User::find($request->id);
         $user->ubicacion()->detach($request->id_ubicacion);
 
-        $user = User::with(['roles','ubicacion'])->find($user->id);
+        $user = User::with(['roles', 'ubicacion'])->find($user->id);
         $exito = 'Ubicación desasociada con éxito';
         return redirect()->route('showUser', ['id' => $request->id, 'exito' => $exito]);
-    }
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Ubicacion $ubicacion)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ubicacion $ubicacion)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Ubicacion $ubicacion)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Ubicacion $ubicacion)
-    {
-        //
     }
 }

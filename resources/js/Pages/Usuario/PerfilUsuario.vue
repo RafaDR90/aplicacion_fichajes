@@ -11,8 +11,16 @@
         <p class="block sm:inline">- {{ exito }}</p>
     </div>
     <div class=" w-full flex flex-col justify-center items-center ">
+        <div class="flex self-start ml-20 mt-6">
+            <div v-for="(breadcrumb, index) in breadcrumbs" :key="index" class="flex">
+                <Link v-if="index !== breadcrumbs.length - 1" :href="breadcrumb.url" ><span class=" text-gray-700 font-semibold hover:text-primary-strong">{{ breadcrumb.title }}</span> <span>></span> </Link>
+                <Link v-else class=" text-gray-700 font-semibold"> &nbsp;{{ breadcrumb.title }}</Link>
+            </div>
+        </div>
+
         <h2 class=" text-2xl font-bold self-start ml-20 mt-10" v-if="role == 'super-admin' || role == 'admin'">Panel
             Administraci&oacute;n</h2>
+        
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6"
             v-if="role == 'super-admin' || role == 'admin'">
 
@@ -45,10 +53,14 @@
                     </label>
                 </div>
                 <div v-if="selectedUser && !selectedUser.deleted_at" class="md:absolute right-0">
-                    <button @click="deleteUserAlert" class=" px-4 py-2 w-max bg-red-600  shadow-lg rounded-lg font-bold text-white hover:bg-red-500 cursor-pointer active:bg-red-700 active:shadow-none">Eliminar usuario</button>
+                    <button @click="deleteUserAlert"
+                        class=" px-4 py-2 w-max bg-red-600  shadow-lg rounded-lg font-bold text-white hover:bg-red-500 cursor-pointer active:bg-red-700 active:shadow-none">Eliminar
+                        usuario</button>
                 </div>
                 <div v-else class="md:absolute right-0">
-                    <button @click="deleteUserAlert" class=" px-4 py-2 w-max bg-green-600  shadow-lg rounded-lg font-bold text-white hover:bg-green-500 cursor-pointer active:bg-green-700 active:shadow-none">Restaurar usuario</button>
+                    <button @click="deleteUserAlert"
+                        class=" px-4 py-2 w-max bg-green-600  shadow-lg rounded-lg font-bold text-white hover:bg-green-500 cursor-pointer active:bg-green-700 active:shadow-none">Restaurar
+                        usuario</button>
                 </div>
             </div>
             <!--Fin del container principal de administracion-->
@@ -58,7 +70,7 @@
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6 flex flex-col gap-14">
             <div class="flex flex-col gap-4 items-center md:items-start md:flex-row md:gap-8">
                 <div class=" w-60 h-60 relative">
-                    <img v-if="selectedUser.image_url" :src="'/images/'+selectedUser.image_url" alt="foto de perfil"
+                    <img v-if="selectedUser.image_url" :src="'/images/' + selectedUser.image_url" alt="foto de perfil"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full object-cover">
                     <img v-else src="/img/navbar/fotoperfil.png" alt="foto de perfil"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full">
@@ -76,8 +88,8 @@
                     <p class=" text-lg">{{ selectedUser.email }}</p>
                     <div v-if="!editPhone" class=" text-lg flex gap-3 items-center">
                         <p>{{ selectedUser.telefono }} </p>
-                        <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editPhone')" class=" w-5 h-5" src="/img/iconos/editar.png"
-                            alt="Icono editar">
+                        <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editPhone')"
+                            class=" w-5 h-5" src="/img/iconos/editar.png" alt="Icono editar">
                     </div>
                     <form form @submit.prevent="submitPhone" v-else>
                         <input type="text" class=" border border-gris-borde rounded-lg p-1" id="editedPhone"
@@ -88,8 +100,8 @@
 
                     <div v-if="!editAddress" class="flex gap-3 items-center">
                         <p class=" text-lg">{{ selectedUser.direccion }}</p>
-                        <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editAddress')" class=" w-5 h-5" src="/img/iconos/editar.png"
-                            alt="Icono editar">
+                        <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editAddress')"
+                            class=" w-5 h-5" src="/img/iconos/editar.png" alt="Icono editar">
                     </div>
                     <form form @submit.prevent="submitAddress" v-else>
                         <input type="text" class=" border border-gris-borde rounded-lg p-1 w-72 md:w-96"
@@ -224,12 +236,14 @@ import { Inertia } from '@inertiajs/inertia';
 import { router } from '@inertiajs/vue3'
 
 
+
 const props = defineProps({
     selectedUser: Object,
     error: String,
     exito: String,
     allHorarios: Array,
     role: String,
+    breadcrumbs: Array,
 });
 const formHorario = reactive({
     horario_id: "",
@@ -296,7 +310,6 @@ const handleFileUpload = (event) => {
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
 ---------------------*/
-
 
 let selectedRole = ref("");
 let showAlert = ref(false);

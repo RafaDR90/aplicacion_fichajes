@@ -10,6 +10,12 @@
 
 
     <div class=" flex-col w-full min-h-[calc(100vh-5rem)] p-16">
+        <div class="flex self-start ml-5 mt-0">
+            <div v-for="(breadcrumb, index) in breadcrumbs" :key="index" class="flex">
+                <Link v-if="index !== breadcrumbs.length - 1" :href="breadcrumb.url" ><span class=" text-gray-700 font-semibold hover:text-primary-strong">{{ breadcrumb.title }}</span> <span>></span> </Link>
+                <Link v-else class=" text-gray-700 font-semibold"> &nbsp;{{ breadcrumb.title }}</Link>
+            </div>
+        </div>
         <div class="p-4 mb-6">
             <h1 class="text-4xl font-bold">{{ horario ? 'Editar horario' : 'Nuevo horario' }}</h1>
             <div class=" w-full rounded-b-xl">
@@ -94,6 +100,7 @@ import { reactive } from 'vue';
 import { defineProps } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { watchEffect } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 
 
@@ -135,9 +142,11 @@ function submitFormEdit(){
 const props = defineProps({
     errores: Array,
     horario: Array,
-    exito: String
+    exito: String,
+    breadcrumbs: Array
 })
 
+console.log(props.breadcrumbs)
 watch(() => props.horario, (newHorario) => {
     if (newHorario) {
         form.nombre = newHorario.nombre || '';

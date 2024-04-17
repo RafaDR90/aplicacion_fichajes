@@ -11,7 +11,10 @@ use Inertia\Inertia;
 class AlertaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Muestra una lista de alertas.
+     *
+     * @param Request $request
+     * @return \Inertia\Response
      */
     public function index(Request $request)
     {
@@ -36,7 +39,13 @@ class AlertaController extends Controller
     }
 
     /**
-     * Crea una alerta
+     * Crea una nueva alerta.
+     *
+     * @param string $tipo
+     * @param string $mensaje
+     * @param mixed $datos
+     * @param int $userId
+     * @return void
      */
     public static function create($tipo, $mensaje, $datos, $userId)
     {
@@ -45,9 +54,15 @@ class AlertaController extends Controller
         $alerta->mensaje = $mensaje;
         $alerta->datos = $datos;
         $alerta->user_id = $userId;
-        $alerta->save();   
+        $alerta->save();
     }
 
+    /**
+     * Marca una alerta como leída.
+     *
+     * @param Request $request
+     * @return void
+     */
     public function marcarLeidaAlerta(Request $request)
     {
         $alerta = Alerta::find($request->idAlert);

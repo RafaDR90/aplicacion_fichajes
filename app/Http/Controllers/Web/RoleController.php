@@ -16,6 +16,13 @@ use Illuminate\Support\Facades\Route;
 
 class RoleController extends Controller
 {
+    
+    /**
+     * Cambia el rol de un usuario.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function cambiarRol(Request $request)
     {
         $error = null;
