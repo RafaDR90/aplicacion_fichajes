@@ -22,6 +22,8 @@ class UserSeeder extends Seeder
             'name' => 'Admin',
             'apellidos' => 'Sanchez Rajoi',
             'email' => 'admin@admin.com',
+            'telefono' => '666666666',
+            'direccion' => 'Calle Falsa 123',
             'requiere_ubicacion' => 0,
             'password' => bcrypt('admin'), 
         ]);

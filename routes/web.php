@@ -13,6 +13,7 @@ use App\Http\Controllers\Web\AlertaController;
 use App\Http\Controllers\Web\SolicitudController;
 use App\Http\Controllers\Web\UbicacionController;
 use App\Http\Controllers\Web\VacacionesController;
+use App\Models\Role;
 
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -81,6 +82,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/vacaciones', [VacacionesController::class, 'index'])->name('vacaciones');
     Route::get('/solicitud', [SolicitudController::class, 'index'])->name('solicitud');
     Route::post('/solicitud-vacaciones', [VacacionesController::class, 'solicitudVacaciones'])->name('solicitudVacaciones');
+    Route::get('/cancelar-vacaciones', [VacacionesController::class, 'cancelarVacacionesSolicitadas'])->name('cancelarVacaciones');
+
     //USUARIO
     Route::get('/my-profile', [UserController::class, 'myProfile'])->name('myProfile');
     Route::post('/change-address', [UserController::class, 'editAddress'])->name('editAddress');

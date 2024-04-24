@@ -223,6 +223,9 @@ class UserController extends Controller
             $user->restore();
             return redirect()->route('showUsers')->with('exito', 'Usuario restaurado correctamente.');
         } else {
+            if ($user->id == Auth::user()->id) {
+                return redirect()->back()->with('error', 'No puedes eliminarte a ti mismo.');
+            }
             $user->delete();
             $request->session()->put('exito', 'Usuario eliminado correctamente.');
             return redirect()->route('showUsers')->with('exito', 'Usuario eliminado correctamente.');

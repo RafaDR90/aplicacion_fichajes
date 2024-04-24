@@ -15,6 +15,32 @@ class VacacionesController extends Controller
 {
 
     /**
+     * Cancela las vacaciones no aprobadas solicitadas por el usuario.
+     * 
+     * @return \Inertia\Response
+     */
+    public function cancelarVacacionesSolicitadas()
+    {
+        $vacaciones = Vacaciones::where('user_id', auth()->user()->id)
+            ->where('aprobada', 0)
+            ->get();
+
+        if ($vacaciones) {
+            foreach ($vacaciones as $vacacion) {
+                $vacacion->delete();
+            }
+            $diasDisponibles = auth()->user()->diasVacaciones;
+            $diasDisponibles->dias_disponibles = $diasDisponibles->dias_disponibles + count($vacaciones);
+            $diasDisponibles->save();
+
+            //Borro la alerta creada
+            Alerta::where('user_id', auth()->user()->id)->where('tipo', 'vacaciones')->delete();
+        }
+
+        return Redirect::route('solicitud', ['exito' => 'Solicitud de vacaciones cancelada con exito', 'vista' => 'vacaciones']);
+    }
+
+    /**
      * Obtiene las vacaciones del usuario autenticado y los días disponibles.
      * Si el usuario no tiene días de vacaciones disponibles, se crean con un valor predeterminado de 30.
      *

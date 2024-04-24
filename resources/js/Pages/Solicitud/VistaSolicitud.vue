@@ -33,17 +33,25 @@
             <div v-if="vista == 'vacaciones'" class=" w-full flex flex-col items-center ">
                 <ul class=" list-disc mt-5 lg:flex lg:gap-20">
                     <li class=" text-[#B21414] font-bold text-shadow  bggr">Fines de semana y festivos</li>
-                    <li class="font-bold text-yellow-400 text-nowrap text-shadow">Vacaciones pendientes de confirmacion</li>
+                    <li class="font-bold text-yellow-400 text-nowrap text-shadow">Vacaciones pendientes de confirmacion
+                    </li>
                     <li class="font-bold text-green-400 text-shadow">Vacaciones</li>
                 </ul>
                 <div class="flex flex-col w-full items-center">
-                    <button @click="solicitarDiasSeleccionados"
-                        class=" p-4 w-max bg-green-300 rounded-md mt-10 font-bold hover:bg-green-200 shadow-md active:shadow-none active:bg-green-300">Solicitar
-                        dias seleccionados</button>
+                    <div class="flex flex-col md:flex-row gap-5 items-center">
+                        <button @click="solicitarDiasSeleccionados"
+                            class=" p-4 w-max bg-green-300 rounded-md mt-10 font-bold hover:bg-green-200 shadow-md active:shadow-none active:bg-green-300">Solicitar
+                            dias seleccionados</button>
+                        <button @click="cancelarDiasSolicitados"
+                            class=" p-4 w-max bg-yellow-300 rounded-md mt-10 font-bold hover:bg-yellow-200 shadow-md active:shadow-none active:bg-yellow-300">
+                            Cancelar dias solicitados
+                        </button>
+                    </div>
                     <button @click="deseleccionarTodo"
                         class=" p-4 w-max bg-red-500 rounded-md mt-10 font-bold hover:bg-red-400 shadow-md active:shadow-none active:bg-red-500">Deseleccionar
                         todo</button>
-                    <p class=" font-bold text-sm mt-2"><span class=" font-bold text-gray-600">Dias disponibles:</span> {{ (vacaciones.diasDisponibles.dias_disponibles - fechasSeleccionadas.length) }}
+                    <p class=" font-bold text-sm mt-2"><span class=" font-bold text-gray-600">Dias disponibles:</span>
+                        {{ (vacaciones.diasDisponibles.dias_disponibles - fechasSeleccionadas.length) }}
                     </p>
                 </div>
 
@@ -75,13 +83,13 @@ const props = defineProps({
 })
 
 onMounted(() => {
-    if(props.vacaciones){
-     vista.value = 'vacaciones';
+    if (props.vacaciones) {
+        vista.value = 'vacaciones';
     }
 })
 // Cuando cargues los datos de las vacaciones, establece datosCargados en true
 const obtenerVacaciones = () => {
-    router.get('/solicitud', { vista: 'vacaciones' }, { preserveState: false, refresh: true});
+    router.get('/solicitud', { vista: 'vacaciones' }, { preserveState: false, refresh: true });
 }
 
 const hoy = new Date()
@@ -91,6 +99,9 @@ const seisMesesDespues = new Date(hoy.getFullYear(), hoy.getMonth() + 8, 0)
 const vista = ref('')
 const fechasSeleccionadas = ref([]);
 
+const cancelarDiasSolicitados = () => {
+    router.get('/cancelar-vacaciones', {}, { preserveState: false, refresh: true });
+}
 
 const deseleccionarTodo = () => {
     fechasSeleccionadas.value.forEach(fecha => {
@@ -142,7 +153,7 @@ const calendarOptions = {
             fechasSeleccionadas.value = fechasSeleccionadas.value.filter(f => f !== info.dateStr)
             info.dayEl.style.backgroundColor = 'white';
             info.dayEl.style.border = '1px solid #D8D8D8';
-        } else if(fechasSeleccionadas.value.length < props.vacaciones.diasDisponibles.dias_disponibles) {
+        } else if (fechasSeleccionadas.value.length < props.vacaciones.diasDisponibles.dias_disponibles) {
             fechasSeleccionadas.value.push(info.dateStr)
             info.dayEl.style.border = '4px solid green';
             info.dayEl.style.backgroundColor = 'rgba(0, 128, 0, 0.1)';
