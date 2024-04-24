@@ -61,7 +61,7 @@ class User extends Authenticatable
 
     public function horarios()
     {
-        return $this->belongsToMany(Horario::class, 'horario_emp','id_empleado', 'id_horario')->withTimestamps();
+        return $this->belongsToMany(Horario::class, 'horario_emp','id_empleado', 'id_horario')->withPivot('dias')->withTimestamps();
     }
 
     public function ubicacion()

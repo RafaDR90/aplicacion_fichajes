@@ -59,7 +59,9 @@ FUNCIONALIDADES A MENCIONAR:
         - elimina ubicacion
     - lista horarios
         - asignacion horario
-        - borrar horario (aún no funciona)
+            - El primer horario se asignara para todos los dias de la semana, para los siguientes deberas asignarle dias, los dias que se
+            le asignen los borrara de los quitara de los horarios que ya disponga dado que no puede tener mas de un horario para cada dia
+        - borrar horario
 
 - Auth
     - Si esta marcada la casilla de ubicacion manda una notificacion (alerta) cuando hace login

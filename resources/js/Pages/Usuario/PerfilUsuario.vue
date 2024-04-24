@@ -13,14 +13,16 @@
     <div class=" w-full flex flex-col justify-center items-center ">
         <div class="flex self-start ml-20 mt-6">
             <div v-for="(breadcrumb, index) in breadcrumbs" :key="index" class="flex">
-                <Link v-if="index !== breadcrumbs.length - 1" :href="breadcrumb.url" ><span class=" text-gray-700 font-semibold hover:text-primary-strong">{{ breadcrumb.title }}</span> <span>></span> </Link>
+                <Link v-if="index !== breadcrumbs.length - 1" :href="breadcrumb.url"><span
+                    class=" text-gray-700 font-semibold hover:text-primary-strong">{{ breadcrumb.title }}</span>
+                <span>></span> </Link>
                 <Link v-else class=" text-gray-700 font-semibold"> &nbsp;{{ breadcrumb.title }}</Link>
             </div>
         </div>
 
         <h2 class=" text-2xl font-bold self-start ml-20 mt-10" v-if="role == 'super-admin' || role == 'admin'">Panel
             Administraci&oacute;n</h2>
-        
+
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6"
             v-if="role == 'super-admin' || role == 'admin'">
 
@@ -148,6 +150,7 @@
                         <div v-for=" horario in selectedUser.horarios">
                             <div class="flex justify-between">
                                 <p class=" font-bold">{{ horario.nombre }}</p>
+                                <p class=" text-sm">{{ horario.pivot.dias }}</p>
                                 <button v-if="role == 'super-admin' || role == 'admin'" class=" w-6 h-6"
                                     @click="desasociarUbicacionAlert(ubicacionId = horario.id, accion = 'desasociar horario', ejecutar = 'desasociarHorario')">
                                     <img class=" w-full h-full" src="/img/iconos/borrar.png" alt="Icono borrar"
@@ -192,14 +195,34 @@
 
                         </div>
                     </div>
-                    <div class="flex gap-2" v-if="!selectedUser.horarios.length > 0">
-                        <form v-if="role == 'super-admin' || role == 'admin'" class="flex items-center"
+                    <div class="flex gap-2">
+                        <form v-if="role == 'super-admin' || role == 'admin'" class="md:flex items-center"
                             @submit.prevent="asignarHorario">
-                            <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1"
-                                v-model="formHorario.horario_id">
-                                <option v-for="horario in allHorarios" :value="horario.id">{{ horario.nombre }}</option>
-                            </select>
-                            <button type="submit" class="bg-blue-500 text-white rounded-lg px-2 py-1 w-max ml-1">Asignar
+                            <div class="flex gap-4">
+                                <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1"
+                                    v-model="formHorario.horario_id">
+                                    <option v-for="horario in allHorarios" :value="horario.id">{{ horario.nombre }}
+                                    </option>
+                                </select>
+                                <div v-if="selectedUser.horarios.length > 0" class="flex">
+                                    <div v-for="day in days" class="">
+                                        <div class="relative ">
+                                            <input type="checkbox" :id="day" v-model="formHorario.selectedDays" :value="day"
+                                                class="hidden" />
+                                            <label :for="day" class="cursor-pointer">
+                                                <span
+                                                    class="w-4 h-4 mr-2 rounded border border-gray-300 flex items-center justify-center">
+                                                    <span v-if="formHorario.selectedDays.includes(day)"
+                                                        class="block w-2 h-2 bg-blue-600 rounded"></span>
+                                                </span>
+                                                {{ day }}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button v-if="(!selectedUser.horarios.length > 0 || formHorario.selectedDays.length > 0) && formHorario.horario_id" type="submit"
+                                class="bg-blue-500 text-white rounded-lg px-2 py-1 w-max ml-1 mt-1 md:mt-0">Asignar
                                 horario</button>
                         </form>
                     </div>
@@ -230,12 +253,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, defineProps, computed } from 'vue';
+import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { Inertia } from '@inertiajs/inertia';
 import { router } from '@inertiajs/vue3'
-
-
 
 const props = defineProps({
     selectedUser: Object,
@@ -245,9 +266,25 @@ const props = defineProps({
     role: String,
     breadcrumbs: Array,
 });
+
+//const selectedDays = ref([]);
+const days = ['L', 'M', 'X', 'J', 'V'];
+
 const formHorario = reactive({
     horario_id: "",
+    selectedDays: [],
 })
+
+watchEffect(() => {
+    formHorario.selectedDays.sort((a, b) => {
+        const order = ['L', 'M', 'X', 'J', 'V'];
+        return order.indexOf(a) - order.indexOf(b);
+    });
+    console.log('me')
+    console.log(formHorario.selectedDays)
+});
+
+
 
 const formAddress = reactive({
     editedAddress: "",
@@ -386,7 +423,8 @@ const desasociarUbicacionAlert = (ubicacionId, act, path) => {
 const asignarHorario = () => {
     router.post('/asignar-horario', {
         horario_id: formHorario.horario_id,
-        idUser: props.selectedUser.id
+        idUser: props.selectedUser.id,
+        selectedDays: formHorario.selectedDays
     });
 };
 

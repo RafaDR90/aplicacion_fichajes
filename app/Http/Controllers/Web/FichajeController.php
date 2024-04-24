@@ -11,8 +11,10 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\Fichaje;
 use Illuminate\Support\Carbon;
 use App\Models\Alerta;
+use App\Models\Horario;
 use Illuminate\Support\Facades\Date;
 use App\Models\User;
+use Carbon\WeekDay;
 use Illuminate\Support\Facades\DB;
 
 
@@ -38,6 +40,8 @@ class FichajeController extends Controller
         return Inertia::render('Fichaje/VistaFichaje', ['error' => $request->error, 'exito' => $request->exito, 'horario' => $horario, 'fichajes' => $fichajes, 'serverTime' => $serverTimeString]);
     }
 
+
+
     /**
      * Realiza el fichaje de un usuario.
      *
@@ -58,17 +62,37 @@ class FichajeController extends Controller
             return Redirect::route('fichaje', ['error' => 'Error al obtener la ubicacion']);
         }
 
+
         //obtengo usuario junto con ubicacion y horarios asignados
         $user = $request->user();
         $ubicacion = $user->ubicacion;
-        //obtengo el primer horario
-        $horario = $user->horarios->first();
+
+        //obtengo el dia de la semana en el que estoy
+        $weekDay = date('N');
+        $weekDay = $this->getWeekDay($weekDay);
+
+        //obtiene todos los horarios del usuario
+        $horarios = $user->horarios;
+
+        //compruebo que el usuario tenga un horario asignado el dia de hoy
+        $horario = null;
+        if ($horarios->isEmpty()) {
+            return Redirect::route('fichaje', ['error' => 'No tienes ningun horario asignado']);
+        }
+        foreach ($horarios as $key => $value) {
+            $days = explode(':', $value->pivot->dias);
+            if (in_array($weekDay, $days)) {
+                $horario = $value;
+                break;
+            }
+        }
+
         //si no existen ubicaciones retorno con error
         if ($ubicacion->isEmpty()) {
             return Redirect::route('fichaje', ['error' => 'No tienes ninguna ubicacion asignada']);
         }
         if (!$horario) {
-            return Redirect::route('fichaje', ['error' => 'No tienes ningun horario asignado']);
+            return Redirect::route('fichaje', ['error' => 'No tienes ningun horario asignado para hoy']);
         }
         $ubicacionPermitida = false;
         $ubicacionId = null;
@@ -164,7 +188,7 @@ class FichajeController extends Controller
 
         return Redirect::route('fichaje', ['exito' => 'Fichaje de ' . $nuevoFichaje->tipo . ' realizado con exito.', 'error' => $error ?? null, 'fichajes' => $fichajes, 'horario' => $horario ?? null, 'serverTime' => $serverTimeString]);
     }
-    
+
     /**
      * Muestra los fichajes de los usuarios.
      *
@@ -212,5 +236,32 @@ class FichajeController extends Controller
         }
 
         return Inertia::render('Fichaje/VistaFichajes', ['serverDate' => $today, 'users' => $users, 'coincidence' => $coincidence, 'searchDateServer' => $day, 'searchNameServer' => $searchName]);
+    }
+
+
+    /**
+     * Obtiene la letra del dia de la semana con el numero de dia.
+     *
+     * @param int $weekDay el numero de dia del 1 al 7.
+     * @return string La letra del dia de la semana
+     */
+    public function getWeekDay($weekDay)
+    {
+        switch ($weekDay) {
+            case 1:
+                return 'L';
+            case 2:
+                return 'M';
+            case 3:
+                return 'X';
+            case 4:
+                return 'J';
+            case 5:
+                return 'V';
+            case 6:
+                return 'S';
+            case 7:
+                return 'D';
+        }
     }
 }

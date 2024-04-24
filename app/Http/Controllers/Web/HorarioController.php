@@ -25,6 +25,7 @@ class HorarioController extends Controller
         $breadcrumbs = Breadcrumbs::generate('horarios');
 
         $horarios = Horario::withTrashed()->orderBy('deleted_at', 'asc')->get();
+        
         return Inertia::render('Horario/VistaHorarios', ['horarios' => $horarios, 'breadcrumbs' => $breadcrumbs]);
     }
 
@@ -202,26 +203,55 @@ class HorarioController extends Controller
     public function asignarHorario(Request $request)
     {
 
-        $horario = Horario::find($request->horario_id);
-        $user = User::find($request->idUser);
+        $newHhorario = Horario::find($request->horario_id);
+        //usuario con horarios
+        $user = User::with('horarios')
+        ->find($request->idUser); 
 
-        if (!$horario || !$user) {
+        if (!$newHhorario || !$user) {
             $error = 'Ha habido un problema al asignar el horario';
             return Redirect::route('showUser', ['id' => $request->idUser, 'error' => $error]);
         }
 
         //compruebo si el horario ya esta asignado
-        $horarioAsignado = $user->horarios()->where('id_horario', $horario->id)->first();
+        $horarioAsignado = $user->horarios()->where('id_horario', $newHhorario->id)->first();
         if ($horarioAsignado) {
             $error = 'El horario ya está asignado';
             return Redirect::route('showUser', ['id' => $request->idUser, 'error' => $error]);
         }
-
-        $user->horarios()->attach($horario->id);
+        if($user->horarios->getDictionary()){
+            $days = $request->selectedDays;
+            //recorro los horarios del usuario y le quito los dias que tiene en $days
+            foreach ($user->horarios as $horario) {
+                $daysToDelete = [];
+                $daysOldHorario = explode(':', $horario->pivot->dias);
+                //si algun dia de daysOldHorario coincide con algun dia de $days lo guardo en $daysToDelete
+                foreach ($daysOldHorario as $dayOld) {
+                    if (in_array($dayOld, $days)) {
+                        $daysToDelete[] = $dayOld;
+                    }
+                }
+                //quito los dias de $daysToDelete al horario seleccionado
+                $newDaysOldHorario = array_diff($daysOldHorario, $daysToDelete);
+                if (empty($newDaysOldHorario)) {
+                    $horario->pivot->delete();
+                    continue;
+                }
+                $horario->pivot->dias = implode(':', $newDaysOldHorario);
+                $horario->pivot->save();
+            }
+            //guardo los dias en el nuevo horario
+            $days = implode(':', $days);
+        }else{
+            $days = 'L:M:X:J:V';
+        }
+       
+        $user->horarios()->attach($newHhorario->id, ['dias' => $days]);
         $exito = 'Horario asignado correctamente';
 
         return Redirect::route('showUser', ['id' => $request->idUser, 'exito' => $exito]);
     }
+
 
     /**
      * Desasocia un horario de un usuario.
