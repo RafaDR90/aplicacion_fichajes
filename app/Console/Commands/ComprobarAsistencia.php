@@ -31,6 +31,7 @@ class ComprobarAsistencia extends Command
         //$this->empleadosAusentes();
         $this->cierraFichajes();
         $this->compruebaHorasTrabajadas();
+        $this->empleadosAusentes();
     }
 
     private function empleadosAusentes()
