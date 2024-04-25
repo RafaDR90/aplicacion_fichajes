@@ -28,7 +28,6 @@ class AppServiceProvider extends ServiceProvider
             'auth' => function () {
                 $user = Auth::user();
                 $user = User::with(['roles'])->find($user->id);
-                dd($user);die;
                 return [
                     'user' => $user,
 
