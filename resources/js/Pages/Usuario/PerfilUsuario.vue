@@ -91,7 +91,7 @@
                     <div v-if="!editPhone" class=" text-lg flex gap-3 items-center">
                         <p>{{ selectedUser.telefono }} </p>
                         <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editPhone')"
-                            class=" w-5 h-5" src="/img/iconos/editar.png" alt="Icono editar">
+                            class=" w-5 h-5 cursor-pointer" src="/img/iconos/editar.png" alt="Icono editar">
                     </div>
                     <form form @submit.prevent="submitPhone" v-else>
                         <input type="text" class=" border border-gris-borde rounded-lg p-1" id="editedPhone"
@@ -103,7 +103,7 @@
                     <div v-if="!editAddress" class="flex gap-3 items-center">
                         <p class=" text-lg">{{ selectedUser.direccion }}</p>
                         <img v-if="selectedUser.id == $page.props.auth.user.id" @click="openEdit('editAddress')"
-                            class=" w-5 h-5" src="/img/iconos/editar.png" alt="Icono editar">
+                            class=" w-5 h-5 cursor-pointer" src="/img/iconos/editar.png" alt="Icono editar">
                     </div>
                     <form form @submit.prevent="submitAddress" v-else>
                         <input type="text" class=" border border-gris-borde rounded-lg p-1 w-72 md:w-96"
