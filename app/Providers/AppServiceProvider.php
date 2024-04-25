@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\User;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-
+        if($this->app->environment('production')) {
+            URL::forceScheme('https');
+        }
 
         Inertia::share([
             'auth' => function () {
@@ -35,17 +38,4 @@ class AppServiceProvider extends ServiceProvider
             },
         ]);
     }
-    /* ESTA ES LA ORIGINAL
-    public function boot(): void
-    {
-        
-        Inertia::share([
-            'auth' => function () {
-                return [
-                    'user' => Auth::user(),
-                ];
-            },
-        ]);
-    }
-    */
 }
