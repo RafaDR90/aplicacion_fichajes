@@ -202,6 +202,9 @@ class UserController extends Controller
         }
         //el nombre de la foto es el email
         $imageName = Auth::user()->email . '.' . $request->file->extension();
+        if (file_exists(public_path('images'))) {
+            mkdir(public_path('images'));
+        }
         $request->file->move(public_path('images'), $imageName);
         $user = User::find(Auth::user()->id);
         $user->image_url = $imageName;
