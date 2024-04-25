@@ -16,6 +16,8 @@ use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
 use Illuminate\Support\Facades\Validator;
 use Diglactic\Breadcrumbs\Breadcrumbs;
+use Kreait\Firebase\Factory;
+
 
 
 class UserController extends Controller
@@ -202,18 +204,22 @@ class UserController extends Controller
         }
         //el nombre de la foto es el email
         $imageName = Auth::user()->email . '.' . $request->file->extension();
-        
+
         $tempPath = sys_get_temp_dir() . '/images';
         if (!file_exists($tempPath)) {
             mkdir($tempPath, 0777, true);
         }
         $request->file->move($tempPath, $imageName);
-        // Aquí debes implementar el código para mover el archivo de /tmp a tu almacenamiento persistente
-        //estoy usando railway
-        $path = '/app/public/images/' . $imageName;
-        $command = 'mv ' . $tempPath . '/' . $imageName . ' ' . $path;
-        exec($command);
+        // Sube el archivo a Firebase Storage
+        $factory = (new Factory)->withServiceAccount(getenv('FIREBASE_CREDENTIALS'));
+        $storage = $factory->createStorage();
+        $bucket = $storage->getBucket();
+        $bucket->upload(fopen($tempPath . '/' . $imageName, 'r'), [
+            'name' => 'profile_images/' . $imageName,
+        ]);
+        unlink($tempPath . '/' . $imageName);
         
+
         //actualizo la imagen en la base de datos
 
 
