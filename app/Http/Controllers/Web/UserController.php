@@ -211,14 +211,14 @@ class UserController extends Controller
         }
         $request->file->move($tempPath, $imageName);
         // Sube el archivo a Firebase Storage
-        $factory = (new Factory)->withServiceAccount(getenv('FIREBASE_CREDENTIALS'));
+        $factory = (new Factory)->withServiceAccount('../credentials.json');
         $storage = $factory->createStorage();
         $bucket = $storage->getBucket();
         $bucket->upload(fopen($tempPath . '/' . $imageName, 'r'), [
             'name' => 'profile_images/' . $imageName,
         ]);
         unlink($tempPath . '/' . $imageName);
-        
+
 
         //actualizo la imagen en la base de datos
 
