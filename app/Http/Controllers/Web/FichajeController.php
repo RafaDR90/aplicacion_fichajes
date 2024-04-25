@@ -21,7 +21,7 @@ use Illuminate\Support\Facades\DB;
 class FichajeController extends Controller
 {
     /**
-     * Muestra una lista de los recursos.
+     * Muestra la vista de fichajes.
      *
      * @param  Request  $request
      * @return Response
@@ -31,7 +31,18 @@ class FichajeController extends Controller
         $serverTime = Carbon::now('UTC');
         $serverTimeString = $serverTime->toJSON();
 
-        $horario = $request->user()->horarios->first();
+        $horario = null;
+        $horarios = $request->user()->horarios;
+        $weekDay = date('N');
+        $weekDay = $this->getWeekDay($weekDay);
+        foreach ($horarios as $key => $value) {
+            $days = explode(':', $value->pivot->dias);
+            if (in_array($weekDay, $days)) {
+                $horario = $value;
+                break;
+            }
+        }
+        
         $fichajes = Fichaje::where('user_id', $request->user()->id)
             ->where('created_at', 'like', date('Y-m-d') . '%')
             ->orderBy('created_at', 'desc')

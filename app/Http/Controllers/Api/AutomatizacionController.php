@@ -10,6 +10,6 @@ class AutomatizacionController extends Controller
 {
     public function cierraFichajes()
     {
-        Artisan::call('app:comprobar-asistencia');    
+        Artisan::call('app:comprobar-asistencia');
     }
 }
