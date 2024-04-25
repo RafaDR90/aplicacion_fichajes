@@ -202,10 +202,21 @@ class UserController extends Controller
         }
         //el nombre de la foto es el email
         $imageName = Auth::user()->email . '.' . $request->file->extension();
-        if (!file_exists(public_path('images'))) {
-            mkdir(public_path('images'), 0777, true);
+        
+        $tempPath = sys_get_temp_dir() . '/images';
+        if (!file_exists($tempPath)) {
+            mkdir($tempPath, 0777, true);
         }
-        $request->file->move(public_path('images'), $imageName);
+        $request->file->move($tempPath, $imageName);
+        // Aquí debes implementar el código para mover el archivo de /tmp a tu almacenamiento persistente
+        //estoy usando railway
+        $path = '/app/public/images/' . $imageName;
+        $command = 'mv ' . $tempPath . '/' . $imageName . ' ' . $path;
+        exec($command);
+        
+        //actualizo la imagen en la base de datos
+
+
         $user = User::find(Auth::user()->id);
         $user->image_url = $imageName;
         $user->save();
