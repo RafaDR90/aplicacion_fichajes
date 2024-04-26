@@ -109,6 +109,17 @@ class UserController extends Controller
         if ($user->roles->isNotEmpty()) {
             $role = $user->roles[0]->role_name;
         }
+        $perfilImage = null;
+        if($user->image_url){
+            // Descarga la imagen de Firebase Storage
+            $factory = (new Factory)->withServiceAccount('../credentials.json');
+            $storage = $factory->createStorage();
+            $bucket = $storage->getBucket();
+            $object = $bucket->object('profile_images/' . $user->image_url);
+            $object->downloadToFile(sys_get_temp_dir() . '/' . $user->image_url);
+            $perfilImage = sys_get_temp_dir() . '/' . $user->image_url;
+            var_dump($perfilImage);die;
+        }
         return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null]);
     }
 
