@@ -109,7 +109,7 @@ class UserController extends Controller
         if ($user->roles->isNotEmpty()) {
             $role = $user->roles[0]->role_name;
         }
-        $perfilImage = null;
+        /* $perfilImage = null;
         if($user->image_url){
             //obtengo la url de la imagen de firestore
             $factory = (new Factory)->withServiceAccount('../credentials.json');
@@ -119,18 +119,10 @@ class UserController extends Controller
             $url = $object->signedUrl(now()->addMinutes(5));
             var_dump($url);die;
             
-        }
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null, 'perfilImage' => $perfilImage]);
+        } */
+        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null]);
     }
-    /*
-    $factory = (new Factory)->withServiceAccount('../credentials.json');
-        $storage = $factory->createStorage();
-        $bucket = $storage->getBucket();
-        $bucket->upload(fopen($tempPath . '/' . $imageName, 'r'), [
-            'name' => 'profile_images/' . $imageName,
-        ]);
-    */
-
+    
     /**
      * Comprueba si el usuario actualmente autenticado tiene un rol específico.
      *
