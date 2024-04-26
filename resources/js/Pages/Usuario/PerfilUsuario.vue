@@ -259,6 +259,7 @@ import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect } f
 import { Link } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
+import { Inertia } from '@inertiajs/inertia';
 
 
 const props = defineProps({
