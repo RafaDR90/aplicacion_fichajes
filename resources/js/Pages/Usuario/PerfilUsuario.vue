@@ -284,9 +284,10 @@ const perfilImage = ref(null);
 
 const storage = getStorage();
 if (props.selectedUser && props.selectedUser.image_url) {
-    const userImageUrl = props.selectedUser.image_url;
-    const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
+
     const downloadImage = () => {
+        const userImageUrl = props.selectedUser.image_url;
+        const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
         getDownloadURL(storageRef)
             .then((url) => {
                 perfilImage.value = url;
@@ -295,12 +296,14 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 console.error("Error al obtener la URL de la imagen: ", error);
             });
     }
-    if(props.imgChange){
+    if (props.imgChange) {
         console.log("cambio de imagen")
         setTimeout(() => {
+            console.log('inicia timeout')
             downloadImage();
         }, 4000);
-    }else{
+    } else {
+        console.log("no cambio de imagen")
         downloadImage();
     }
 }
