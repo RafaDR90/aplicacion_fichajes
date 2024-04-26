@@ -10,10 +10,14 @@
       <button @click="changueStatusDropdownPerfil" @click.stop
         class="relative flex justify-center items-center gap-2 px-2 mr-4 md:mr-14 rounded-lg transition duration-100 hover:bg-gris-light hover:shadow-md focus:bg-gris-light focus:shadow-md active:bg-gris-light active:shadow-md">
         <div class="h-9 w-9">
-          <img v-if="$page.props.auth.user.image_url" :src="'/images/'+$page.props.auth.user.image_url" alt="foto de perfil" class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png"  />
-          <img v-else class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png" alt="" />
+          <img v-if="authImage" :src="authImage"
+            alt="foto de perfil" class="h-full w-full rounded-full object-cover object-center"
+            src="/img/navbar/fotoperfil.png" />
+          <img v-else class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png"
+            alt="" />
         </div>
-        <p v-if="$page && $page.props.auth.user">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
+        <p v-if="$page && $page.props.auth.user">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}
+        </p>
         <div class="w-4 h-4">
           <img class="w-full Fh-full object-cover object-center mt-0.5" src="/img/navbar/flecha-hacia-abajo.png"
             alt="Flecha" />
@@ -23,16 +27,18 @@
         class=" z-20 absolute w-48 pb-2 ml-12 mt-0 bg-white rounded-lg shadow-xl transition duration-100 transform origin-top scale-95">
         <div @click.stop class="w-full flex flex-col justify-center items-center bg-primary-strong rounded-t-lg">
           <div class="w-20 h-20 my-2">
-            <img v-if="$page.props.auth.user.image_url" :src="'/images/'+$page.props.auth.user.image_url" class="w-full h-full rounded-full object-cover object-center">
+            <img v-if="authImage" :src="authImage" class="w-full h-full rounded-full object-cover object-center">
             <img v-else class="w-full h-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png"
               alt="Foto de perfil" />
           </div>
-          <p v-if="$page && $page.props.auth.user" class=" text-white py-2 mx-2">{{ $page.props.auth.user.name }} {{ $page.props.auth.user.apellidos }}</p>
+          <p v-if="$page && $page.props.auth.user" class=" text-white py-2 mx-2">{{ $page.props.auth.user.name }} {{
+            $page.props.auth.user.apellidos }}</p>
         </div>
         <Link @click="dropdownOpen = !dropdownOpen"
           class="block px-4 py-2 text-gray-800 hover:bg-gray-100 active:bg-gray-200 w-full" :href="route('myProfile')">
         Perfil</Link>
-        <DropdownLink @click="dropdownOpen = !dropdownOpen" :href="route('logout')" method="post" as="button" class="w-full text-start">
+        <DropdownLink @click="dropdownOpen = !dropdownOpen" :href="route('logout')" method="post" as="button"
+          class="w-full text-start">
           Cerrar sesion
         </DropdownLink>
       </div>
@@ -41,13 +47,19 @@
 </template>
 
 <script setup>
-import { watch, ref, defineProps } from "vue";
-import { Link } from "@inertiajs/vue3";
+import { watch, ref, defineProps, onMounted } from "vue";
+import { Link, usePage } from "@inertiajs/vue3";
 import DropdownLink from '@/Components/DropdownLink.vue';
+import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
+
+let { props: pageProps } = usePage();
+
+
+const authImage = ref(null);
 
 const props = defineProps({
   dropdownPerfilOpen: Boolean,
-  user: Object, 
+  user: Object,
 });
 
 const emit = defineEmits(["toggle-sidebar", "dropdown-perfil"]);
@@ -60,6 +72,24 @@ const toggleSidebar = () => {
 };
 
 let dropdownOpen = ref(false);
+
+
+
+const storage = getStorage();
+if (pageProps.auth.user.image_url) {
+  const userImageUrl = pageProps.auth.user.image_url;
+  const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
+  getDownloadURL(storageRef)
+    .then((url) => {
+      authImage.value = url;
+    })
+    .catch((error) => {
+      console.error("Error al obtener la URL de la imagen: ", error);
+    });
+}
+
+
+
 
 
 </script>

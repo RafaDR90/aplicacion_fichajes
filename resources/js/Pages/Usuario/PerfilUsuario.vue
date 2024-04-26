@@ -72,7 +72,7 @@
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6 flex flex-col gap-14">
             <div class="flex flex-col gap-4 items-center md:items-start md:flex-row md:gap-8">
                 <div class=" w-60 h-60 relative">
-                    <img v-if="selectedUser.image_url" :src="'/images/' + selectedUser.image_url" alt="foto de perfil"
+                    <img v-if="perfilImage" :src="perfilImage"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full object-cover">
                     <img v-else src="/img/navbar/fotoperfil.png" alt="foto de perfil"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full">
@@ -255,8 +255,9 @@
 <script setup>
 import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import { Inertia } from '@inertiajs/inertia';
 import { router } from '@inertiajs/vue3'
+import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
+
 
 const props = defineProps({
     selectedUser: Object,
@@ -266,6 +267,24 @@ const props = defineProps({
     role: String,
     breadcrumbs: Array,
 });
+
+/*-----------------------------------
+     IMAGEN PERFIL DE FIREBASE
+-----------------------------------*/
+const perfilImage = ref(null);
+
+const storage = getStorage();
+if (props.selectedUser && props.selectedUser.image_url) {
+  const userImageUrl = props.selectedUser.image_url;
+  const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
+  getDownloadURL(storageRef)
+    .then((url) => {
+      perfilImage.value = url;
+    })
+    .catch((error) => {
+      console.error("Error al obtener la URL de la imagen: ", error);
+    });
+}
 
 //const selectedDays = ref([]);
 const days = ['L', 'M', 'X', 'J', 'V'];
@@ -280,8 +299,6 @@ watchEffect(() => {
         const order = ['L', 'M', 'X', 'J', 'V'];
         return order.indexOf(a) - order.indexOf(b);
     });
-    console.log('me')
-    console.log(formHorario.selectedDays)
 });
 
 
@@ -361,7 +378,6 @@ let isChecked = ref(false);
 onMounted(() => {
     isChecked.value = props.selectedUser.requiere_ubicacion == 1;
 })
-console.log(props.selectedUser);
 
 let obtieneRol = computed(() => {
     if (props.selectedUser.roles.length === 0) {

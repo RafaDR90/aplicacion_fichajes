@@ -66,7 +66,7 @@
                         <div class="p-2 xl:flex xl:gap-2">
                             <div :class="{ 'border-green-400 border-2 rounded-full': isAdmin(user) }"
                                 class=" w-10 h-10 ">
-                                <img v-if="user.image_url" :src="getImageUrl(user.image_url)"
+                                <img v-if="imageUrls[user.id]" :src="imageUrls[user.id]"
                                     class="h-full w-full rounded-full object-cover" alt="foto de perfil" />
                                 <img v-else class="h-full w-full rounded-full object-cover"
                                     src="/img/navbar/fotoperfil.png" alt="foto de perfil">
@@ -137,7 +137,7 @@ export default {
             itemsPerPage: 10,
             isOpen: [],
             intervalId: null,
-            imageUrl: null,
+            imageUrls: {},
         }
     },
     components: {
@@ -163,18 +163,7 @@ export default {
         }
     },
     methods: {
-        getImageUrl(imageName){
-            const storage = getStorage();
-            const imageRef = ref(storage, `/profile_images/${imageName}`);
-            return getDownloadURL(imageRef)
-            .then((url) => {
-                return url;
-            })
-            .catch((error) => {
-                console.log(error);
-                return;
-            });
-        },
+
         toggleEliminados() {
             if (this.eliminados) {
                 router.get(`/usuarios?`);
@@ -215,7 +204,6 @@ export default {
             this.fetchUsers();
         },
         fetchUsers() {
-            console.log(this.eliminados)
             let params = {
                 search: this.search,
                 page: this.currentPage,
@@ -242,6 +230,22 @@ export default {
         exito: String | null,
         eliminados: Boolean,
         breadcrumbs: Array,
+    },
+    mounted() {
+        const storage = getStorage();
+        const usersArray = this.users.data;
+        usersArray.forEach(user => {
+            if (user.image_url) {
+                const storageRef = ref(storage, '/profile_images/' + user.image_url);
+                getDownloadURL(storageRef)
+                    .then((url) => {
+                        this.imageUrls[user.id] = url;
+                    })
+                    .catch((error) => {
+                        console.error("Error al obtener la URL de la imagen: ", error);
+                    });
+            }
+        });
     },
 };
 </script>
