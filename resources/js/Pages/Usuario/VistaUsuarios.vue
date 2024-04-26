@@ -66,7 +66,7 @@
                         <div class="p-2 xl:flex xl:gap-2">
                             <div :class="{ 'border-green-400 border-2 rounded-full': isAdmin(user) }"
                                 class=" w-10 h-10 ">
-                                <img v-if="user.image_url" :src="'/images/' + user.image_url"
+                                <img v-if="user.image_url" :src="imageUrl"
                                     class="h-full w-full rounded-full object-cover" alt="foto de perfil" />
                                 <img v-else class="h-full w-full rounded-full object-cover"
                                     src="/img/navbar/fotoperfil.png" alt="foto de perfil">
@@ -125,6 +125,7 @@
 import { Link } from '@inertiajs/vue3'
 import Pagination from '@/Components/Pagination.vue'
 import { router } from '@inertiajs/vue3';
+import { getStorage, ref, getDownloadURL } from "firebase/storage";
 
 
 export default {
@@ -136,6 +137,7 @@ export default {
             itemsPerPage: 10,
             isOpen: [],
             intervalId: null,
+            imageUrl: null,
         }
     },
     components: {
@@ -161,7 +163,17 @@ export default {
         }
     },
     methods: {
-
+        fetchImage(imageName){
+            const storage = getStorage();
+            const imageRef = ref(storage, `images/${imageName}`);
+            getDownloadURL(imageRef)
+            .then((url) => {
+                this.imageUrl = url;
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        },
         toggleEliminados() {
             if (this.eliminados) {
                 router.get(`/usuarios?`);
@@ -220,9 +232,8 @@ export default {
             this.currentPage = page;
             this.search = this.search;
             this.fetchUsers();
-        }
+        },
     },
-
     props: {
         users: Object,
         search: String,
@@ -231,6 +242,9 @@ export default {
         eliminados: Boolean,
         breadcrumbs: Array,
     },
+    mounted() {
+        this.fetchImage(this.user.image_url);
+    }
 
 };
 </script>

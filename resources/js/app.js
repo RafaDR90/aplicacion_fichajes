@@ -6,8 +6,23 @@ import { createInertiaApp } from '@inertiajs/vue3';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import Applayout from './Layouts/AppLayout.vue';
+import { initializeApp } from "firebase/app";
+import { getStorage } from "firebase/storage";
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
+
+const firebaseConfig = {
+    apiKey: "AIzaSyB1rVTliyMh_DmSV4fVmavO_Tok3bvIus4",
+    authDomain: "fichaje-storage.firebaseapp.com",
+    projectId: "fichaje-storage",
+    storageBucket: "fichaje-storage.appspot.com",
+    messagingSenderId: "23179215093",
+    appId: "1:23179215093:web:eacd68b694bf0b76f585bc",
+    measurementId: "G-661S7DGE72"
+};
+
+const app = initializeApp(firebaseConfig);
+const storage = getStorage(app);
 
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,

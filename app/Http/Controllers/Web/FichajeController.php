@@ -129,7 +129,7 @@ class FichajeController extends Controller
         $fecha = date('Y-m-d');
         $hora = date('H:i:s');
 
-        $hora = date('H:i:s', mktime(10, 50, 0));
+        //$hora = date('H:i:s', mktime(10, 50, 0));
 
         //obtengo el ultimo fichaje del usuario de hoy
         $ultimoFichaje = Fichaje::where('user_id', $user->id)
