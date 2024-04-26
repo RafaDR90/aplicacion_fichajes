@@ -237,8 +237,8 @@ class UserController extends Controller
         $user = User::find(Auth::user()->id);
         $user->image_url = $imageName;
         $user->save();
-        return back()->with('exito', 'Imagen de perfil actualizada correctamente.')
-            ->with('imgChange', true);
+        return back()->with('imgChange', 'Imagen de perfil actualizada correctamente.')
+            ->with('exito', true);
     }
 
     /**
