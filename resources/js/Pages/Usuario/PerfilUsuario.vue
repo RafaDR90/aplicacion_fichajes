@@ -207,8 +207,8 @@
                                 <div v-if="selectedUser.horarios.length > 0" class="flex">
                                     <div v-for="day in days" class="">
                                         <div class="relative ">
-                                            <input type="checkbox" :id="day" v-model="formHorario.selectedDays" :value="day"
-                                                class="hidden" />
+                                            <input type="checkbox" :id="day" v-model="formHorario.selectedDays"
+                                                :value="day" class="hidden" />
                                             <label :for="day" class="cursor-pointer">
                                                 <span
                                                     class="w-4 h-4 mr-2 rounded border border-gray-300 flex items-center justify-center">
@@ -221,7 +221,9 @@
                                     </div>
                                 </div>
                             </div>
-                            <button v-if="(!selectedUser.horarios.length > 0 || formHorario.selectedDays.length > 0) && formHorario.horario_id" type="submit"
+                            <button
+                                v-if="(!selectedUser.horarios.length > 0 || formHorario.selectedDays.length > 0) && formHorario.horario_id"
+                                type="submit"
                                 class="bg-blue-500 text-white rounded-lg px-2 py-1 w-max ml-1 mt-1 md:mt-0">Asignar
                                 horario</button>
                         </form>
@@ -280,15 +282,15 @@ watch(() => props.selectedUser.image_url, (newValue, oldValue) => {
 
 const storage = getStorage();
 if (props.selectedUser && props.selectedUser.image_url) {
-  const userImageUrl = props.selectedUser.image_url;
-  const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
-  getDownloadURL(storageRef)
-    .then((url) => {
-      perfilImage.value = url;
-    })
-    .catch((error) => {
-      console.error("Error al obtener la URL de la imagen: ", error);
-    });
+    const userImageUrl = props.selectedUser.image_url;
+    const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
+    getDownloadURL(storageRef)
+        .then((url) => {
+            perfilImage.value = url;
+        })
+        .catch((error) => {
+            console.error("Error al obtener la URL de la imagen: ", error);
+        });
 }
 
 //const selectedDays = ref([]);
@@ -364,11 +366,9 @@ const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
-    router.post('/change-profile-image', formData)
-    .then(() => {
-        Inertia.reload({ preserveState: false });
-    });
-    
+    router.post('/change-profile-image', formData);
+
+    Inertia.reload({ preserveState: false });
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
