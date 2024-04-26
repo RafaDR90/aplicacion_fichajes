@@ -273,6 +273,11 @@ const props = defineProps({
 -----------------------------------*/
 const perfilImage = ref(null);
 
+//cuando cambie props.selectedUser.image_url, hago un console.log
+watch(() => props.selectedUser.image_url, (newValue, oldValue) => {
+    console.log("Cambio la imagen de perfil");
+});
+
 const storage = getStorage();
 if (props.selectedUser && props.selectedUser.image_url) {
   const userImageUrl = props.selectedUser.image_url;
@@ -359,10 +364,11 @@ const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
-    router.post('/change-profile-image', formData),
-    then(() => {
-        location.reload();
-    })
+    router.post('/change-profile-image', formData)
+    .then(() => {
+        Inertia.reload({ preserveState: false });
+    });
+    
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
