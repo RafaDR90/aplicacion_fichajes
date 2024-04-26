@@ -122,7 +122,7 @@ class UserController extends Controller
         } */
         return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null]);
     }
-    
+
     /**
      * Comprueba si el usuario actualmente autenticado tiene un rol específico.
      *
@@ -237,7 +237,8 @@ class UserController extends Controller
         $user = User::find(Auth::user()->id);
         $user->image_url = $imageName;
         $user->save();
-        return back()->with('exito', 'Imagen de perfil actualizada correctamente.');
+        return back()->with('exito', 'Imagen de perfil actualizada correctamente.')
+            ->with('imgChange', true);
     }
 
     /**

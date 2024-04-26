@@ -269,6 +269,8 @@ const props = defineProps({
     allHorarios: Array,
     role: String,
     breadcrumbs: Array,
+    imgChange: imgChange,
+
 });
 
 /*-----------------------------------
@@ -276,22 +278,27 @@ const props = defineProps({
 -----------------------------------*/
 const perfilImage = ref(null);
 
-//cuando cambie props.selectedUser.image_url, hago un console.log
-watch(() => props.selectedUser.image_url, (newValue, oldValue) => {
-    console.log("Cambio la imagen de perfil");
-});
-
 const storage = getStorage();
 if (props.selectedUser && props.selectedUser.image_url) {
     const userImageUrl = props.selectedUser.image_url;
     const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
-    getDownloadURL(storageRef)
-        .then((url) => {
-            perfilImage.value = url;
-        })
-        .catch((error) => {
-            console.error("Error al obtener la URL de la imagen: ", error);
-        });
+    const downloadImage = () => {
+        getDownloadURL(storageRef)
+            .then((url) => {
+                perfilImage.value = url;
+            })
+            .catch((error) => {
+                console.error("Error al obtener la URL de la imagen: ", error);
+            });
+    }
+    if(props.imgChange){
+        console.log("cambio de imagen")
+        setTimeout(() => {
+            downloadImage();
+        }, 4000);
+    }else{
+        downloadImage();
+    }
 }
 
 //const selectedDays = ref([]);
@@ -368,7 +375,7 @@ const handleFileUpload = (event) => {
     const formData = new FormData();
     formData.append('file', file);
     router.post('/change-profile-image', formData);
-//    Inertia.reload({ preserveState: false });
+    //    Inertia.reload({ preserveState: false });
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
