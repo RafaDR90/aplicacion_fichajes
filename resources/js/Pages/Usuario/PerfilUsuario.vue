@@ -274,8 +274,9 @@ const props = defineProps({
         default: false,
         required: false
     }
-
 });
+
+console.log(props.imgChange);
 
 /*-----------------------------------
      IMAGEN PERFIL DE FIREBASE
@@ -298,10 +299,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
     }
     if (props.imgChange) {
         console.log("cambio de imagen")
-        setTimeout(() => {
-            console.log('inicia timeout')
             downloadImage();
-        }, 4000);
     } else {
         console.log("no cambio de imagen")
         setTimeout(() => {
