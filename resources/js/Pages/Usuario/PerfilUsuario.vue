@@ -304,6 +304,10 @@ if (props.selectedUser && props.selectedUser.image_url) {
         }, 4000);
     } else {
         console.log("no cambio de imagen")
+        setTimeout(() => {
+            console.log('inicia timeout')
+            downloadImage();
+        }, 4000);
         downloadImage();
     }
 }

@@ -230,9 +230,7 @@ class UserController extends Controller
         ]);
         unlink($tempPath . '/' . $imageName);
 
-
         //actualizo la imagen en la base de datos
-
 
         $user = User::find(Auth::user()->id);
         $user->image_url = $imageName;
