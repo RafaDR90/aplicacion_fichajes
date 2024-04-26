@@ -359,7 +359,10 @@ const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
-    router.post('/change-profile-image', formData);
+    router.post('/change-profile-image', formData),
+    then(() => {
+        location.reload();
+    })
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
