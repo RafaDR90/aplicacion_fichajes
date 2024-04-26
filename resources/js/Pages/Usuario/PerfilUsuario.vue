@@ -384,7 +384,7 @@ const handleFileUpload = (event) => {
     const formData = new FormData();
     formData.append('file', file);
     router.post('/change-profile-image', formData);
-    //    Inertia.reload({ preserveState: false });
+    Inertia.reload({ preserveState: false });
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
