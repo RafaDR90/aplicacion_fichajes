@@ -305,7 +305,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
         setTimeout(() => {
             console.log('inicia timeout')
             downloadImage();
-        }, 4000);
+        }, 250);
         downloadImage();
     }
 }
