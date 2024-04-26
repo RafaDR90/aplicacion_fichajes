@@ -269,7 +269,11 @@ const props = defineProps({
     allHorarios: Array,
     role: String,
     breadcrumbs: Array,
-    imgChange: Boolean,
+    imgChange: {
+        type: Boolean,
+        default: false,
+        required: false
+    }
 
 });
 
