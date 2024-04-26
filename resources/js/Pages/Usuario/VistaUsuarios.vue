@@ -165,7 +165,7 @@ export default {
     methods: {
         fetchImage(imageName){
             const storage = getStorage();
-            const imageRef = ref(storage, `images/${imageName}`);
+            const imageRef = ref(storage, `/profile_images/${imageName}`);
             getDownloadURL(imageRef)
             .then((url) => {
                 this.imageUrl = url;
