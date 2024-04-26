@@ -103,6 +103,7 @@ class UserController extends Controller
     {
         $error = session('error') ?? null;
         $exito = session('exito') ?? null;
+        $imgChange = session('imgChange') ?? null;
         $user = Auth::user();
         $user = User::with(['roles', 'ubicacion', 'horarios'])->find($user->id);
         $allHorarios = DB::table('horarios')->whereNull('deleted_at')->get();
@@ -120,7 +121,7 @@ class UserController extends Controller
             var_dump($url);die;
             
         } */
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null]);
+        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null, 'imgChange' => $imgChange ?? null]);
     }
 
     /**
@@ -235,8 +236,8 @@ class UserController extends Controller
         $user = User::find(Auth::user()->id);
         $user->image_url = $imageName;
         $user->save();
-        return back()->with('imgChange', 'Imagen de perfil actualizada correctamente.')
-            ->with('exito', true);
+        return back()->with('exito', 'Imagen de perfil actualizada correctamente.')
+            ->with('imgChange', true);
     }
 
     /**
