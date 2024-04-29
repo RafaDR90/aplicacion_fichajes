@@ -36,7 +36,7 @@ class SolicitudController extends Controller
      * @param  int     $userId
      * @return bool
      */
-    public static function creaSolicitud($tipo, $mensaje, $datos, $userId)
+    public static function creaSolicitud($tipo, $mensaje, $datos, $userId, $observations=null)
     {
         //obtengo las alertas del userId del tipo $tipo y si ya hay una creada retorno false
         $alerta = Alerta::where('user_id', $userId)
@@ -52,6 +52,7 @@ class SolicitudController extends Controller
             $alerta->tipo = $tipo;
             $alerta->mensaje = $mensaje;
             $alerta->datos = $datos;
+            $alerta->observaciones = $observations;
             $alerta->user_id = $userId;
             $alerta->save();
             return true;

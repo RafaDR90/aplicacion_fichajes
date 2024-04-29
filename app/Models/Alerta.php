@@ -9,7 +9,7 @@ class Alerta extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['tipo', 'mensaje', 'datos', 'user_id', 'leido'];
+    protected $fillable = ['tipo', 'mensaje', 'datos', 'user_id', 'leido', 'observaciones'];
 
     protected $casts = [
         'datos' => 'array'

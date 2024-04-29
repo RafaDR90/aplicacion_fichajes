@@ -9,6 +9,27 @@
         role="alert">
         <p class="block sm:inline">- {{ exito }}</p>
     </div>
+    
+    <div v-if="newAlertId" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-100 bg-opacity-40 transition-opacity" aria-hidden="true"></div>
+
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <div
+                class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form  @submit.prevent="addObservation" class="p-6">
+                    <label for="comentario" class="font-bold text-xl">Raz&oacute;n por la que llega tarde</label>
+                    <textarea name="comentario" id="comentario" cols="30" rows="10" v-model="observationForm.comentario"
+                        class="w-full mt-2 p-2 border rounded"></textarea>
+                    <button type="submit"
+                        class="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Enviar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="flex flex-col items-center  h-[80vh] justify-between lg:justify-normal lg:gap-32  lg:w-1/2">
         <div class=" w-max mt-10 ">
             <p v-if="horario && horario.tipo != 'flexible'" class=" font-bold text-xl ml-1 lg:text-4xl">Horario</p>
@@ -38,12 +59,13 @@
             <Link :href="route('fichar')" :class="{
                 'bg-red-500 hover:bg-red-400 active:bg-red-500': props.fichajes && props.fichajes[0] && props.fichajes[0].tipo === 'entrada',
                 'bg-[#2196f3] hover:bg-[#64b5f6] active:bg-[#2196f3]': !props.fichajes || !props.fichajes[0] || props.fichajes[0].tipo === 'salida'
-            }" class="inline-block text-white text-lg rounded-full px-10 py-4 lg:px-14 lg:py-6 transition-colors duration-200 ease-in-out shadow-xl hover:shadow-xl active:shadow-none lg:text-2xl">
+            }"
+                class="inline-block text-white text-lg rounded-full px-10 py-4 lg:px-14 lg:py-6 transition-colors duration-200 ease-in-out shadow-xl hover:shadow-xl active:shadow-none lg:text-2xl">
             Fichar
             </Link>
             <div>
-                <p class="font-bold lg:text-2xl">Tiempo transcurrido: <span
-                        class=" text-gray-400 font-bold">{{ totalHours }}</span></p>
+                <p class="font-bold lg:text-2xl">Tiempo transcurrido: <span class=" text-gray-400 font-bold">{{
+                        totalHours }}</span></p>
             </div>
         </div>
 
@@ -67,8 +89,8 @@
 </template>
 
 <script setup>
-import { Link } from '@inertiajs/vue3';
-import { defineProps, onMounted, onUnmounted, computed } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import { defineProps, onMounted, onUnmounted, computed, reactive } from 'vue';
 import { ref, watchEffect } from 'vue';
 
 
@@ -78,8 +100,18 @@ const props = defineProps({
     horario: Object,
     fichajes: Array,
     serverTime: String,
-
+    newAlertId: Number,
 });
+
+const observationForm = reactive({
+    comentario: '',
+    alertId: props.newAlertId,
+});
+
+function addObservation() {
+    router.post('/alert-observation-store', observationForm)
+    props.newAlertId = null;
+}
 
 /*---------------------------------
     MENSAJE DE ERROR O EXITO

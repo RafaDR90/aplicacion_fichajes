@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Alerta;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Redirect;
 
 
 class AlertaController extends Controller
@@ -45,7 +46,7 @@ class AlertaController extends Controller
      * @param string $mensaje
      * @param mixed $datos
      * @param int $userId
-     * @return void
+     * 
      */
     public static function create($tipo, $mensaje, $datos, $userId)
     {
@@ -55,6 +56,7 @@ class AlertaController extends Controller
         $alerta->datos = $datos;
         $alerta->user_id = $userId;
         $alerta->save();
+        return $alerta;
     }
 
     /**
@@ -68,5 +70,14 @@ class AlertaController extends Controller
         $alerta = Alerta::find($request->idAlert);
         $alerta->leido = 1;
         $alerta->save();
+    }
+
+    public function storeObservation(Request $request)
+    {
+        $alerta = Alerta::find($request->alertId);
+        $alerta->observaciones = $request->comentario;
+        $alerta->save();
+        return Redirect::route('fichaje', ['exito' => 'Observación enviada correctamente.']);
+
     }
 }

@@ -89,6 +89,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/change-address', [UserController::class, 'editAddress'])->name('editAddress');
     Route::post('/change-phone', [UserController::class, 'editPhone'])->name('editPhone');
     Route::post('/change-profile-image', [UserController::class, 'editProfileImage'])->name('editProfileImage');
+
+    //ALERTAS
+    Route::post('/alert-observation-store', [AlertaController::class, 'storeObservation'])->name('storeObservation');
 });
 
 require __DIR__ . '/auth.php';

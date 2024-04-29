@@ -90,7 +90,9 @@
                                                     Date(dia).toLocaleDateString('es-ES') }} <span
                                                     v-if="index !== alerta.datos.length - 1"> - </span> <span
                                                     v-else>.</span> </span></p>
+                                                    <p v-if="alerta.observaciones" class=" font-bold">Observaciones: <span class=" font-normal">{{ alerta.observaciones }}</span></p>
                                     </div>
+                                    
 
                                 </div>
                                 <div class="flex gap-3 mt-3" v-if="!alerta.leido">
@@ -141,7 +143,8 @@
                                             <p v-if="alerta.datos.horaSalida"><span class=" font-bold">Hora de salida:
                                                 </span>{{ alerta.datos.horaSalida.split(':').slice(0, 2).join(':') }}
                                             </p>
-                                            
+                                            <p v-if="alerta.observaciones" class=" font-bold">Observaciones: <span class=" font-normal">{{ alerta.observaciones }}</span></p>
+
                                         </div>
                                         <button v-if="!alerta.leido"
                                             @click="openConfirmation(alerta.id, alerta.user.id, 'marcar como leído', null, 'marcarLeidaAlerta')"

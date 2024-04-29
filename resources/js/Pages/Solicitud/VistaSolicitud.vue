@@ -37,6 +37,7 @@
                     </li>
                     <li class="font-bold text-green-400 text-shadow">Vacaciones</li>
                 </ul>
+                
                 <div class="flex flex-col w-full items-center">
                     <div class="flex flex-col md:flex-row gap-5 items-center">
                         <button @click="solicitarDiasSeleccionados"
@@ -53,6 +54,11 @@
                     <p class=" font-bold text-sm mt-2"><span class=" font-bold text-gray-600">Dias disponibles:</span>
                         {{ (vacaciones.diasDisponibles.dias_disponibles - fechasSeleccionadas.length) }}
                     </p>
+                </div>
+                <div class=" mt-4">
+                    <label class=" text-sm font-semibold text-gray-600" for="observaciones">Observaciones:</label>
+                    <textarea name="observaciones" id="observaciones" cols="50" rows="4"
+                        class="w-full border border-gris-borde rounded-lg p-2" v-model="holidayObservations"></textarea>
                 </div>
 
             </div>
@@ -74,6 +80,7 @@ import esLocale from '@fullcalendar/core/locales/es';
 import { onMounted } from 'vue';
 
 
+const holidayObservations = ref('')
 
 //obtengo props
 const props = defineProps({
@@ -118,7 +125,7 @@ const solicitarDiasSeleccionados = () => {
     if (fechasSeleccionadas.value.length === 0) {
         return
     }
-    router.post('/solicitud-vacaciones', { dias: fechasSeleccionadas.value }, { preserveState: false, refresh: true });
+    router.post('/solicitud-vacaciones', { dias: fechasSeleccionadas.value, observations: holidayObservations.value }, { preserveState: false, refresh: true });
 }
 
 const calendarOptions = {

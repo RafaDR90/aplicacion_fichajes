@@ -78,7 +78,13 @@ class VacacionesController extends Controller
             return Redirect::route('solicitud', ['error' => 'Error al solicitar vacaciones, no tienes suficientes dias disponibles', 'vista' => 'vacaciones']);
         }
 
-        if (!SolicitudController::creaSolicitud('vacaciones', 'Solicitud de vacaciones', $dias, auth()->user()->id)) {
+        //si observations no esta vacio lo guardo en variable
+        $observations = null;
+        if ($request->input('observations') && $request->input('observations') != ''){
+            $observations = $request->input('observations');
+        }
+
+        if (!SolicitudController::creaSolicitud('vacaciones', 'Solicitud de vacaciones', $dias, auth()->user()->id, $observations)) {
             //si no se ha creado la alerta retorno un error a la vista
             return Redirect::route('solicitud', ['error' => 'Error al solicitar vacaciones, ya tienes una solicitud de vacaciones pendiente', 'vista' => 'vacaciones']);
         }

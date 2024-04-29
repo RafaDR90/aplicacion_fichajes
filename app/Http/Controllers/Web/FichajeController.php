@@ -42,13 +42,13 @@ class FichajeController extends Controller
                 break;
             }
         }
-        
+
         $fichajes = Fichaje::where('user_id', $request->user()->id)
             ->where('created_at', 'like', date('Y-m-d') . '%')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return Inertia::render('Fichaje/VistaFichaje', ['error' => $request->error, 'exito' => $request->exito, 'horario' => $horario, 'fichajes' => $fichajes, 'serverTime' => $serverTimeString]);
+        return Inertia::render('Fichaje/VistaFichaje', ['error' => $request->error, 'exito' => $request->exito, 'horario' => $horario, 'fichajes' => $fichajes, 'serverTime' => $serverTimeString, 'newAlertId' => $request->newAlertId ?? null]);
     }
 
 
@@ -142,7 +142,7 @@ class FichajeController extends Controller
         $nuevoFichaje->user_id = $user->id;
         $nuevoFichaje->ubicacion_id = $ubicacionId;
 
-
+        $newAlertId= null;
         if (!$ultimoFichaje || !$ultimoFichaje->esDeHoy()) {
             $nuevoFichaje->tipo = 'entrada';
             //compruebo que la hora actual este en un rango de 15 minutos antes o despues de la hora de entrada
@@ -158,7 +158,8 @@ class FichajeController extends Controller
                         'horaEntrada' => $horaEntrada->format('H:i:s'),
                         'nombreHorario' => $horario->nombre,
                     ];
-                    AlertaController::create('fichaje', 'Anomalía fichaje', $datos, $user->id);
+                    $newAlert = AlertaController::create('fichaje', 'Anomalía fichaje', $datos, $user->id);
+                    $newAlertId = $newAlert->id;
                     $error = 'LLegada tarde, se ha creado una alerta. Su hora de entrada es: ' . $horaEntrada->format('H:i:s');
                 }
             }
@@ -193,11 +194,9 @@ class FichajeController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-
         $serverTime = Carbon::now('UTC');
         $serverTimeString = $serverTime->toJSON();
-
-        return Redirect::route('fichaje', ['exito' => 'Fichaje de ' . $nuevoFichaje->tipo . ' realizado con exito.', 'error' => $error ?? null, 'fichajes' => $fichajes, 'horario' => $horario ?? null, 'serverTime' => $serverTimeString]);
+        return Redirect::route('fichaje', ['exito' => 'Fichaje de ' . $nuevoFichaje->tipo . ' realizado con exito.', 'error' => $error ?? null, 'fichajes' => $fichajes, 'horario' => $horario ?? null, 'serverTime' => $serverTimeString, 'newAlertId' => $newAlertId ?? null]);
     }
 
     /**
