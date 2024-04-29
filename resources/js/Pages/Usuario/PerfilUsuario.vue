@@ -306,24 +306,25 @@ if (props.selectedUser && props.selectedUser.image_url) {
         downloadImage();
     } else {
         console.log("imagen instanteneo")
-            downloadImage();
+        downloadImage();
     }
+
+    //compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
+    watch(() => props.imgChange, (newValue) => {
+        if (newValue) {
+            console.log(props.imgChange)
+            if (props.imgChange) {
+                console.log("inicio timeout")
+                setTimeout(() => {
+                    console.log('ejecuto timeout')
+                    downloadImage();
+                }, 500);
+            }
+        }
+    });
 }
 
-//compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
-watch(() => props.imgChange, (newValue) => {
-    if (newValue) {
-        console.log(props.imgChange)
-        if(props.imgChange){
-            console.log("inicio timeout")
-            setTimeout(() => {
-            console.log('ejecuto timeout')
-            downloadImage();
-        }, 500);
-        }
-        
-    }
-});
+
 
 //const selectedDays = ref([]);
 const days = ['L', 'M', 'X', 'J', 'V'];
@@ -399,7 +400,7 @@ const handleFileUpload = (event) => {
     const formData = new FormData();
     formData.append('file', file);
     router.post('/change-profile-image', formData);
-   // Inertia.reload({ preserveState: false });
+    // Inertia.reload({ preserveState: false });
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
