@@ -17,6 +17,7 @@ Se ha usado Guzzle para obtener informacion sobre la ubicacion del cliente
 Se ha usado FullCalendar para renderizar el calendario
 Se ha usado LibPhoneNumber para validar los numeros de telefono
 Se ha usado Breadcrumbs para las migas de pan
+Se ha usado Firestore para las imagenes de perfil
 
 - Si da error la creacion de token
     php artisan passport:client --personal

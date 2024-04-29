@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Fichaje extends Model
 {
     use HasFactory;
-    protected $fillable = ['user_id', 'ubicacion_id', 'tipo'];
+    protected $fillable = ['user_id', 'ubicacion_id', 'tipo', 'observaciones'];
 
     public function user()
     {
