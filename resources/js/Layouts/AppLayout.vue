@@ -7,14 +7,14 @@
                 @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar"
                 :dropdownPerfilOpen="dropdownPerfilOpen" :user="user" />
             <main class="w-full min-h-[calc(100vh-5rem)]">
-                <slot :navbarImgReload="navbarImgReload"></slot>
+                <slot @imgChange="imgChange"></slot>
             </main>
         </div>
     </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watchEffect } from 'vue';
 import NavbarComponent from '@/Components/Navbar.vue';
 import SidebarComponent from '@/Components/Sidebar.vue';
 
@@ -32,12 +32,6 @@ export default {
         const dropdownPerfilOpen = ref(false);
         const navbarImgReload = ref(false);
 
-        watch(navbarImgReload, (value) => {
-            if (value) {
-                console.log('Recargando imagen de perfil');
-                console.log('valor' + value);
-            }
-        });
 
         const toggleSidebar = () => {
             isHidden.value = !isHidden.value;
@@ -69,7 +63,9 @@ export default {
         }
     },
     methods: {
-
+        imgChange() {
+            console.log('imgChange');
+        }
     }
 }
 

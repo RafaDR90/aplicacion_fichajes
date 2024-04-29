@@ -255,7 +255,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect } from 'vue';
+import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect ,defineEmits } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
@@ -281,8 +281,9 @@ const props = defineProps({
     }
 });
 
-//edito la prop navbarImgReload
-props.navbarImgReload = true;
+const emits = defineEmits(['imgChange']);
+
+
 
 /*-----------------------------------
      IMAGEN PERFIL DE FIREBASE
@@ -313,7 +314,8 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 setTimeout(() => {
                     downloadImage();
                     props.imgChange = false;
-                    Inertia.reload({ preserveState: false });
+                    emits('imgChange');
+                   // Inertia.reload({ preserveState: false });
                 }, 250);
             }
         }
