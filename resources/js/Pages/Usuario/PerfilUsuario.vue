@@ -301,14 +301,12 @@ if (props.selectedUser && props.selectedUser.image_url) {
     //compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
     watch(() => props.imgChange, (newValue) => {
         if (newValue) {
-            console.log(props.imgChange)
             if (props.imgChange) {
-                console.log("inicio timeout")
                 setTimeout(() => {
-                    console.log('ejecuto timeout')
                     downloadImage();
                     props.imgChange = false;
-                }, 500);
+                    Inertia.reload();
+                }, 250);
             }
         }
     });
