@@ -302,7 +302,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
         setTimeout(() => {
             console.log('ejecuto timeout')
             downloadImage();
-        }, 500);
+        }, 1000);
         downloadImage();
     } else {
         console.log("imagen instanteneo")
