@@ -255,13 +255,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect, defineEmits } from 'vue';
+import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { Inertia } from '@inertiajs/inertia';
 
-const emits = defineEmits(['imgChange']);
 
 const props = defineProps({
     selectedUser: Object,
@@ -274,8 +273,16 @@ const props = defineProps({
         type: Boolean,
         default: false,
         required: false
+    },
+    navbarImgReload: {
+        type: Boolean,
+        default: false,
+        required: false
     }
 });
+
+//edito la prop navbarImgReload
+props.navbarImgReload = true;
 
 /*-----------------------------------
      IMAGEN PERFIL DE FIREBASE
@@ -306,8 +313,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 setTimeout(() => {
                     downloadImage();
                     props.imgChange = false;
-                    //EJECUTO emit('imgChange') para que se ejecute la funcion en el padre
-                    emits('imgChange');
+                    Inertia.reload({ preserveState: false });
                 }, 250);
             }
         }
