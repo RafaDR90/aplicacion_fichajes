@@ -276,8 +276,6 @@ const props = defineProps({
     }
 });
 
-console.log(props.imgChange);
-
 /*-----------------------------------
      IMAGEN PERFIL DE FIREBASE
 -----------------------------------*/
@@ -297,17 +295,8 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 console.error("Error al obtener la URL de la imagen: ", error);
             });
     }
-    if (props.imgChange) {
-        console.log("inicio timeout")
-        setTimeout(() => {
-            console.log('ejecuto timeout')
-            downloadImage();
-        }, 500);
-        downloadImage();
-    } else {
-        console.log("imagen instanteneo")
-        downloadImage();
-    }
+
+    downloadImage();
 
     //compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
     watch(() => props.imgChange, (newValue) => {

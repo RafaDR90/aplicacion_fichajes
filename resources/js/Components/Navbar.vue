@@ -60,6 +60,16 @@ const authImage = ref(null);
 const props = defineProps({
   dropdownPerfilOpen: Boolean,
   user: Object,
+  imgChange: {
+        type: Boolean,
+        default: false,
+        required: false
+    }
+});
+
+watch(() => props.imgChange, (value) => {
+  console.log(value);
+  props.imgChange = false;
 });
 
 const emit = defineEmits(["toggle-sidebar", "dropdown-perfil"]);
