@@ -31,7 +31,7 @@
                     <div class=" w-full">
                         <label for="tipo" class="block text-sm font-medium text-gray-700">Tipo</label>
                         <select id="tipo" v-model="form.tipo"
-                            class=" h-10 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                            class=" pl-3 h-10 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                             <option value="partido">Partido</option>
                             <option value="continuo">Continuo</option>
                             <option value="flexible">Flexible</option>

@@ -1,10 +1,11 @@
 RECORDATORIO
 - Mirar spatie para los roles
-- mirar paddings de formularios
 - cambiar de color el boton de fichar para entrada y Salida
 - mirar idioma de errores
 - añadir observaciones a las notificaciones de vacaciones y de las que pueda
 - quitar opciones que no se usan
+- añadir numero de notificaciones a sidebar
+- que cuando cambie la pw me loguee automaticamente
 
 Usuario super-admin
 - admin@admin.com

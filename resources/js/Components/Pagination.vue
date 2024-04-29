@@ -58,11 +58,6 @@ export default {
     }
   },
   mounted(){
-    if(this.search){
-      console.log('hay search')
-    }else{
-      console.log('no hay search')
-    }
   },
   computed: {
     prevPageUrl() {

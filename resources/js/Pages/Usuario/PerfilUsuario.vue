@@ -35,7 +35,7 @@
                     </div>
                     <div v-if="obtieneRol != 'Super Admin'" class="flex gap-2">
                         <label for="roles">Modificar Rol</label>
-                        <select v-model="selectedRole" class="border border-gray-300 rounded-lg">
+                        <select v-model="selectedRole" class="border border-gray-300 rounded-lg pr-7 text-center">
                             <option v-if="obtieneRol != 'Normal'" value="normal">Normal</option>
                             <option v-if="obtieneRol != 'Admin'" value="admin">Admin</option>
                             <option v-if="obtieneRol != 'Super Admin' && superAdmin" value="super-admin">Super Admin
@@ -199,9 +199,9 @@
                         <form v-if="role == 'super-admin' || role == 'admin'" class="md:flex items-center"
                             @submit.prevent="asignarHorario">
                             <div class="flex gap-4">
-                                <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1"
+                                <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1 pr-7"
                                     v-model="formHorario.horario_id">
-                                    <option v-for="horario in allHorarios" :value="horario.id">{{ horario.nombre }}
+                                    <option v-for="horario in allHorarios" :value="horario.id" >{{ horario.nombre }}
                                     </option>
                                 </select>
                                 <div v-if="selectedUser.horarios.length > 0" class="flex">

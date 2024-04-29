@@ -30,18 +30,20 @@
                         horario.libre }}</p>
                     <p class=" p-4"><span class=" font-bold">Total jornada:</span> {{ horario.total_horas }}</p>
                 </div>
-                
+
             </div>
 
         </div>
         <div class="  flex gap-10 lg:gap-32 max-w-[90%] items-center lg:absolute lg:right-[40%] lg:top-1/2">
-            <Link :href="route('fichar')"
-                class="inline-block bg-[#2196f3] hover:bg-[#64b5f6] active:bg-[#2196f3] text-white text-lg rounded-full px-10 py-4 lg:px-14 lg:py-6 transition-colors duration-200 ease-in-out shadow-xl hover:shadow-xl active:shadow-none lg:text-2xl">
+            <Link :href="route('fichar')" :class="{
+                'bg-red-500 hover:bg-red-400 active:bg-red-500': props.fichajes && props.fichajes[0] && props.fichajes[0].tipo === 'entrada',
+                'bg-[#2196f3] hover:bg-[#64b5f6] active:bg-[#2196f3]': !props.fichajes || !props.fichajes[0] || props.fichajes[0].tipo === 'salida'
+            }" class="inline-block text-white text-lg rounded-full px-10 py-4 lg:px-14 lg:py-6 transition-colors duration-200 ease-in-out shadow-xl hover:shadow-xl active:shadow-none lg:text-2xl">
             Fichar
             </Link>
             <div>
                 <p class="font-bold lg:text-2xl">Tiempo transcurrido: <span
-                        class=" text-gray-400 font-bold">{{totalHours}}</span></p>
+                        class=" text-gray-400 font-bold">{{ totalHours }}</span></p>
             </div>
         </div>
 
@@ -60,7 +62,7 @@
     </div>
     <div
         class="fixed bottom-0 text-xl justify-center text-nowrap border border-gris-borde w-max left-1/2 transform -translate-x-1/2 bg-white rounded-tl-lg rounded-tr-lg p-4 hidden sm:flex">
-        <p>Hora: <span>{{clockFormat(serverTimeRef)}}</span></p>
+        <p>Hora: <span>{{ clockFormat(serverTimeRef) }}</span></p>
     </div>
 </template>
 
@@ -78,6 +80,7 @@ const props = defineProps({
     serverTime: String,
 
 });
+console.log(props.fichajes);
 
 /*---------------------------------
     MENSAJE DE ERROR O EXITO
@@ -87,7 +90,7 @@ let successMessage = ref(props.exito ?? null);
 /*---------------------------------*/
 
 let serverTimeRef = ref();
-let serverTimeToCompare= ref();
+let serverTimeToCompare = ref();
 let totalHours = ref(['00:00:00']);
 
 watchEffect(() => {
@@ -156,23 +159,23 @@ const clockFormat = (date) => {
 const calculateTime = () => {
     let totalSeconds = 0;
     let lastEntry;
-    for (let i = props.fichajes.length-1; i >= 0; i--) {
+    for (let i = props.fichajes.length - 1; i >= 0; i--) {
         const fichaje = props.fichajes[i];
         if (fichaje.tipo === 'entrada') {
             lastEntry = new Date(fichaje.created_at);
-        } else  {
+        } else {
             const salida = new Date(fichaje.created_at);
             totalSeconds += (salida - lastEntry) / 1000;
             lastEntry = null;
-            
+
         }
     }
-    
+
 
     // Si el ultimo fichaje fue una entrada, suma la diferencia con la hora actual
     if (lastEntry) {
         const serverTime = new Date(serverTimeToCompare.value);
-        
+
         totalSeconds += (serverTime - lastEntry) / 1000;
     }
 
@@ -185,8 +188,8 @@ const calculateTime = () => {
 
 // Llamar a calculateTime cada vez que fichajes o serverTimeRef cambie
 watchEffect(() => {
-    if(props.fichajes)
-    calculateTime();
+    if (props.fichajes)
+        calculateTime();
 });
 
 
