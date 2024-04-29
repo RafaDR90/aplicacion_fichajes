@@ -226,6 +226,14 @@ class UserController extends Controller
         $factory = (new Factory)->withServiceAccount('../credentials.json');
         $storage = $factory->createStorage();
         $bucket = $storage->getBucket();
+
+        //si existe la imagen en firestore la elimino
+        if (Auth::user()->image_url) {
+            $object = $bucket->object('profile_images/' . Auth::user()->image_url);
+            $object->delete();
+        }
+
+        //la guardo en firestore
         $bucket->upload(fopen($tempPath . '/' . $imageName, 'r'), [
             'name' => 'profile_images/' . $imageName,
         ]);

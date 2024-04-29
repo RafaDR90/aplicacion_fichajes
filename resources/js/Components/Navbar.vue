@@ -51,7 +51,6 @@ import { watch, ref, defineProps, onMounted } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import DropdownLink from '@/Components/DropdownLink.vue';
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
-import { EventBus } from "@/EventBus";
 let { props: pageProps } = usePage();
 
 
@@ -60,18 +59,7 @@ const authImage = ref(null);
 const props = defineProps({
   dropdownPerfilOpen: Boolean,
   user: Object,
-  imgChange: {
-        type: Boolean,
-        default: false,
-        required: false
-    }
 });
-
-onMounted(()=>{
-  EventBus.on("imgChange", () => {
-    console.log("Imagen cambiada llega a navbar");
-  });
-})
 
 
 
