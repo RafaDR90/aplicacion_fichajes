@@ -298,15 +298,15 @@ if (props.selectedUser && props.selectedUser.image_url) {
             });
     }
     if (props.imgChange) {
-        console.log("cambio de imagen")
-            downloadImage();
-    } else {
-        console.log("no cambio de imagen")
+        console.log("inicio timeout")
         setTimeout(() => {
-            console.log('inicia timeout')
+            console.log('ejecuto timeout')
             downloadImage();
-        }, 250);
+        }, 500);
         downloadImage();
+    } else {
+        console.log("imagen instanteneo")
+            downloadImage();
     }
 }
 
