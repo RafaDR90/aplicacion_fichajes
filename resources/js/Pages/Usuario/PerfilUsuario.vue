@@ -281,7 +281,6 @@ const props = defineProps({
     }
 });
 
-const emits = defineEmits(['imgChange']);
 
 
 
@@ -314,8 +313,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 setTimeout(() => {
                     downloadImage();
                     props.imgChange = false;
-                    emits('imgChange');
-                   // Inertia.reload({ preserveState: false });
+                    Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
                 }, 250);
             }
         }

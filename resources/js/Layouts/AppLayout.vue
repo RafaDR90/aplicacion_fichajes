@@ -7,14 +7,14 @@
                 @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar"
                 :dropdownPerfilOpen="dropdownPerfilOpen" :user="user" />
             <main class="w-full min-h-[calc(100vh-5rem)]">
-                <slot @imgChange="imgChange"></slot>
+                <slot></slot>
             </main>
         </div>
     </div>
 </template>
 
 <script>
-import { ref, watchEffect } from 'vue';
+import { ref } from 'vue';
 import NavbarComponent from '@/Components/Navbar.vue';
 import SidebarComponent from '@/Components/Sidebar.vue';
 
@@ -30,7 +30,6 @@ export default {
     setup(props) {
         const isHidden = ref(true);
         const dropdownPerfilOpen = ref(false);
-        const navbarImgReload = ref(false);
 
 
         const toggleSidebar = () => {
@@ -63,9 +62,6 @@ export default {
         }
     },
     methods: {
-        imgChange() {
-            console.log('imgChange');
-        }
     }
 }
 
