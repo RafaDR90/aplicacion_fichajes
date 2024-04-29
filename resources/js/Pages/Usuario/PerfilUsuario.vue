@@ -255,12 +255,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect } from 'vue';
+import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect, defineEmits } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { Inertia } from '@inertiajs/inertia';
 
+const emits = defineEmits(['imgChange']);
 
 const props = defineProps({
     selectedUser: Object,
@@ -306,7 +307,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
                     downloadImage();
                     props.imgChange = false;
                     //EJECUTO emit('imgChange') para que se ejecute la funcion en el padre
-                    emit('imgChange');
+                    emits('imgChange');
                 }, 250);
             }
         }
