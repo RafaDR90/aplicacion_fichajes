@@ -306,7 +306,6 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 setTimeout(() => {
                     downloadImage();
                     props.imgChange = false;
-                    Inertia.reload();
                     EventBus.$emit('imgChange', true);
                 }, 250);
             }
