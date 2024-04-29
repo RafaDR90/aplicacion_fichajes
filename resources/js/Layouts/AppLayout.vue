@@ -4,7 +4,7 @@
                 <div @click="closeSidebar" :class="{ 'xl:ml-80': !isHidden }" class="transition-all duration-300 transform">
             <NavbarComponent v-if="$page && $page.props && $page.props.auth && $page.props.auth.user" @dropdown-perfil="handleDropdownPerfil" @toggle-sidebar="toggleSidebar" :dropdownPerfilOpen="dropdownPerfilOpen" :user="user" />
             <main class="w-full min-h-[calc(100vh-5rem)]">
-                <slot/>
+                <slot @imgChange="probando"></slot>
             </main>
         </div>
     </div>
@@ -55,6 +55,11 @@
             dropdownPerfilOpen,
             closeDropdownPerfil,
             handleDropdownPerfil
+        }
+    },
+    methods:{
+        probando(){
+            console.log('probando');
         }
     }
   }

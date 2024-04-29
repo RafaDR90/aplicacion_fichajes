@@ -305,7 +305,8 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 setTimeout(() => {
                     downloadImage();
                     props.imgChange = false;
-                    Inertia.reload({ preserveState: true });
+                    //EJECUTO emit('imgChange') para que se ejecute la funcion en el padre
+                    emit('imgChange');
                 }, 250);
             }
         }
