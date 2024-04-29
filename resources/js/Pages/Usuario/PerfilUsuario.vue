@@ -302,7 +302,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
         setTimeout(() => {
             console.log('ejecuto timeout')
             downloadImage();
-        }, 1000);
+        }, 500);
         downloadImage();
     } else {
         console.log("imagen instanteneo")
@@ -384,7 +384,7 @@ const handleFileUpload = (event) => {
     const formData = new FormData();
     formData.append('file', file);
     router.post('/change-profile-image', formData);
-    Inertia.reload({ preserveState: false });
+   // Inertia.reload({ preserveState: false });
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
