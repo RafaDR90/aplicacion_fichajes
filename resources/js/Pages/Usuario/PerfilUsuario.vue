@@ -260,6 +260,7 @@ import { Link } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { Inertia } from '@inertiajs/inertia';
+import { EventBus } from '@/EventBus';
 
 
 const props = defineProps({
@@ -306,6 +307,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
                     downloadImage();
                     props.imgChange = false;
                     Inertia.reload();
+                    EventBus.$emit('imgChange', true);
                 }, 250);
             }
         }

@@ -51,7 +51,7 @@ import { watch, ref, defineProps, onMounted } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import DropdownLink from '@/Components/DropdownLink.vue';
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
-
+import { EventBus } from "@/EventBus";
 let { props: pageProps } = usePage();
 
 
@@ -67,10 +67,13 @@ const props = defineProps({
     }
 });
 
-watch(() => props.imgChange, (value) => {
-  console.log(value);
-  props.imgChange = false;
-});
+onMounted(()=>{
+  EventBus.on("imgChange", () => {
+    console.log("Imagen cambiada llega a navbar");
+  });
+})
+
+
 
 const emit = defineEmits(["toggle-sidebar", "dropdown-perfil"]);
 
