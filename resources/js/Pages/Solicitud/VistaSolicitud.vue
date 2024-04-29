@@ -23,11 +23,11 @@
                     Vacaciones</p>
                 <div class=" border-b border-gris-borde  w-20 md:hidden"></div>
                 <p @click="vista = ''"
-                    class="cursor-pointer text-sm text-nowrap font-bold px-6 py-4 text-white bg-azul-fondo-btn w-min h-min border border-azul-fondo-btn rounded-xl hover:bg-azul-fondo-btn-hover active:bg-azul-fondo-btn-pulse active:shadow-xl lg:text-xl lg:px-10 lg:py-5">
+                    class=" hidden cursor-pointer text-sm text-nowrap font-bold px-6 py-4 text-white bg-azul-fondo-btn w-min h-min border border-azul-fondo-btn rounded-xl hover:bg-azul-fondo-btn-hover active:bg-azul-fondo-btn-pulse active:shadow-xl lg:text-xl lg:px-10 lg:py-5">
                     Otra opcion</p>
                 <div class=" border-b border-gris-borde  w-20 md:hidden"></div>
                 <p @click="vista = ''"
-                    class="cursor-pointer text-sm text-nowrap font-bold px-6 py-4 text-white bg-azul-fondo-btn w-min h-min border border-azul-fondo-btn rounded-xl hover:bg-azul-fondo-btn-hover active:bg-azul-fondo-btn-pulse active:shadow-xl lg:text-xl lg:px-10 lg:py-5">
+                    class=" hidden cursor-pointer text-sm text-nowrap font-bold px-6 py-4 text-white bg-azul-fondo-btn w-min h-min border border-azul-fondo-btn rounded-xl hover:bg-azul-fondo-btn-hover active:bg-azul-fondo-btn-pulse active:shadow-xl lg:text-xl lg:px-10 lg:py-5">
                     Otra opcion</p>
             </div>
             <div v-if="vista == 'vacaciones'" class=" w-full flex flex-col items-center ">

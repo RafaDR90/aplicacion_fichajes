@@ -80,7 +80,6 @@ const props = defineProps({
     serverTime: String,
 
 });
-console.log(props.fichajes);
 
 /*---------------------------------
     MENSAJE DE ERROR O EXITO
