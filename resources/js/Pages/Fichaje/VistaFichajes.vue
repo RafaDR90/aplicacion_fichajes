@@ -86,7 +86,6 @@ const props = defineProps({
     searchDateServer: String,
     searchNameServer: String
 });
-console.log(props.users.data)
 
 let searchDate = ref('');
 let searchName = ref('');

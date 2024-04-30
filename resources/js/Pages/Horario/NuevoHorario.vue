@@ -151,7 +151,6 @@ const props = defineProps({
     breadcrumbs: Array
 })
 
-console.log(props.breadcrumbs)
 watch(() => props.horario, (newHorario) => {
     if (newHorario) {
         form.nombre = newHorario.nombre || '';
