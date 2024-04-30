@@ -12,9 +12,8 @@
         <div class="h-9 w-9">
           <img v-if="perfilImage" :src="perfilImage" alt="foto de perfil"
             class="h-full w-full rounded-full object-cover object-center" />
-          <img v-else-if="authImage" :src="authImage"
-            alt="foto de perfil" class="h-full w-full rounded-full object-cover object-center"
-            src="/img/navbar/fotoperfil.png" />
+          <img v-else-if="authImage" :src="authImage" alt="foto de perfil"
+            class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png" />
           <img v-else class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png"
             alt="" />
         </div>
@@ -63,32 +62,6 @@ const props = defineProps({
   user: Object,
 });
 
-/*--------------------
-    NOTIFICACIONES
---------------------*/
-const notificacionesCount = ref(0);
-//creo intervalo cada 10 segundos que haga fetch a la api de notificaciones
-const fetchNotificaciones = async () => {
-  const token= localStorage.getItem('token');
-  console.log(token);
-  const response = await fetch("http://127.0.0.1:8000/api/obtiene-notificaciones");
-  const data = await response.json();
-  notificacionesCount.value = data;
-  console.log(data);
-};
-
-
-let interval;
-
-onMounted(() => {
-  interval = setInterval(() => {
-    fetchNotificaciones();
-  }, 10000);
-});
-
-onUnmounted(() => {
-  clearInterval(interval);
-});
 
 
 

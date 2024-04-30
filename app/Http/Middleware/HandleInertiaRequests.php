@@ -33,10 +33,13 @@ class HandleInertiaRequests extends Middleware
             $request->user()->load('roles');
         }
         
+        
+
         return [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
+                'token'=> session()->get('token'),
             ],
         ];
     }

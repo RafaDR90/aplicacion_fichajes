@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Models\User;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if($this->app->environment('production')) {
+        if ($this->app->environment('production')) {
             URL::forceScheme('https');
         }
 
@@ -31,9 +32,9 @@ class AppServiceProvider extends ServiceProvider
             'auth' => function () {
                 $user = Auth::user();
                 $user = User::with(['roles'])->find($user->id);
+
                 return [
                     'user' => $user,
-
                 ];
             },
         ]);

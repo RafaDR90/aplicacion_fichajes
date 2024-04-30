@@ -43,6 +43,9 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+
+
+
     /**
      * Get the attributes that should be cast.
      *
@@ -85,4 +88,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Fichaje::class);
     }
+
+    public function hasRole($roleName)
+{
+    return $this->roles()->where('role_name', $roleName)->exists();
+}
 }

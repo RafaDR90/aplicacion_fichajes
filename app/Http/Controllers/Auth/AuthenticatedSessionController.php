@@ -39,7 +39,21 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
-        //si el user es admin o super-admin crea token
+
+        session()->forget('token');
+
+        $token=null;
+        //compruebo si es admin
+        if($user->roles()->whereIn('role_name', ['admin', 'super-admin'])->exists()){
+            //borro los tokens
+        $user->tokens->each(function ($token, $key) {
+            $token->delete();
+        });
+        $token=$user->createToken('token')->accessToken;
+        session()->put('token', $token);
+        }
+
+
 
         if ($user->requiere_ubicacion) {
 
