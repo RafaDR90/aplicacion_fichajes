@@ -61,7 +61,7 @@ export default {
   },
   computed: {
     prevPageUrl() {
-      let url = this.pagination.prev_page_url;
+      let url = (this.pagination.prev_page_url || '').replace(/^http:/, 'https:');
       if (this.search) {
         url += '&search=' + this.search;
       }
@@ -83,7 +83,7 @@ export default {
       return url;
     },
     nextPageUrl() {
-      let url = this.pagination.next_page_url;
+  let url = (this.pagination.next_page_url || '').replace(/^http:/, 'https:');
       if (this.search) {
         url += '&search=' + this.search;
       }
