@@ -225,6 +225,7 @@ class FichajeController extends Controller
 
         $users = User::with('vacaciones')
             ->where(DB::raw('CONCAT(name, " ", apellidos)'), 'like', '%' . $searchName . '%')
+            ->orWhere('email', 'like', '%' . $searchName . '%')
             ->whereDoesntHave('vacaciones', function ($query) use ($day) {
                 $query->where('fecha', '=', $day)
                     ->where('aprobada', '=', 1);

@@ -1,6 +1,5 @@
 RECORDATORIO
 - Mirar spatie para los roles
-- probar automatizacion desde servidor (no local)
 
 Usuario super-admin
 - admin@admin.com
