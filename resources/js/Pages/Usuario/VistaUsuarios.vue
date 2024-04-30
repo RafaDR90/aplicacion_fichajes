@@ -232,6 +232,7 @@ export default {
         breadcrumbs: Array,
     },
     mounted() {
+        console.log(this.users);
         const storage = getStorage();
         const usersArray = this.users.data;
         usersArray.forEach(user => {
