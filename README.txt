@@ -1,7 +1,5 @@
 RECORDATORIO
 - Mirar spatie para los roles
-- añadir numero de notificaciones a sidebar
-tengo que mirar el login de auth y el login de la api para ver como crea el token y añadirlo
 - probar automatizacion desde servidor (no local)
 
 Usuario super-admin
@@ -26,4 +24,14 @@ Se ha usado Firestore para las imagenes de perfil
 - Video padre
     https://www.youtube.com/watch?v=Uz56BOekpLA&ab_channel=OnlineWebTutor
 
-    NIXPACKS_BUILD_CMD=composer install && npm install && npx vite build && php artisan optimize && php artisan config:cache && php artisan view:cache && php artisan passport:install --force --no-interaction && php artisan migrate --force --no-interaction
+
+- errar fichajes
+    - login
+    https://aplicacionfichajes-production.up.railway.app/api/login
+        Accept: application/json
+        email: cierrafichaje@cierrafichaje
+        password: cierrafichaje
+    - funcion
+    https://aplicacionfichajes-production.up.railway.app/api/cierra-fichajes
+        Accept: application/json
+        Authorization: Bearer 

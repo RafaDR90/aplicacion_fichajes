@@ -11,4 +11,6 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 
-Schedule::command(ComprobarAsistencia::class,['cierraFichajes', '--force'])->everyMinute();
+Schedule::command(ComprobarAsistencia::class)->everyMinute();
+//Artisan::call('app:comprobar-asistencia');
+//php artisan schedule:run

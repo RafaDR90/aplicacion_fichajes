@@ -39,7 +39,7 @@
             </div>
             <p class="mr-8">Notificaciones</p>
             <div v-if="notificacionesCount > 0"
-                class="bg-red-500 rounded-full h-max w-max px-1 flex items-center justify-center text-white">
+                class="bg-blue-400 rounded-full h-max w-max px-1 flex items-center justify-center text-white">
                 {{ notificacionesCount }}
             </div>
             </Link>
