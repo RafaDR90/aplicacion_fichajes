@@ -16,7 +16,9 @@ use App\Http\Controllers\Api\AutomatizacionController;
 
 Route::group(['middleware' => ['auth:api']], function () {
   Route::get('/cierra-fichajes', [AutomatizacionController::class, 'cierraFichajes'])->middleware(Admin::class);
+  Route::get('/obtiene-notificaciones', [AutomatizacionController::class, 'obtieneNotificaciones'])->middleware(Admin::class);
 });
+
 
 
 

@@ -11,6 +11,8 @@ use App\Models\RoleEmp;
 use App\Models\DiasVacaciones;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;

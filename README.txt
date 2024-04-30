@@ -1,7 +1,8 @@
 RECORDATORIO
 - Mirar spatie para los roles
-- añadir observaciones a las notificaciones de vacaciones y de las que pueda
 - añadir numero de notificaciones a sidebar
+tengo que mirar el login de auth y el login de la api para ver como crea el token y añadirlo
+- probar automatizacion desde servidor (no local)
 
 Usuario super-admin
 - admin@admin.com
@@ -25,4 +26,4 @@ Se ha usado Firestore para las imagenes de perfil
 - Video padre
     https://www.youtube.com/watch?v=Uz56BOekpLA&ab_channel=OnlineWebTutor
 
-    
+    NIXPACKS_BUILD_CMD=composer install && npm install && npx vite build && php artisan optimize && php artisan config:cache && php artisan view:cache && php artisan passport:install --force --no-interaction && php artisan migrate --force --no-interaction

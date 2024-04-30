@@ -39,6 +39,7 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerate();
 
         $user = $request->user();
+        //si el user es admin o super-admin crea token
 
         if ($user->requiere_ubicacion) {
 

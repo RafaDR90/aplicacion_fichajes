@@ -49,7 +49,7 @@
 </template>
 
 <script setup>
-import { watch, ref, defineProps, onMounted } from "vue";
+import { watch, ref, defineProps, onMounted, onUnmounted } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import DropdownLink from '@/Components/DropdownLink.vue';
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
@@ -61,6 +61,33 @@ const authImage = ref(null);
 const props = defineProps({
   dropdownPerfilOpen: Boolean,
   user: Object,
+});
+
+/*--------------------
+    NOTIFICACIONES
+--------------------*/
+const notificacionesCount = ref(0);
+//creo intervalo cada 10 segundos que haga fetch a la api de notificaciones
+const fetchNotificaciones = async () => {
+  const token= localStorage.getItem('token');
+  console.log(token);
+  const response = await fetch("http://127.0.0.1:8000/api/obtiene-notificaciones");
+  const data = await response.json();
+  notificacionesCount.value = data;
+  console.log(data);
+};
+
+
+let interval;
+
+onMounted(() => {
+  interval = setInterval(() => {
+    fetchNotificaciones();
+  }, 10000);
+});
+
+onUnmounted(() => {
+  clearInterval(interval);
 });
 
 
