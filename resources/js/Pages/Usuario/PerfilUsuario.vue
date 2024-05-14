@@ -72,7 +72,7 @@
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6 flex flex-col gap-14">
             <div class="flex flex-col gap-4 items-center md:items-start md:flex-row md:gap-8">
                 <div class=" w-60 h-60 relative">
-                    <img v-if="perfilImage" :src="perfilImage"
+                    <img v-if="profileImageStore.imageUrl" :src="profileImageStore.imageUrl"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full object-cover">
                     <img v-else src="/img/navbar/fotoperfil.png" alt="foto de perfil"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full">
@@ -201,7 +201,7 @@
                             <div class="flex gap-4">
                                 <select class="bg-white text-black rounded-lg px-2 py-1 w-max ml-1 pr-7"
                                     v-model="formHorario.horario_id">
-                                    <option v-for="horario in allHorarios" :value="horario.id" >{{ horario.nombre }}
+                                    <option v-for="horario in allHorarios" :value="horario.id">{{ horario.nombre }}
                                     </option>
                                 </select>
                                 <div v-if="selectedUser.horarios.length > 0" class="flex">
@@ -255,11 +255,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect ,defineEmits } from 'vue';
+import { ref, onMounted, reactive, defineProps, computed, watch, watchEffect, defineEmits } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { Inertia } from '@inertiajs/inertia';
+import { profileImage } from '@/Store/ProfileImage';
+
+const profileImageStore = profileImage();
 
 
 const props = defineProps({
@@ -297,7 +300,8 @@ if (props.selectedUser && props.selectedUser.image_url) {
         const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
         getDownloadURL(storageRef)
             .then((url) => {
-                perfilImage.value = url;
+                perfilImage.value = url; //QUITAR
+                profileImageStore.setImageUrl(url);
             })
             .catch((error) => {
                 console.error("Error al obtener la URL de la imagen: ", error);
@@ -313,7 +317,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
                 setTimeout(() => {
                     downloadImage();
                     props.imgChange = false;
-                    Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
+                 //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
                 }, 250);
             }
         }

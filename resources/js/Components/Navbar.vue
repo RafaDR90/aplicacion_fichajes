@@ -10,7 +10,7 @@
       <button @click="changueStatusDropdownPerfil" @click.stop
         class="relative flex justify-center items-center gap-2 px-2 mr-4 md:mr-14 rounded-lg transition duration-100 hover:bg-gris-light hover:shadow-md focus:bg-gris-light focus:shadow-md active:bg-gris-light active:shadow-md">
         <div class="h-9 w-9">
-          <img v-if="perfilImage" :src="perfilImage" alt="foto de perfil"
+          <img v-if="profileImageStore.imageUrl" :src="profileImageStore.imageUrl" alt="foto de perfil"
             class="h-full w-full rounded-full object-cover object-center" />
           <img v-else-if="authImage" :src="authImage" alt="foto de perfil"
             class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png" />
@@ -52,7 +52,12 @@ import { watch, ref, defineProps, onMounted, onUnmounted } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import DropdownLink from '@/Components/DropdownLink.vue';
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
+import { profileImage } from "@/Store/ProfileImage";
+
+const profileImageStore = profileImage();
+
 let { props: pageProps } = usePage();
+
 
 
 const authImage = ref(null);

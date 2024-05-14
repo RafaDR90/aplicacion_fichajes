@@ -8,6 +8,10 @@ import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import Applayout from './Layouts/AppLayout.vue';
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { createPinia } from 'pinia'
+
+const pinia = createPinia()
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
@@ -41,6 +45,7 @@ createInertiaApp({
             })
             .use(plugin)
             .use(ZiggyVue)
+            .use(pinia)
             .mount(el);
     },
     progress: {
