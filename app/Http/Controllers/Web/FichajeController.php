@@ -62,9 +62,21 @@ class FichajeController extends Controller
     public function fichar(Request $request)
     {
         //muestro datetime de laravel en un vardump
-        $ip = $request->ip();
+        $ip = null;
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        }
+        //whether ip is from the proxy  
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        }
+        //whether ip is from the remote address  
+        else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
         //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
-        $ip = '154.62.41.89';
+        //$ip = '154.62.41.89';
 
         $client = new Client(); //creo clase de Guzzle
         $response = $client->request('GET', 'http://ip-api.com/json/' . $ip);
@@ -142,7 +154,7 @@ class FichajeController extends Controller
         $nuevoFichaje->user_id = $user->id;
         $nuevoFichaje->ubicacion_id = $ubicacionId;
 
-        $newAlertId= null;
+        $newAlertId = null;
         if (!$ultimoFichaje || !$ultimoFichaje->esDeHoy()) {
             $nuevoFichaje->tipo = 'entrada';
             //compruebo que la hora actual este en un rango de 15 minutos antes o despues de la hora de entrada
