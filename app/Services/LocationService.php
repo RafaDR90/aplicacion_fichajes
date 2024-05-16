@@ -9,6 +9,7 @@ class LocationService
     public static function getLocation()
     {
         $ip = request()->ip();
+        $ip = trim(shell_exec("dig +short myip.opendns.com @resolver1.opendns.com"));
 
         //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
         //$ip = '154.62.41.89';
