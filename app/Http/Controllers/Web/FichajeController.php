@@ -64,7 +64,7 @@ class FichajeController extends Controller
         //muestro datetime de laravel en un vardump
         $ip = $request->ip();
         //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
-        $ip = '154.62.41.89';
+        //$ip = '154.62.41.89';
 
         $client = new Client(); //creo clase de Guzzle
         $response = $client->request('GET', 'http://ip-api.com/json/' . $ip);

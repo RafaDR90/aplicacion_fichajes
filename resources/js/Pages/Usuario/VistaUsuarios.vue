@@ -247,7 +247,7 @@ export default {
             }
         });
 
-        console.log(this.sortedUsers)
+      //  console.log(this.sortedUsers)
     },
 };
 </script>
