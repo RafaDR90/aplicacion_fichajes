@@ -246,6 +246,8 @@ export default {
                     });
             }
         });
+
+        console.log(this.sortedUsers)
     },
 };
 </script>
