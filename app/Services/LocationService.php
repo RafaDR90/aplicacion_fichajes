@@ -11,7 +11,7 @@ class LocationService
         $ip = request()->ip();
         $ip = request()->getClientIp();
         $ip =$_SERVER['REMOTE_ADDR'];
-        var_dump('asdasd');
+        var_dump('asssssssssdasd');
         dd($_SERVER['REMOTE_ADDR']);
 
         //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
