@@ -15,7 +15,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         // Crear 100 usuarios con datos aleatorios
-        User::factory()->count(100)->create();
+        User::factory()->count(30)->create();
 
         // Crear un usuario con el correo electrónico 'admin@admin.com'
         $admin = User::create([

@@ -208,6 +208,7 @@
                                     class="border-t border-gris-borde w-full mt-4">
                                 </div>
                             </div>
+                            <div v-else> cago ent o</div>
                         </div>
                     </div>
                 </div>
