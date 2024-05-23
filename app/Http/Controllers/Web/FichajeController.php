@@ -61,7 +61,6 @@ class FichajeController extends Controller
      */
     public function fichar(Request $request)
     {
-        //muestro datetime de laravel en un vardump
         $ip = null;
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -75,8 +74,8 @@ class FichajeController extends Controller
             $ip = $_SERVER['REMOTE_ADDR'];
         }
 
-        //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
-        //$ip = '154.62.41.89';
+        /*COMENTAR ESTO CUANDO SE SUBA A PRODUCCION
+        $ip = '154.62.41.89';*/
 
         $client = new Client(); //creo clase de Guzzle
         $response = $client->request('GET', 'http://ip-api.com/json/' . $ip);
@@ -141,6 +140,7 @@ class FichajeController extends Controller
         $fecha = date('Y-m-d');
         $hora = date('H:i:s');
 
+        //HORA PARA PRUEBAS
         //$hora = date('H:i:s', mktime(10, 50, 0));
 
         //obtengo el ultimo fichaje del usuario de hoy
