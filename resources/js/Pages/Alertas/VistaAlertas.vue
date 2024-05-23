@@ -208,7 +208,42 @@
                                     class="border-t border-gris-borde w-full mt-4">
                                 </div>
                             </div>
-                            <div v-else> cago ent o</div>
+                            <div v-else-if="alerta.tipo == 'horasTrabajadas' && alerta.user">
+                                <p class=" text-blue-500 font-bold text-xl mb-2">{{ alerta.mensaje }}</p>
+                                <div class="flex flex-col sm:flex-row sm:gap-40">
+                                    <div>
+                                        <div class="flex flex-col md:flex-row md:gap-20">
+                                            <p><span class=" font-bold">Nombre: </span>{{ alerta.user.name }} {{
+                                                alerta.user.apellidos }}</p>
+                                            <p><span class=" font-bold">Email: </span>{{ alerta.user.email }}</p>
+                                            <p><span class="font-bold">Horas trabajadas: </span><span
+                                                    class=" text-red-500 font-bold">{{ alerta.datos.horas_trabajadas
+                                                    }}</span> de <span class=" font-bold text-red-500">{{
+                                                    alerta.datos.horas_requeridas }}</span></p>
+                                        </div>
+                                        <p class=" mt-3"><span class=" font-bold">Fecha de ausencia: </span> {{ new
+                                            Date(alerta.created_at).toLocaleDateString() }}</p>
+                                    </div>
+
+                                </div>
+                                <button v-if="!alerta.leido"
+                                    @click="openConfirmation(alerta.id, alerta.user.id, 'marcar como leído', null, 'marcarLeidaAlerta')"
+                                    class=" mt-2 bg-green-500 text-white p-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50 hover:bg-green-600 active:bg-green-700">Marcar
+                                    como leido</button>
+                                <p class=" text-sm text-gray-500 mt-2"><span class=" font-bold">Fecha: </span>{{
+                                    new
+                                        Date(alerta.created_at).toLocaleDateString('es-ES', {
+                                            year: 'numeric', month: 'long', day: 'numeric'
+                                        }) }} a las {{ new
+                                        Date(alerta.created_at).toLocaleTimeString('es-ES', {
+                                            hour: '2-digit', minute:
+                                                '2-digit'
+                                        }) }}</p>
+                                <!-- Linea separadora -->
+                                <div v-if="alerta != alertas.data[alertas.data.length - 1]"
+                                    class="border-t border-gris-borde w-full mt-4">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
