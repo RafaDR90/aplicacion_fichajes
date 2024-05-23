@@ -20,6 +20,7 @@ class LocationService
         else {
             $ip = $_SERVER['REMOTE_ADDR'];
         }
+        dd($ip);
 
         //BORRAR ESTO CUANDO SE SUBA A PRODUCCION
         //$ip = '154.62.41.89';
