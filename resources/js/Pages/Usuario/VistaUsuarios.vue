@@ -27,9 +27,10 @@
                             </svg>
                         </div>
 
-                        <input v-focus @input="updateSearch"
+                        <input v-focus
                             class="peer h-full w-full outline-none text-lg text-gray-700 pr-2 border-none placeholder:text-gray-300 focus:ring-0"
-                            type="text" id="search" placeholder="Buscar por nombre..." :value="search" />
+                            type="text" id="search" placeholder="Buscar por nombre..." v-model="localSearch"
+                            @input="updateSearch" />
                     </div>
                 </div>
 
@@ -131,7 +132,7 @@ import { getStorage, ref, getDownloadURL } from "firebase/storage";
 export default {
     data() {
         return {
-            search: '',
+            localSearch: '',
             sortField: '',
             currentPage: 1,
             itemsPerPage: 10,
@@ -182,8 +183,9 @@ export default {
 
         },
         updateSearch(event) {
-            this.search = event.target.value;
-            if (event.data === ' ' && this.search.slice(-1) === ' ') {
+            //this.search = event.target.value;
+            // No hace nada si el último carácter es un espacio
+            if (event.data === ' ' && this.localSearch.slice(-1) === ' ') {
                 return;
             }
             // Limpiar el intervalo existente
@@ -205,7 +207,7 @@ export default {
         },
         fetchUsers() {
             let params = {
-                search: this.search,
+                search: this.localSearch,
                 page: this.currentPage,
                 sortField: this.sortField
             };
@@ -246,8 +248,6 @@ export default {
                     });
             }
         });
-
-      //  console.log(this.sortedUsers)
     },
 };
 </script>
