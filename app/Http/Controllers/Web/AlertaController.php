@@ -24,7 +24,7 @@ class AlertaController extends Controller
         $filtro = $request->input('filter', '');
         //si filtro no esta vacio busco las alertas que contengan el filtro
         if ($filtro) {
-            $alertas = Alerta::where('leido', $leidos)->where('tipo', 'like', '%' . $filtro . '%')->with('user');
+            $alertas = Alerta::where('leido', $leidos)->where('tipo', 'like', '%' . $filtro . '%')->whereHas('user')->with('user');
         } else {
             $alertas = Alerta::where('leido', $leidos)->with('user');
         }
