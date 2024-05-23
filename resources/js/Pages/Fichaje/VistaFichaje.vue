@@ -57,10 +57,10 @@
         </div>
         <div class="  flex gap-10 lg:gap-32 max-w-[90%] items-center lg:absolute lg:right-[40%] lg:top-1/2">
             <Link :href="route('fichar')" :class="{
-                'bg-red-500 hover:bg-red-400 active:bg-red-500': props.fichajes && props.fichajes[0] && props.fichajes[0].tipo === 'entrada',
-                'bg-[#2196f3] hover:bg-[#64b5f6] active:bg-[#2196f3]': !props.fichajes || !props.fichajes[0] || props.fichajes[0].tipo === 'salida'
+                'bg-red-500 hover:bg-red-400 active:bg-red-500 shadow-red-300 hover:shadow-red-200' : props.fichajes && props.fichajes[0] && props.fichajes[0].tipo === 'entrada',
+                'bg-[#2196f3] hover:bg-[#64b5f6] active:bg-[#2196f3] shadow-blue-300 hover:shadow-blue-200': !props.fichajes || !props.fichajes[0] || props.fichajes[0].tipo === 'salida'
             }"
-                class="inline-block text-white text-lg rounded-full px-10 py-4 lg:px-14 lg:py-6 transition-colors duration-200 ease-in-out shadow-xl hover:shadow-xl active:shadow-none lg:text-2xl">
+                class="inline-block text-white font-bold text-lg rounded-full px-10 py-4 lg:px-14 lg:py-6 transition-colors duration-200 ease-in-out shadow-xl hover:shadow-xl active:shadow-none lg:text-2xl">
             Fichar
             </Link>
             <div>
