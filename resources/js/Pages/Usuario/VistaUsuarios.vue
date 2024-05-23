@@ -84,7 +84,7 @@
                                     aria-labelledby="hs-dropdown-custom-icon-trigger">
                                     <Link :href="route('showUser', { id: user.id })"
                                         class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 ">
-                                    <p>Ver perfil</p>
+                                    <p>Gestionar empleado</p>
                                     </Link>
                                     <a class="hidden items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 "
                                         href="#">
