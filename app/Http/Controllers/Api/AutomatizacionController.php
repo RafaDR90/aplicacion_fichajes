@@ -17,7 +17,7 @@ class AutomatizacionController extends Controller
     public static function obtieneNotificaciones()
     {
         //obtiene la cantidad de notificaciones de la BD no leidas
-        $notificaciones = Alerta::where('leido', 0)->count();
+        $notificaciones = Alerta::where('leido', 0)->whereHas('user')->count();
         return response()->json(['notificacionesCount' => $notificaciones]);
     }
 }
