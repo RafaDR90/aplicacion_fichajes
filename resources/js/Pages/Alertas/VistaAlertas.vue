@@ -216,15 +216,12 @@
                                             <p><span class=" font-bold">Nombre: </span>{{ alerta.user.name }} {{
                                                 alerta.user.apellidos }}</p>
                                             <p><span class=" font-bold">Email: </span>{{ alerta.user.email }}</p>
-                                            <p><span class="font-bold">Horas trabajadas: </span><span
-                                                    class=" text-red-500 font-bold">{{ alerta.datos.horas_trabajadas
-                                                    }}</span> de <span class=" font-bold text-red-500">{{
-                                                    alerta.datos.horas_requeridas }}</span></p>
+                                            <p><span class="font-bold">Horas trabajadas: </span><span class=" text-red-500 font-bold">{{ alerta.datos.horas_trabajadas }}</span> de <span class=" font-bold text-red-500">{{ alerta.datos.horas_requeridas }}</span></p>
                                         </div>
                                         <p class=" mt-3"><span class=" font-bold">Fecha de ausencia: </span> {{ new
                                             Date(alerta.created_at).toLocaleDateString() }}</p>
                                     </div>
-
+                                    
                                 </div>
                                 <button v-if="!alerta.leido"
                                     @click="openConfirmation(alerta.id, alerta.user.id, 'marcar como leído', null, 'marcarLeidaAlerta')"
@@ -242,7 +239,7 @@
                                 <!-- Linea separadora -->
                                 <div v-if="alerta != alertas.data[alertas.data.length - 1]"
                                     class="border-t border-gris-borde w-full mt-4">
-                                </div>
+                                </div>{{ alerta }}
                             </div>
                         </div>
                     </div>
