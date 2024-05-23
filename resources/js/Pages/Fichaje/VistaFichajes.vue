@@ -18,7 +18,7 @@
                             </svg>
                         </div>
 
-                        <input v-focus :value="searchNameServer" @input="updateSearchName"
+                        <input v-focus v-model="searchName" @input="updateSearchName"
                             class="peer h-full w-full outline-none text-lg text-gray-700 pr-2 border-none placeholder:text-gray-300 focus:ring-0"
                             type="text" id="search" placeholder="Buscar por nombre..." />
                     </div>
@@ -57,7 +57,7 @@
                         </ul>
                         <p class=" text-center  self-center w-[44%] font-bold"> Jornada: <span
                                 :class="getWorkedHours(user.checkins) === 'En proceso' ? 'text-green-500' : 'text-red-500'">{{
-                                getWorkedHours(user.checkins) }}</span></p>
+                                    getWorkedHours(user.checkins) }}</span></p>
                     </div>
 
                 </div>
@@ -73,7 +73,7 @@
 </template>
 <script setup>
 //defino las props
-import { defineProps, ref } from 'vue';
+import { defineProps, onMounted, ref, watch } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Pagination from '@/Components/Pagination.vue';
 
@@ -87,8 +87,11 @@ const props = defineProps({
     searchNameServer: String
 });
 
-let searchDate = ref('');
 let searchName = ref('');
+let searchDate = ref('');
+
+
+
 
 const updateSearchDate = (event) => {
     searchDate.value = event.target.value;
@@ -128,17 +131,17 @@ const getWorkedHours = (checkins) => {
     let minutes = Math.floor((totalSeconds % 3600) / 60);
     return `${hours}:${minutes < 10 ? '0' + minutes : minutes} h.`;
 }
+
 let intervaloSearch = null;
 const updateSearchName = (event) => {
-    searchName.value = event.target.value.trim();
-    if (searchName.value == props.searchNameServer) {
+    if (searchName.value == props.searchNameServer || (event.data === ' ' && searchName.value.slice(-1) === ' ')) {
         return;
     }
     if (intervaloSearch) {
         clearInterval(intervaloSearch);
     }
     intervaloSearch = setInterval(() => {
-        router.get('/fichajes', { dateFilter: props.searchDateServer, search: searchName.value });
+        router.get('/fichajes', { dateFilter: props.searchDateServer, search: searchName.value }, { preserveState: true});
         clearInterval(intervaloSearch);
     }, 500);
 }
