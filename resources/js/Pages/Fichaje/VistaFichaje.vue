@@ -155,10 +155,6 @@ onUnmounted(() => {
     clearInterval(intervalId);
 });
 
-const muestrainfo = () => {
-    //redirigo con inertia a /fichar
-
-}
 
 const hourFormat = (hour) => {
     if (!hour) return '';

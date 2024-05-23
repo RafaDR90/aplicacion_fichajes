@@ -18,10 +18,10 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
-    public function create(): Response
+    public function create()
     {
         if (Auth::check()) {
-            return Inertia::render('Fichaje/VistaFichaje');
+            return Inertia::location('/fichaje');
         }
         return Inertia::render('Auth/Login', [
             'canResetPassword' => Route::has('password.request'),
