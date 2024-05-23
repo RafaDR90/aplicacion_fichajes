@@ -92,6 +92,8 @@ const props = defineProps({
 onMounted(() => {
     if (props.vacaciones) {
         vista.value = 'vacaciones';
+    }else{
+        obtenerVacaciones(); //COMENTAR ESTE ELSE SI NO QUIERO QUE SE ABRA VACACIONES POR DEFECTO
     }
 })
 // Cuando cargues los datos de las vacaciones, establece datosCargados en true
