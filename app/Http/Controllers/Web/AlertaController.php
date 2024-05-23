@@ -26,7 +26,7 @@ class AlertaController extends Controller
         if ($filtro) {
             $alertas = Alerta::where('leido', $leidos)->where('tipo', 'like', '%' . $filtro . '%')->whereHas('user')->with('user');
         } else {
-            $alertas = Alerta::where('leido', $leidos)->with('user');
+            $alertas = Alerta::where('leido', $leidos)->whereHas('user')->with('user');
         }
 
         $alertas = $alertas->paginate(10);
