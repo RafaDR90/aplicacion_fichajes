@@ -241,6 +241,7 @@
                                     class="border-t border-gris-borde w-full mt-4">
                                 </div>{{ alerta }}
                             </div>
+                            <div v-else>esto es verdad?</div>
                         </div>
                     </div>
                 </div>
