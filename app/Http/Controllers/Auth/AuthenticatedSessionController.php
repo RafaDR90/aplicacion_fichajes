@@ -42,15 +42,15 @@ class AuthenticatedSessionController extends Controller
 
         session()->forget('token');
 
-        $token=null;
+        $token = null;
         //compruebo si es admin
-        if($user->roles()->whereIn('role_name', ['admin', 'super-admin'])->exists()){
+        if ($user->roles()->whereIn('role_name', ['admin', 'super-admin'])->exists()) {
             //borro los tokens
-        $user->tokens->each(function ($token, $key) {
-            $token->delete();
-        });
-        $token=$user->createToken('token')->accessToken;
-        session()->put('token', $token);
+            $user->tokens->each(function ($token, $key) {
+                $token->delete();
+            });
+            $token = $user->createToken('token')->accessToken;
+            session()->put('token', $token);
         }
 
 
@@ -58,25 +58,28 @@ class AuthenticatedSessionController extends Controller
         if ($user->requiere_ubicacion) {
 
             $datosUbicacion = LocationService::getLocation();
-            Alerta::create([
-                'user_id' => $user->id,
-                'tipo' => 'ubicacion',
-                'mensaje' => 'Solicitud de ubicación',
-                'leido' => 0,
-                'datos' => [
-                    'countryCode' => $datosUbicacion['countryCode'],
-                    'city' => $datosUbicacion['city'],
-                    'zip' => $datosUbicacion['zip'],
-                    'lat' => $datosUbicacion['lat'],
-                    'lon' => $datosUbicacion['lon']
-                ],
-            ]);
+            try {
+                Alerta::create([
+                    'user_id' => $user->id,
+                    'tipo' => 'ubicacion',
+                    'mensaje' => 'Solicitud de ubicación',
+                    'leido' => 0,
+                    'datos' => [
+                        'countryCode' => $datosUbicacion['countryCode'],
+                        'city' => $datosUbicacion['city'],
+                        'zip' => $datosUbicacion['zip'],
+                        'lat' => $datosUbicacion['lat'],
+                        'lon' => $datosUbicacion['lon']
+                    ],
+                ]);
 
-            $user->update([
-                'requiere_ubicacion' => 0
-            ]);
+                $user->update([
+                    'requiere_ubicacion' => 0
+                ]);
+            } catch (\Exception $e) {
+                return redirect()->intended(route('fichaje', ['error' => 'Ha habido un problema al obtener la ubicación, por favor asegúrate de no estar usando algún camuflador de IP y vuelve a intentarlo.'], absolute: false));
+            }
         }
-
         return redirect()->intended(route('fichaje', absolute: false));
     }
 
