@@ -239,7 +239,7 @@
                                 <!-- Linea separadora -->
                                 <div v-if="alerta != alertas.data[alertas.data.length - 1]"
                                     class="border-t border-gris-borde w-full mt-4">
-                                </div>{{ alerta }}
+                                </div>
                             </div>
                             <div v-else>esto es verdad?</div>
                         </div>
