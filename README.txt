@@ -35,10 +35,11 @@ Se ha usado Firestore para las imagenes de perfil
         Accept: application/json
         Authorization: Bearer 
 
-hacer ladning
-
-hacer vista de configuracion (tiempo para fichar)
 
 crear correo al registrar usuario
 
+hacer vista de configuracion (tiempo para fichar)
+
 mapa de ubicaciones 
+
+arreglar imagen que al ver un perfil de un empleado se cambia mi imagen de navbar

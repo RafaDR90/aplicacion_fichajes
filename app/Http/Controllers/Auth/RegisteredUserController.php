@@ -14,6 +14,8 @@ use Inertia\Inertia;
 use Inertia\Response;
 use libphonenumber\PhoneNumberUtil;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
+
 
 class RegisteredUserController extends Controller
 {
@@ -37,7 +39,7 @@ class RegisteredUserController extends Controller
             'apellidos' => 'required|string|max:255',
             'direccion' => 'required|string|max:255|min:8',
             'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            //'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
         $phoneUtil = PhoneNumberUtil::getInstance();
@@ -63,7 +65,7 @@ class RegisteredUserController extends Controller
             'telefono' => $request->telefono,
             'direccion' => $request->direccion,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
+            'password' => Hash::make(bin2hex(openssl_random_pseudo_bytes(10))),
         ]);
 
         event(new Registered($user));
@@ -73,6 +75,10 @@ class RegisteredUserController extends Controller
         $user->diasVacaciones()->create([
             'dias_disponibles' => 30,
         ]);
+
+        $status= Password::sendResetLink(
+            $request->only('email')
+        );
         
         $exito = "Empleado '{$user->name} {$user->apellidos}' creado correctamente";
 
