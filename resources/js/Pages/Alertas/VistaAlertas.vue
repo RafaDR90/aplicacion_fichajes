@@ -4,7 +4,11 @@
             <h1 class="text-4xl font-bold">Notificaciones</h1>
         </div>
 
+
         <div class="w-full  bg-white border border-gris-borde p-8 rounded-t-2xl flex flex-col gap-3">
+            <InputTextComponent :placeHolder="'Buscar por nombre o email...'" :search="search"
+                @updateSearch="updateSearchValue" />
+
             <!-- Aqui va la barra de busqueda y filtros-->
             <select :value="filter" @change="updateFilter" name="filter" id=""
                 class="border border-gris-borde rounded-lg p-4 h-16 text-lg pr-10">
@@ -216,12 +220,15 @@
                                             <p><span class=" font-bold">Nombre: </span>{{ alerta.user.name }} {{
                                                 alerta.user.apellidos }}</p>
                                             <p><span class=" font-bold">Email: </span>{{ alerta.user.email }}</p>
-                                            <p><span class="font-bold">Horas trabajadas: </span><span class=" text-red-500 font-bold">{{ alerta.datos.horas_trabajadas }}</span> de <span class=" font-bold text-red-500">{{ alerta.datos.horas_requeridas }}</span></p>
+                                            <p><span class="font-bold">Horas trabajadas: </span><span
+                                                    class=" text-red-500 font-bold">{{ alerta.datos.horas_trabajadas
+                                                    }}</span> de <span class=" font-bold text-red-500">{{
+                                                        alerta.datos.horas_requeridas }}</span></p>
                                         </div>
                                         <p class=" mt-3"><span class=" font-bold">Fecha de ausencia: </span> {{ new
                                             Date(alerta.created_at).toLocaleDateString() }}</p>
                                     </div>
-                                    
+
                                 </div>
                                 <button v-if="!alerta.leido"
                                     @click="openConfirmation(alerta.id, alerta.user.id, 'marcar como leído', null, 'marcarLeidaAlerta')"
@@ -272,18 +279,20 @@
 
 <script setup>
 
-import { ref, defineProps } from 'vue';
+import { ref, defineProps, watch } from 'vue';
 import { Link } from "@inertiajs/vue3";
 import Pagination from '@/Components/Pagination.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { router } from '@inertiajs/vue3';
+import InputTextComponent from '@/Components/inputs/InputTextComponent.vue';
 
 
 
 const props = defineProps({
     alertas: Array,
     filter: String,
-    leidos: Boolean
+    leidos: Boolean,
+    search: String
 });
 
 // Variables para la confirmacion.
@@ -294,20 +303,31 @@ const idEmp = ref('');
 const rute = ref('');
 const idAlerta = ref('');
 const sortField = ref('');
-const search = ref('');
 
+const updateSearchValue = (value) => {
+    //router.get(`/alertas?filter=${props.filter || ''}${props.leidos? '&leidos=true' : ''}&search=${value}`,{preserveState: true})
+    // router.get('/alertas',{filter: props.filter, leidos: props.leidos, search: value},{preserveState: true})
+    let params = {};
+    if (props.filter) params.filter = props.filter;
+    if (props.leidos) params.leidos = props.leidos;
+    if (value) params.search = value;
+    router.get('/alertas', params, { preserveState: true });
+}
 
 const toggleLeidos = () => {
-    if (props.leidos) {
-        router.get(`/alertas?filter=${props.filter || ''}`);
-    } else {
-        router.get(`/alertas?filter=${props.filter || ''}&leidos=${!props.leidos}`);
-    }
+    let params = {};
+    if (!props.leidos) params.leidos = true;
+    if (props.filter) params.filter = props.filter;
+    if (props.search) params.search = props.search;
+    router.get('/alertas', params, { preserveState: true });
 };
 
 const updateFilter = (event) => {
-    //añadi leidos a la url
-    router.get(`/alertas?filter=${event.target.value}&leidos=${props.leidos}`);
+    let params = {};
+    if (event.target.value) params.filter = event.target.value;
+    if (props.leidos) params.leidos = props.leidos;
+    if (props.search) params.search = props.search;
+    router.get('/alertas', params, { preserveState: true });
 };
 
 

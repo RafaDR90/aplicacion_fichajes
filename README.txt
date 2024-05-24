@@ -34,3 +34,11 @@ Se ha usado Firestore para las imagenes de perfil
     https://aplicacionfichajes-production.up.railway.app/api/cierra-fichajes
         Accept: application/json
         Authorization: Bearer 
+
+hacer ladning
+
+hacer vista de configuracion (tiempo para fichar)
+
+crear correo al registrar usuario
+
+mapa de ubicaciones 

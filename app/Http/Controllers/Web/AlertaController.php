@@ -22,6 +22,7 @@ class AlertaController extends Controller
         $leidos = $request->input('leidos', false);
         $leidos = filter_var($leidos, FILTER_VALIDATE_BOOLEAN);
         $filtro = $request->input('filter', '');
+        $search = $request->input('search', null);
         //si filtro no esta vacio busco las alertas que contengan el filtro
         if ($filtro) {
             $alertas = Alerta::where('leido', $leidos)->where('tipo', 'like', '%' . $filtro . '%')->whereHas('user')->with('user');
@@ -29,12 +30,19 @@ class AlertaController extends Controller
             $alertas = Alerta::where('leido', $leidos)->whereHas('user')->with('user');
         }
 
+        if($search){
+            $alertas = $alertas->whereHas('user', function($query) use ($search){
+                $query->where('name', 'like', '%'.$search.'%');
+            });
+        }
+
         $alertas = $alertas->paginate(10);
 
         return Inertia::render('Alertas/VistaAlertas', [
             'alertas' => $alertas,
             'filter' => $filtro,
-            'leidos' => $leidos
+            'leidos' => $leidos,
+            'search' => $search,
 
         ]);
     }
