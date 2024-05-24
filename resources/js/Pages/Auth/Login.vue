@@ -34,39 +34,35 @@ const submit = () => {
 
         <Head title="Log in" />
 
-        <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
+        <div v-if="status" class="mb-4 font-medium text-sm text-green-600 rounded bg-gray-700 px-2">
             {{ status }}
         </div>
+        <h3 class=" text-white text-4xl mb-5 font-bold text-center">Inicie sesión para acceder al fichador</h3>
+        <div class=" bg-white rounded-full w-11/12 h-1 mb-20"></div>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" class=" w-full flex flex-col ">
+
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Email" class=" text-white text-xl" />
 
-                <TextInput id="email" type="email" name="email" class="mt-1 block w-full" v-model="form.email" required autofocus
-                    autocomplete="email" />
+                <TextInput id="email" type="email" name="email" class="mt-1 block w-full" v-model="form.email" required
+                    autofocus autocomplete="email" />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-2" :message="form.errors.email"  />
             </div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Contraseña" />
+            <div class="mt-8">
+                <InputLabel for="password" value="Contraseña" class=" text-xl text-white" />
 
-                <TextInput id="password" type="password" name="password" class="mt-1 block w-full" v-model="form.password" required
-                    autocomplete="current-password" />
+                <TextInput id="password" type="password" name="password" class="mt-1 block w-full"
+                    v-model="form.password" required autocomplete="current-password" />
 
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
-            <div class="block mt-4">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600">Recuerdame</span>
-                </label>
-            </div>
-
-            <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center justify-end mt-6">
                 <Link v-if="canResetPassword" :href="route('password.request')"
-                    class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    class="underline text-sm text-gray-50 hover:text-gray-300 rounded-md focus:outline-none ">
                 ¿Has olvidado tu contraseña?
                 </Link>
 
