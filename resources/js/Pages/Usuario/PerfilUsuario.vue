@@ -301,13 +301,11 @@ if (props.selectedUser && props.selectedUser.image_url) {
         getDownloadURL(storageRef)
             .then((url) => {
                 perfilImage.value = url; //QUITAR
+                return url;
                 
             })
             .catch((error) => {
                 console.error("Error al obtener la URL de la imagen: ", error);
-            })
-            .finally((url) => {
-                return url;
             });
     }
 
