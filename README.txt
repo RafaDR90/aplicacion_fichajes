@@ -36,8 +36,6 @@ Se ha usado Firestore para las imagenes de perfil
         Authorization: Bearer 
 
 
-crear correo al registrar usuario
-
 hacer vista de configuracion (tiempo para fichar)
 
 mapa de ubicaciones 

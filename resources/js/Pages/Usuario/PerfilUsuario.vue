@@ -72,7 +72,7 @@
         <div class=" w-11/12 m-5 rounded-lg bg-white border border-gris-borde p-6 flex flex-col gap-14">
             <div class="flex flex-col gap-4 items-center md:items-start md:flex-row md:gap-8">
                 <div class=" w-60 h-60 relative">
-                    <img v-if="profileImageStore.imageUrl" :src="profileImageStore.imageUrl"
+                    <img v-if="perfilImage" :src="perfilImage"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full object-cover">
                     <img v-else src="/img/navbar/fotoperfil.png" alt="foto de perfil"
                         class="bg-gris-light border border-gris-borde rounded-lg w-full h-full">
