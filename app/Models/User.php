@@ -10,6 +10,8 @@ use Laravel\Passport\HasApiTokens;
 use App\Models\RoleEmp;
 use App\Models\DiasVacaciones;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Notifications\CustomResetPasswordNotification;
+
 
 
 
@@ -66,7 +68,7 @@ class User extends Authenticatable
 
     public function horarios()
     {
-        return $this->belongsToMany(Horario::class, 'horario_emp','id_empleado', 'id_horario')->withPivot('dias')->withTimestamps();
+        return $this->belongsToMany(Horario::class, 'horario_emp', 'id_empleado', 'id_horario')->withPivot('dias')->withTimestamps();
     }
 
     public function ubicacion()
@@ -90,7 +92,12 @@ class User extends Authenticatable
     }
 
     public function hasRole($roleName)
+    {
+        return $this->roles()->where('role_name', $roleName)->exists();
+    }
+
+    public function sendPasswordResetNotification($token)
 {
-    return $this->roles()->where('role_name', $roleName)->exists();
+    $this->notify(new CustomResetPasswordNotification($token));
 }
 }
