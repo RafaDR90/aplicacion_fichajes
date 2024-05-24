@@ -301,7 +301,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
         getDownloadURL(storageRef)
             .then((url) => {
                 perfilImage.value = url; //QUITAR
-                profileImageStore.setImageUrl(url);
+                
             })
             .catch((error) => {
                 console.error("Error al obtener la URL de la imagen: ", error);
@@ -316,6 +316,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
             if (props.imgChange) {
                 setTimeout(() => {
                     downloadImage();
+                    profileImageStore.setImageUrl(perfilImage.value);
                     props.imgChange = false;
                  //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
                 }, 250);
