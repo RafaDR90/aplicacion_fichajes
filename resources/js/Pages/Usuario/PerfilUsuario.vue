@@ -320,6 +320,7 @@ onMounted(() => {
             console.log('have el on mounted')
             profileImageStore.setImageUrl(profileImage.value);
             props.imgChange = false;
+            console.log('profileImageStore.imageUrl', profileImageStore.imageUrl)
             //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
         }, 250);
     }
