@@ -54,9 +54,12 @@ class UserController extends Controller
         }
 
         if ($search) {
-            $query->where(DB::raw('CONCAT(name, " ", apellidos)'), 'like', '%' . $search . '%')
-            ->orWhere('email', 'like', '%' . $search . '%');
+            $query->where(function ($q) use ($search) {
+                $q->where(DB::raw('CONCAT(name, " ", apellidos)'), 'like', '%' . $search . '%')
+                  ->orWhere('email', 'like', '%' . $search . '%');
+            });
         }
+        
         if (!empty($sortField))
             $query->orderBy($sortField, 'asc');
 

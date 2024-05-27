@@ -37,3 +37,4 @@ Se ha usado Firestore para las imagenes de perfil
 
 
 hacer vista de configuracion (tiempo para fichar)
+
