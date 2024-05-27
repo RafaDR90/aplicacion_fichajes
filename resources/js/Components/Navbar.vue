@@ -52,9 +52,9 @@ import { watch, ref, defineProps, onMounted, onUnmounted } from "vue";
 import { Link, usePage } from "@inertiajs/vue3";
 import DropdownLink from '@/Components/DropdownLink.vue';
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
-import { profileImage } from "@/Store/ProfileImage";
+import { useProfileImage } from "@/Store/ProfileImage";
 
-const profileImageStore = useStore(profileImage);
+const profileImageStore = useProfileImage();
 
 let { props: pageProps } = usePage();
 

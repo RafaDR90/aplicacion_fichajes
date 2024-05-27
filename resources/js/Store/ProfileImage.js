@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-export const profileImage = defineStore({
+export const useProfileImage = defineStore({
   id: "profileImage",
   state: () => ({
     imageUrl: null,
