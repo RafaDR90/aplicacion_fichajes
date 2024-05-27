@@ -7,6 +7,7 @@ use App\Models\Alerta;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\DB;
 
 
 class AlertaController extends Controller
@@ -32,7 +33,8 @@ class AlertaController extends Controller
 
         if($search){
             $alertas = $alertas->whereHas('user', function($query) use ($search){
-                $query->where('name', 'like', '%'.$search.'%');
+                $query->where(DB::raw('CONCAT(name, " ", apellidos)'), 'like', '%' . $search . '%')
+                ->orWhere('email', 'like', '%' . $search . '%');
             });
         }
 
