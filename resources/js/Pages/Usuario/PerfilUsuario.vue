@@ -400,8 +400,7 @@ const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
-    router.post('/change-profile-image', formData);
-    // Inertia.reload({ preserveState: false });
+    router.post('/change-profile-image', formData, {preserveState: false,});
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
