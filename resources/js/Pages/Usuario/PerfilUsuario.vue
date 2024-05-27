@@ -299,7 +299,8 @@ const downloadImage = () => {
     const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
     getDownloadURL(storageRef)
         .then((url) => {
-            perfilImage.value = url; //QUITAR
+            console.log('url', url)
+            perfilImage.value = url; 
             
         })
         .catch((error) => {
@@ -308,6 +309,7 @@ const downloadImage = () => {
 }
 
 if (props.selectedUser && props.selectedUser.image_url) {
+    console.log('hace el downloadImage')
     downloadImage();
 }
 
@@ -315,6 +317,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
 onMounted(() => {
     if (props.imgChange) {
         setTimeout(() => {
+            console.log('have el on mounted')
             profileImageStore.setProfileImage(profileImage.value);
             props.imgChange = false;
             //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
