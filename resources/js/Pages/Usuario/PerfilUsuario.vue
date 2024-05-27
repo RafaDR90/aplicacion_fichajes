@@ -261,9 +261,8 @@ import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { Inertia } from '@inertiajs/inertia';
 import { profileImage } from '@/Store/ProfileImage';
-import { setActivePinia } from 'pinia';
 
-const profileImageStore = profileImage();
+const profileImageStore = useStore(profileImage);
 
 
 const props = defineProps({

@@ -54,7 +54,7 @@ import DropdownLink from '@/Components/DropdownLink.vue';
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { profileImage } from "@/Store/ProfileImage";
 
-const profileImageStore = profileImage();
+const profileImageStore = useStore(profileImage);
 
 let { props: pageProps } = usePage();
 
