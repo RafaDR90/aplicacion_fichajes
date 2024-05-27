@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import "leaflet/dist/leaflet.css"; // Importa los estilos de Leaflet
 import L from "leaflet"; // Importa la biblioteca Leaflet
 
@@ -8,12 +8,14 @@ const props = defineProps({
     lon: Number,
 });
 
+const mapContainer = ref(null);
+
 onMounted(() => {
     console.log('lat', props.lat);
     console.log('lon', props.lon);  // Asegúrate de que 'lon' está bien escrito
 
     if (props.lat && props.lon) {
-        const map = L.map("map").setView([props.lat, props.lon], 13); // Ajuste del nivel de zoom
+        const map = L.map(mapContainer.value).setView([props.lat, props.lon], 13); // Ajuste del nivel de zoom
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution:
@@ -31,6 +33,6 @@ onMounted(() => {
 
 <template>
     <div>
-        <div id="map" class=" w-60 h-40"></div>
+        <div ref="mapContainer" class=" w-60 h-40"></div>
     </div>
 </template>
