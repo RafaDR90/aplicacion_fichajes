@@ -122,7 +122,7 @@ class UserController extends Controller
             var_dump($url);die;
             
         } */
-        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null, 'imgChange' => $imgChange ?? null]);
+        return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $exito ?? null, 'error' => $error ?? null,  'allHorarios' => $allHorarios, 'role' => $role ?? null, 'imgChange' => $imgChange ?? null, 'ownProfile'=>true]);
     }
 
     /**

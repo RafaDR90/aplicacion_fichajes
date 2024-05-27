@@ -281,6 +281,11 @@ const props = defineProps({
         type: Boolean,
         default: false,
         required: false
+    },
+    ownProfile: {
+        type: Boolean,
+        default: false,
+        required: false
     }
 });
 
@@ -298,8 +303,8 @@ const downloadImage = () => {
     const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
     getDownloadURL(storageRef)
         .then((url) => {
-            perfilImage.value = url; 
-            
+            perfilImage.value = url;
+
         })
         .catch((error) => {
             console.error("Error al obtener la URL de la imagen: ", error);
@@ -321,13 +326,11 @@ if (props.selectedUser && props.selectedUser.image_url) {
 //         }, 250);
 //     }
 // });
-if (perfilImage.value){
-    console.log('ostia ha entrado')
-    profileImageStore.setImageUrl(perfilImage.value);
-}
+
 watch(() => perfilImage.value, (newPerfilImage) => {
     console.log('salta el watch')
-    profileImageStore.setImageUrl(newPerfilImage);
+    if (props.ownProfile)
+        profileImageStore.setImageUrl(newPerfilImage);
 });
 
 
@@ -405,7 +408,7 @@ const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const formData = new FormData();
     formData.append('file', file);
-    router.post('/change-profile-image', formData, {preserveState: false,});
+    router.post('/change-profile-image', formData, { preserveState: false, });
 };
 /*---------------------
 FIN BLOQUE SUBIR IMAGEN
