@@ -68,7 +68,12 @@ const props = defineProps({
 });
 
 
-
+onMounted(() =>{
+  console.log(profileImageStore.imageUrl);
+  watch(profileImageStore.imageUrl, () => {
+    console.log(profileImageStore.imageUrl);
+  });
+})
 
 const emit = defineEmits(["toggle-sidebar", "dropdown-perfil"]);
 
