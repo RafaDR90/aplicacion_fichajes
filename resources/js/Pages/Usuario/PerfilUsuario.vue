@@ -298,7 +298,6 @@ const downloadImage = () => {
     const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
     getDownloadURL(storageRef)
         .then((url) => {
-            console.log('url', url)
             perfilImage.value = url; 
             
         })
@@ -308,21 +307,27 @@ const downloadImage = () => {
 }
 
 if (props.selectedUser && props.selectedUser.image_url) {
-    console.log('hace el downloadImage')
     downloadImage();
 }
 
 //compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
-onMounted(() => {
-    if (props.imgChange) {
-        setTimeout(() => {
-            console.log('have el on mounted')
-            profileImageStore.setImageUrl(perfilImage.value);
-            props.imgChange = false;
-            console.log('profileImageStore.imageUrl', profileImageStore.imageUrl)
-            //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
-        }, 250);
-    }
+// onMounted(() => {
+//     if (props.imgChange) {
+//         setTimeout(() => {
+//             profileImageStore.setImageUrl(perfilImage.value);
+//             props.imgChange = false;
+//             console.log('profileImageStore.imageUrl', profileImageStore.imageUrl)
+//             //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
+//         }, 250);
+//     }
+// });
+if (perfilImage.value){
+    console.log('ostia ha entrado')
+    profileImageStore.setImageUrl(perfilImage.value);
+}
+watch(() => perfilImage.value, (newPerfilImage) => {
+    console.log('salta el watch')
+    profileImageStore.setImageUrl(newPerfilImage);
 });
 
 
