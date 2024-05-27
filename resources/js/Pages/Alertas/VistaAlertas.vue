@@ -55,6 +55,9 @@
                                         <p><span class=" font-bold">Latitud: </span>{{ alerta.datos.lat }}</p>
                                         <p><span class=" font-bold">Longitud: </span>{{ alerta.datos.lon }}</p>
                                     </div>
+                                    <div>
+                                        <LeafletMiniMap :lat="alerta.datos.lat" :lon="alerta.datos.lon" />
+                                    </div>
 
                                 </div>
                                 <div class="flex gap-3 mt-3" v-if="!alerta.leido">
@@ -285,6 +288,9 @@ import Pagination from '@/Components/Pagination.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { router } from '@inertiajs/vue3';
 import InputTextComponent from '@/Components/inputs/InputTextComponent.vue';
+import LeafletMiniMap from '@/Components/mapa/LeafletMiniMap.vue';
+
+
 
 
 
@@ -305,8 +311,6 @@ const idAlerta = ref('');
 const sortField = ref('');
 
 const updateSearchValue = (value) => {
-    //router.get(`/alertas?filter=${props.filter || ''}${props.leidos? '&leidos=true' : ''}&search=${value}`,{preserveState: true})
-    // router.get('/alertas',{filter: props.filter, leidos: props.leidos, search: value},{preserveState: true})
     let params = {};
     if (props.filter) params.filter = props.filter;
     if (props.leidos) params.leidos = props.leidos;

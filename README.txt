@@ -39,5 +39,3 @@ Se ha usado Firestore para las imagenes de perfil
 hacer vista de configuracion (tiempo para fichar)
 
 mapa de ubicaciones 
-
-arreglar imagen que al ver un perfil de un empleado se cambia mi imagen de navbar
