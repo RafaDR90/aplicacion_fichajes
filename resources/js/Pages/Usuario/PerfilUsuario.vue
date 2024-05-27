@@ -317,6 +317,7 @@ onMounted(() => {
     if (props.imgChange) {
         setTimeout(() => {
             console.log('have el on mounted')
+            console.log('profileImage.value', profileImage.value)
             profileImageStore.setImageUrl(profileImage.value);
             props.imgChange = false;
             console.log('profileImageStore.imageUrl', profileImageStore.imageUrl)
