@@ -12,8 +12,8 @@
         <div class="h-9 w-9">
           <img v-if="profileImageStore.imageUrl" :src="profileImageStore.imageUrl" alt="foto de perfil"
             class="h-full w-full rounded-full object-cover object-center" />
-          <img v-else-if="authImage" :src="authImage" alt="foto de perfil"
-            class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png" />
+          <!-- <img v-else-if="authImage" :src="authImage" alt="foto de perfil"
+            class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png" /> -->
           <img v-else class="h-full w-full rounded-full object-cover object-center" src="/img/navbar/fotoperfil.png"
             alt="" />
         </div>
