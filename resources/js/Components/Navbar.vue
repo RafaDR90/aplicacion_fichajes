@@ -68,13 +68,6 @@ const props = defineProps({
 });
 
 
-onMounted(() => {
-  console.log('navbar 1'+profileImageStore.imageUrl);
-  watch(() => profileImageStore.imageUrl, (newImageUrl, oldImageUrl) => {
-    console.log('navbar 2'+newImageUrl);
-  });
-});
-
 const emit = defineEmits(["toggle-sidebar", "dropdown-perfil"]);
 
 const changueStatusDropdownPerfil = () => {

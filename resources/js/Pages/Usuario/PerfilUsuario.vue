@@ -315,20 +315,8 @@ if (props.selectedUser && props.selectedUser.image_url) {
     downloadImage();
 }
 
-//compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
-// onMounted(() => {
-//     if (props.imgChange) {
-//         setTimeout(() => {
-//             profileImageStore.setImageUrl(perfilImage.value);
-//             props.imgChange = false;
-//             console.log('profileImageStore.imageUrl', profileImageStore.imageUrl)
-//             //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
-//         }, 250);
-//     }
-// });
 
 watch(() => perfilImage.value, (newPerfilImage) => {
-    console.log('salta el watch')
     if (props.imgChange)
         profileImageStore.setImageUrl(newPerfilImage);
 });
