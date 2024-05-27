@@ -261,6 +261,7 @@ import { router } from '@inertiajs/vue3'
 import { getStorage, getDownloadURL, ref as firebaseRef } from "firebase/storage";
 import { Inertia } from '@inertiajs/inertia';
 import { profileImage } from '@/Store/ProfileImage';
+import { setActivePinia } from 'pinia';
 
 const profileImageStore = profileImage();
 
@@ -291,35 +292,35 @@ const props = defineProps({
      IMAGEN PERFIL DE FIREBASE
 -----------------------------------*/
 const perfilImage = ref(null);
-
 const storage = getStorage();
-if (props.selectedUser && props.selectedUser.image_url) {
 
-    const downloadImage = () => {
-        const userImageUrl = props.selectedUser.image_url;
-        const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
-        getDownloadURL(storageRef)
-            .then((url) => {
-                perfilImage.value = url; //QUITAR
-            })
-            .catch((error) => {
-                console.error("Error al obtener la URL de la imagen: ", error);
-            });
-    }
-
-    downloadImage();
-
-    //compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
-    onMounted(() => {
-        if (props.imgChange) {
-            setTimeout(() => {
-                profileImageStore.setProfileImage(profileImage.value);
-                props.imgChange = false;
-                //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
-            }, 250);
-        }
-    });
+const downloadImage = () => {
+    const userImageUrl = props.selectedUser.image_url;
+    const storageRef = firebaseRef(storage, '/profile_images/' + userImageUrl);
+    getDownloadURL(storageRef)
+        .then((url) => {
+            perfilImage.value = url; //QUITAR
+            
+        })
+        .catch((error) => {
+            console.error("Error al obtener la URL de la imagen: ", error);
+        });
 }
+
+if (props.selectedUser && props.selectedUser.image_url) {
+    downloadImage();
+}
+
+//compruebo si cambia el estado de props.imgChange y ejecuto la funcion downloadImage
+onMounted(() => {
+    if (props.imgChange) {
+        setTimeout(() => {
+            profileImageStore.setProfileImage(profileImage.value);
+            props.imgChange = false;
+            //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
+        }, 250);
+    }
+});
 
 
 
