@@ -17,6 +17,7 @@
                 <option value="vacaciones">Solicitud de vacaciones</option>
                 <option value="fichaje">Anomalia de fichaje</option>
                 <option value="asistencia">Falta de asistencia</option>
+                <option value="horasTrabajadas">Horas trabajadas insuficientes</option>
             </select>
 
             <div class="flex items-center space-x-2">
