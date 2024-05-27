@@ -14,6 +14,7 @@ use App\Http\Controllers\Web\SolicitudController;
 use App\Http\Controllers\Web\UbicacionController;
 use App\Http\Controllers\Web\VacacionesController;
 use App\Models\Role;
+use App\Http\Middleware\SuperAdmin;
 
 /*Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -26,14 +27,16 @@ use App\Models\Role;
 
 Route::get('/', [UserController::class, 'index']);
 
+Route::group(['middleware' => SuperAdmin::class], function (){
+    Route::post('/delete-user', [UserController::class, 'deleteUser'])->name('deleteUser');
+    Route::post('/cambiar-rol', [RoleController::class, 'cambiarRol'])->name('cambiarRol');
+});
 
 
 Route::group(['middleware' => Admin::class], function () {
     //USUARIOS
     Route::get('/usuarios', [UserController::class, 'showUsers'])->name('showUsers');
-    Route::post('/cambiar-rol', [RoleController::class, 'cambiarRol'])->name('cambiarRol');
     Route::get('/perfil', [UserController::class, 'showUser'])->name('showUser');
-    Route::post('/delete-user', [UserController::class, 'deleteUser'])->name('deleteUser');
 
     //HORARIO   
     Route::get('/horarios', [HorarioController::class, 'gestionHorarios'])->name('horarios');
@@ -77,7 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/fichaje', [FichajeController::class, 'index'])->name('fichaje');
     //FICHAJE
     Route::get('/fichar', [FichajeController::class, 'fichar'])->name('fichar');
-    
+
     //VACACIONES
     Route::get('/vacaciones', [VacacionesController::class, 'index'])->name('vacaciones');
     Route::get('/solicitud', [SolicitudController::class, 'index'])->name('solicitud');

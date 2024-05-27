@@ -17,12 +17,11 @@ class SuperAdmin
     {
         $user = $request->user();
         
-        
 
         // Verificar si el usuario tiene el rol de administrador
         if ($user && $user->roles()->where('role_name', 'super-admin')->exists()) {
             return $next($request);
         }
-        return response()->json(['error' => 'Unauthorized'], 401);
+        return response()->json(['error' => 'Unauthorized'], 403);
     }
 }

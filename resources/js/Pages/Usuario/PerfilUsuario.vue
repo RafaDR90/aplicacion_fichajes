@@ -33,7 +33,7 @@
                         <p>Usuario: </p>
                         <p :class="{ 'text-green-500': obtieneRol != 'Normal' }" class=" ">{{ obtieneRol }}</p>
                     </div>
-                    <div v-if="obtieneRol != 'Super Admin'" class="flex gap-2">
+                    <div v-if="obtieneRol != 'Super Admin' && role == 'super-admin'" class="flex gap-2">
                         <label for="roles">Modificar Rol</label>
                         <select v-model="selectedRole" class="border border-gray-300 rounded-lg pr-7 text-center">
                             <option v-if="obtieneRol != 'Normal'" value="normal">Normal</option>
@@ -54,12 +54,13 @@
                         </div>
                     </label>
                 </div>
-                <div v-if="selectedUser && !selectedUser.deleted_at" class="md:absolute right-0">
+                <div>{{ role }}</div>
+                <div v-if="selectedUser && !selectedUser.deleted_at && role=='super-admin'" class="md:absolute right-0">
                     <button @click="deleteUserAlert"
                         class=" px-4 py-2 w-max bg-red-600  shadow-lg rounded-lg font-bold text-white hover:bg-red-500 cursor-pointer active:bg-red-700 active:shadow-none">Eliminar
                         usuario</button>
                 </div>
-                <div v-else class="md:absolute right-0">
+                <div v-else-if="selectedUser && selectedUser.deleted_at && role=='super-admin'" class="md:absolute right-0">
                     <button @click="deleteUserAlert"
                         class=" px-4 py-2 w-max bg-green-600  shadow-lg rounded-lg font-bold text-white hover:bg-green-500 cursor-pointer active:bg-green-700 active:shadow-none">Restaurar
                         usuario</button>

@@ -19,7 +19,6 @@ use Diglactic\Breadcrumbs\Breadcrumbs;
 use Kreait\Firebase\Factory;
 
 
-
 class UserController extends Controller
 {
 
@@ -92,7 +91,12 @@ class UserController extends Controller
         $id = $request->input('id');
         $user = User::withTrashed()->with(['roles', 'ubicacion', 'horarios'])->find($id);
         $allHorarios = DB::table('horarios')->whereNull('deleted_at')->get();
-        $role = 'admin';
+        //obtengo el rol del usuario actual con el que estoy logueado
+        $currentUser = Auth::user();
+        $role = null;
+        if ($currentUser->roles->isNotEmpty()) {
+            $role = $currentUser->roles[0]->role_name;
+        }
         $breadcrumbs = Breadcrumbs::generate('showUser');
         return Inertia::render('Usuario/PerfilUsuario', ['selectedUser' => $user, 'exito' => $request->input('exito'), 'error' => $request->input('error'), 'allHorarios' => $allHorarios, 'role' => $role, 'breadcrumbs' => $breadcrumbs]);
     }
