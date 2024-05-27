@@ -329,7 +329,7 @@ if (props.selectedUser && props.selectedUser.image_url) {
 
 watch(() => perfilImage.value, (newPerfilImage) => {
     console.log('salta el watch')
-    if (props.ownProfile)
+    if (props.imgChange)
         profileImageStore.setImageUrl(newPerfilImage);
 });
 
