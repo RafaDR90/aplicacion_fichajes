@@ -318,7 +318,7 @@ onMounted(() => {
     if (props.imgChange) {
         setTimeout(() => {
             console.log('have el on mounted')
-            profileImageStore.setProfileImage(profileImage.value);
+            profileImageStore.setImageUrl(profileImage.value);
             props.imgChange = false;
             //   Inertia.reload({ preserveState: false, preserveScroll: true, refresh: true });
         }, 250);
