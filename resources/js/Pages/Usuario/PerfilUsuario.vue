@@ -54,7 +54,6 @@
                         </div>
                     </label>
                 </div>
-                <div>{{ role }}</div>
                 <div v-if="selectedUser && !selectedUser.deleted_at && role=='super-admin'" class="md:absolute right-0">
                     <button @click="deleteUserAlert"
                         class=" px-4 py-2 w-max bg-red-600  shadow-lg rounded-lg font-bold text-white hover:bg-red-500 cursor-pointer active:bg-red-700 active:shadow-none">Eliminar
