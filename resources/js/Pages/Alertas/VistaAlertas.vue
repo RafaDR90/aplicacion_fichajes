@@ -265,7 +265,7 @@
 
 
 
-    <div v-if="showAlert" class="absolute inset-0 flex justify-center  text-2xl">
+    <div v-if="showAlert" class="absolute inset-0 flex justify-center z-50 text-2xl">
         <div class=" sticky top-1/2 bg-white p-4 rounded shadow-gray-600 shadow-2xl h-max border">
             <p>¿Seguro que desea <span class=" font-bold">{{ accion }}</span> <span v-if="nombreEmp">a</span> <span
                     class=" font-bold">{{
