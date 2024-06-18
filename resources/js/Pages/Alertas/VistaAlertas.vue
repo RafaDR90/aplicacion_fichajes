@@ -56,7 +56,7 @@
                                         <p><span class=" font-bold">Latitud: </span>{{ alerta.datos.lat }}</p>
                                         <p><span class=" font-bold">Longitud: </span>{{ alerta.datos.lon }}</p>
                                     </div>
-                                    <div>
+                                    <div class="z-10">
                                         <LeafletMiniMap :lat="alerta.datos.lat" :lon="alerta.datos.lon" />
                                     </div>
 
